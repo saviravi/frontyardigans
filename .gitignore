@@ -137,3 +137,4 @@ tokens
 rasa/.rasa/cache/*
 rasa/models/
 
+node_modules
