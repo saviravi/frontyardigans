@@ -15,7 +15,11 @@ import sys
 import os
 
 #import Recommendation
-sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - 10])
+print("--------------")
+print(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\actions\\actions.py")] + "Recommendation")
+print("--------------")
+
+sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\actions\\actions.py")] + "Recommendation")
 import Recommendation
 
 
