@@ -11,7 +11,17 @@ from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-import ../../Recommendation
+import sys
+import os
+
+#import Recommendation
+print("--------------")
+print(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\actions\\actions.py")] + "Recommendation")
+print("--------------")
+
+sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\actions\\actions.py")] + "Recommendation")
+import Recommendation
+
 
 class ActionGetRecommendation(Action):
 
@@ -21,4 +31,4 @@ class ActionGetRecommendation(Action):
          tracker: Tracker,
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
          dispatcher.utter_message(text=Recommendation.handleInput([]))
-     return []
+         return []
