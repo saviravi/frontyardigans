@@ -1,3 +1,4 @@
 duffel-api
 rasa
+python-dotenv
 
