@@ -15,6 +15,11 @@ stories:
 responses:
   utter_greet:
   - text: "Hey! How are you?"
+  - text: "Hello! How are you?"
+  - text: "Hi! How are you?"
+  - text: "Hello! What can I help you with?"
+  - text: "Hey! What can I help you with?"
+  - text: "Hi! What can I help you with?"
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
@@ -22,15 +27,22 @@ responses:
 
   utter_did_that_help:
   - text: "Did that help you?"
+  - text: "Is that helpful?"
+  - text: "Are you happy with that answer?"
 
   utter_happy:
   - text: "Great, carry on!"
+  - text: "Awesome!"
+  - text: "Nice!"
 
   utter_goodbye:
   - text: "Bye"
+  - text: "Goodbye!"
+  - text: "Have a great day!!"
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+  - text: "I am a Rasa chatbot."
 
 actions:
   - action_search_yelp_resturants
