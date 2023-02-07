@@ -1,5 +1,6 @@
 .DS_Store
 weather.pickle
+Recommendation/weather/stations/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
