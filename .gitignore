@@ -132,8 +132,3 @@ dmypy.json
 
 # tokens
 tokens
-
-# rasa
-rasa/.rasa/cache/*
-rasa/models/
-
