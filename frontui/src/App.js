@@ -2,13 +2,13 @@ import React from "react";
 import Chatbot from "react-chatbot-kit";
 import 'react-chatbot-kit/build/main.css'
 
-import config from "./Config.js";
-import MessageParser from "./MessageParser.js";
-import ActionProvider from "./ActionProvider.js";
+import config from './Config.js';
+import MessageParser from './MessageParser.js';
+import ActionProvider from './ActionProvider.js';
 
-function App() {
+const BotFrontend = () => {
   return (
-    <div className="App">
+    <div>
       <Chatbot
         config={config}
         messageParser={MessageParser}
@@ -16,6 +16,6 @@ function App() {
       />
     </div>
   );
-}
+};
 
-export default App;
+export default BotFrontend;

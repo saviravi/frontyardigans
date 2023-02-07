@@ -1,17 +1,20 @@
-class MessageParser {
-    constructor(actionProvider, state) {
-      this.actionProvider = actionProvider;
-      console.log(this.actionProvider);
-      this.state = state;
-    }
-  
-    parse(message) {
-      let botMessage = this.actionProvider.createChatBotMessage(message);
-      this.actionProvider.setState((prev, props) => ({
-          ...prev,
-          messages: [...prev.messages, botMessage]
-      }))
-    }
-  }
+import React from 'react';
+
+const MessageParser = ({ children, actions }) => {
+  const parse = (message) => {
+    console.log(message);
+  };
+
+  return (
+    <div>
+      {React.Children.map(children, (child) => {
+        return React.cloneElement(child, {
+          parse: parse,
+          actions: {},
+        });
+      })}
+    </div>
+  );
+};
 
 export default MessageParser;

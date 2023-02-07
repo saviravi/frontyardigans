@@ -1,19 +1,15 @@
-class ActionProvider {
-    constructor(
-     createChatBotMessage,
-     setStateFunc,
-     createClientMessage,
-     stateRef,
-     createCustomMessage,
-     ...rest
-   ) {
-     this.createChatBotMessage = createChatBotMessage;
-     this.setState = setStateFunc;
-     this.createClientMessage = createClientMessage;
-     this.stateRef = stateRef;
-     this.createCustomMessage = createCustomMessage;
-   }
- }
- 
- export default ActionProvider;
- 
+import React from 'react';
+
+const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+  return (
+    <div>
+      {React.Children.map(children, (child) => {
+        return React.cloneElement(child, {
+          actions: {},
+        });
+      })}
+    </div>
+  );
+};
+
+export default ActionProvider;
