@@ -12,6 +12,7 @@ load_dotenv()
 DUFFEL_ACCESS_TOKEN = os.getenv('DUFFEL_ACCESS_TOKEN')
 
 def handleInput(inputData):
+    print(inputData)
     return "This connection works"
 
 @dataclass
