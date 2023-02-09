@@ -11,3 +11,7 @@ in rasa: ```python3 -m rasa run --enable-api --cors="*"``` and ```python3 -m ras
 in frontui: ```npm start``` (make sure to do ```npm install``` for dependencies)
 
 Open in localhost:3000 if it doesn't pop up automatically
+
+# Note about API keys
+
+You will have to supply your own API keys
