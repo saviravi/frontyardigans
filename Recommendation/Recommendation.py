@@ -9,6 +9,8 @@ from dataclasses import dataclass
 import requests
 import json
 import sys
+from urllib.parse import urlencode
+from yelp import get_businesses_by_location_name, YelpAPIException
 
 # Load environment variables
 load_dotenv()
@@ -141,7 +143,4 @@ def get_duffel_airports() -> List[Airport]:
 
     return result
 
-# Then get resturants and weather
 
-
-# pick the one that matches the user's input the best
