@@ -6,19 +6,27 @@ import os
 from time import sleep
 from typing import List
 from dataclasses import dataclass
+import requests
+import json
+import sys
 
 # Load environment variables
 load_dotenv()
 DUFFEL_ACCESS_TOKEN = os.getenv('DUFFEL_ACCESS_TOKEN')
 
-def handleInput(inputData) -> List[Trip]:
-    """
-    Handles input and returns a list of possible trips :)
-    """
-    print(inputData)
-    return "This connection works"
 
+def handleInput(inputData):
+    return "This works"
 
+@dataclass
+class Location:
+    """
+    Class representing a location
+    """
+    city_name: str
+    latitude: float
+    longitude: float
+    time_zone: str
 
 @dataclass
 class Lodging:
@@ -82,15 +90,7 @@ class Trip:
     return_flight: Flight
     schedule: Schedulue
 
-@dataclass
-class Location:
-    """
-    Class representing a location
-    """
-    city_name: str
-    latitude: float
-    longitude: float
-    time_zone: str
+
 
 
 @dataclass
@@ -99,7 +99,14 @@ class Airport:
     Class representing an airport retrieved from Duffel
     """
     airport_name: str
-    Location location
+    location: Location
+
+    def handleInput(inputData) -> List[Trip]:
+        """
+        Handles input and returns a list of possible trips :)
+        """
+        print(inputData)
+        return "This connection works"
 
 # This takes a couple of seconds and doesn't change between calls so could be cached
 def get_duffel_airports() -> List[Airport]:
