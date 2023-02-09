@@ -28,3 +28,21 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: interactive story 1
+  steps:
+  - intent: ask_me_anything
+  - action: utter_temp
+  - action: travel_form
+  - active_loop: travel_form
+  - slot_was_set:
+    - requested_slot: temperature
+  - slot_was_set:
+    - temperature: hot 
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: action_say_temperature
+  - action: utter_remember
+  - intent: goodbye
+  - action: utter_goodbye

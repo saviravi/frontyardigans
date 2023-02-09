@@ -8,6 +8,26 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - ask_me_anything
+  - give_temp
+
+entities:
+- temperature
+
+slots:
+  temperature:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: temperature
+      conditions:
+      - active_loop: travel_form
+
+forms:
+  travel_form:
+    required_slots:
+      - temperature
 
 responses:
   utter_greet:
@@ -28,6 +48,26 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+
+  utter_ask_temp:
+  - text: "What temperature do you prefer"
+  
+  utter_remember:
+  - text: "Thanks. I'll remember that."
+
+  utter_temp:
+  - text: "What weather do you prefer?"
+
+
+actions:
+  - action_say_temperature
+  - utter_ask_temp
+  - utter_cheer_up
+  - utter_did_that_help
+  - utter_goodbye
+  - utter_greet
+  - utter_happy
+  - utter_remember
 
 session_config:
   session_expiration_time: 60

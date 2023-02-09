@@ -11,3 +11,21 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Activate form
+  steps:
+  - intent: ask_me_anything
+  - action: utter_temp
+  - action: travel_form
+  - active_loop: travel_form
+
+- rule: Submit form
+  condition:
+  - active_loop: travel_form
+  steps:
+  - action: travel_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_say_temperature
+  - action: utter_remember

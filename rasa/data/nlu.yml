@@ -89,3 +89,15 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: ask_me_anything
+  examples: |
+    - ask me anything
+    - would you like to ask me something
+    - feel free to ask me about things
+    - want to ask me something?
+
+- intent: give_temp
+  examples: |
+    - You prefer [hot](temperature) weather
+    - [cold](temperature) weather
