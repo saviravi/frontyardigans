@@ -20,6 +20,10 @@ DUFFEL_ACCESS_TOKEN = os.getenv('DUFFEL_ACCESS_TOKEN')
 def handleInput(inputData):
     return "This works"
 
+def readAPIKey(api_key_filename):
+    with open(api_key_filename, 'r+') as keyFile:
+        return keyFile.readline()
+
 @dataclass
 class Location:
     """
@@ -144,3 +148,17 @@ def get_duffel_airports() -> List[Airport]:
     return result
 
 
+
+
+def get_local_businesses_from_yelp(city_name, number_to_fetch, api_key_filename):
+    # Reads the API key from a file
+    YELP_API_KEY = readAPIKey(api_key_filename).strip()
+    # Call the Fusion API
+    url = "https://api.yelp.com/v3/businesses/search?sort_by=best_match&limit=" + number_to_fetch
+    headers = {"accept": "application/json",
+                "Authorization": "Bearer " + API_KEY}
+    response = requests.get(url, headers=headers, params = {"location": city_name})
+
+    # Print all the business names
+    data = response.json()["businesses"]
+    return data
