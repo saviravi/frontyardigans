@@ -1,3 +1,7 @@
+.DS_Store
+weather.pickle
+Recommendation/weather/stations/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -130,3 +134,9 @@ dmypy.json
 
 # tokens
 tokens
+
+# rasa
+rasa/.rasa/cache/*
+rasa/models/
+
+node_modules

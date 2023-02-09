@@ -5,13 +5,14 @@ rules:
 - rule: Say goodbye anytime the user says goodbye
   steps:
   - intent: goodbye
-  - action: utter_goodbye
+  - action: action_GetRecommendation
 
 - rule: Say 'I am a bot' anytime the user challenges
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
 
+<<<<<<< HEAD
 - rule: Activate form
   steps:
   - intent: ask_me_anything
@@ -29,3 +30,8 @@ rules:
     - requested_slot: null
   - action: action_say_temperature
   - action: utter_remember
+=======
+
+actions:
+  - action_GetRecommendation
+>>>>>>> 01782abef2a4f17f935e69780f4232cd3b9819f7
