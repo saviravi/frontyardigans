@@ -8,7 +8,7 @@ from typing import List
 from dataclasses import dataclass
 import requests
 from urllib.parse import urlencode
-from yelp import get_businesses, YelpAPIException
+from yelp import get_businesses_by_location_name, YelpAPIException
 
 # Load environment variables
 load_dotenv()
@@ -62,5 +62,5 @@ def get_duffel_locations() -> List[Location]:
     return result
 
 # Then get resturants and weather
-
+print(get_businesses_by_location_name("NYC")["businesses"])
 # pick the one that matches the user's input the best

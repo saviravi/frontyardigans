@@ -27,7 +27,7 @@ def _send_yelp_request(url, params):
     url_params = "?" + urlencode(params)
     return requests.get(url + url_params, headers=headers)
 
-def get_businesses(location: str, radius=8050, price=2, limit=50) -> dict:
+def get_businesses_by_location_name(location: str, radius=8050, price=2, limit=50) -> dict:
     """
     Searches Yelp Fusion API for businesses by location name, e.g. "NYC".
     Returns JSON of business details or raises YelpAPIException.
@@ -38,7 +38,7 @@ def get_businesses(location: str, radius=8050, price=2, limit=50) -> dict:
     else:
         raise YelpAPIException(str(response.content))
 
-def get_businesses(latitude: float, longitude: float, radius=8050, price=2, limit=50) -> dict:
+def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, price=2, limit=50) -> dict:
     """
     Searches Yelp Fusion API for businesses by latitude and longitude.
     Returns JSON of business details or raises YelpAPIException.
