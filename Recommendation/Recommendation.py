@@ -6,6 +6,9 @@ import os
 from time import sleep
 from typing import List
 from dataclasses import dataclass
+import requests
+from urllib.parse import urlencode
+from yelp import get_businesses, YelpAPIException
 
 # Load environment variables
 load_dotenv()
