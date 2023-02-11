@@ -44,5 +44,3 @@ stories:
   - active_loop: null
   - action: action_say_temperature
   - action: utter_remember
-  - intent: goodbye
-  - action: utter_goodbye
