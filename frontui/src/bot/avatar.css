@@ -1,0 +1,15 @@
+.bot-avatar {
+    content: url(chatbot.png);
+    height: 35px;
+    width: 35px;
+    display: flex;
+    margin-right: 15px;
+}
+
+.user-avatar {
+    content: url(user.png);
+    height: 35px;
+    width: 35px;
+    display: flex;
+    margin-left: 15px;
+}
