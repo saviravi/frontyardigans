@@ -34,7 +34,7 @@ from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.events import SlotSet
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-import Recommendation
+# import Recommendation
 
 class ActionSayTemperature(Action):
 
@@ -44,15 +44,15 @@ class ActionSayTemperature(Action):
 ALLOWED_TEMP = ["hot","cold"]
 
 
-class ActionGetRecommendation(Action):
+# class ActionGetRecommendation(Action):
 
- def name(self) -> Text:
-     return "action_GetRecommendation"
- def run(self, dispatcher: CollectingDispatcher,
-         tracker: Tracker,
-         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-         dispatcher.utter_message(text=Recommendation.handleInput([]))
-         return []
+#  def name(self) -> Text:
+#      return "action_GetRecommendation"
+#  def run(self, dispatcher: CollectingDispatcher,
+#          tracker: Tracker,
+#          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+#          dispatcher.utter_message(text=Recommendation.handleInput([]))
+#          return []
 
 
 
