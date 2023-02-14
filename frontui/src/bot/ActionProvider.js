@@ -7,13 +7,13 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       Takes the response from Rasa and outputs a message box.
       Called by Message Parser
     */
-    const botMessage = createChatBotMessage(data[0].text);
+    const botMessage = data.map(d => createChatBotMessage(d.text));
 
     // TODO: check if allow photos
 
     setState((prev) => ({
       ...prev,
-      messages: [...prev.messages, botMessage],
+      messages: [...prev.messages].concat(botMessage),
     }));
   };
 
