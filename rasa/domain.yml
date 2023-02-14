@@ -10,11 +10,17 @@ intents:
   - bot_challenge
   - ask_me_anything
   - give_temp
+<<<<<<< HEAD
   - give_city
 
 entities:
 - temperature
 - city
+=======
+
+entities:
+- temperature
+>>>>>>> main
 
 slots:
   temperature:
@@ -25,6 +31,7 @@ slots:
       entity: temperature
       conditions:
       - active_loop: travel_form
+<<<<<<< HEAD
   city:
     type: text
     influence_conversation: true
@@ -34,12 +41,17 @@ slots:
       conditions:
       - active_loop: travel_form
 
+=======
+>>>>>>> main
 
 forms:
   travel_form:
     required_slots:
       - temperature
+<<<<<<< HEAD
       - city
+=======
+>>>>>>> main
 
 stories:
   - story: collecting info
@@ -84,6 +96,16 @@ responses:
   
   utter_ask_travel_form_city:
   - text: "What city did you recently visit/liked?"
+
+
+  utter_ask_temp:
+  - text: "What temperature do you prefer"
+  
+  utter_remember:
+  - text: "Thanks. I'll remember that."
+
+  utter_temp:
+  - text: "What weather do you prefer?"
 
 
 actions:
