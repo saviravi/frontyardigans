@@ -60,7 +60,8 @@ class ActionGetRecommendation(Action):
  def run(self, dispatcher: CollectingDispatcher,
          tracker: Tracker,
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-         dispatcher.utter_message(text=Recommendation.handleInput([]))
+         temp = tracker.get_slot("temperature")
+         dispatcher.utter_message(text=Recommendation.handleInput([temp]))
          return []
 
 class ValidateTravelForm(FormValidationAction):
