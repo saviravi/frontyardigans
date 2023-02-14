@@ -45,4 +45,4 @@ stories:
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
-  - action: utter_remember
+  - action: action_GetRecommendation

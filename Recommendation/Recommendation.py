@@ -17,8 +17,7 @@ load_dotenv()
 DUFFEL_ACCESS_TOKEN = os.getenv('DUFFEL_ACCESS_TOKEN')
 
 
-def handleInput(inputData):
-    return "This works"
+
 
 def readAPIKey(api_key_filename):
     with open(api_key_filename, 'r+') as keyFile:
@@ -107,12 +106,12 @@ class Airport:
     airport_name: str
     location: Location
 
-    def handleInput(inputData) -> List[Trip]:
-        """
-        Handles input and returns a list of possible trips :)
-        """
-        print(inputData)
-        return "This connection works"
+def handleInput(inputData):
+    """
+    Handles input and returns a list of possible trips :)
+    """
+    print(inputData[0])
+    return "Okay, let me find you some cities that are " + inputData[0] + "[TODO WEATHER API]"
 
 # This takes a couple of seconds and doesn't change between calls so could be cached
 def get_duffel_airports() -> List[Airport]:
