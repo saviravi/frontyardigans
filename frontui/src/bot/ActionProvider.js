@@ -1,5 +1,6 @@
 // in ActionProvider.jsx
 import React from 'react';
+import { createCustomMessage } from 'react-chatbot-kit';
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   const handleMessage = (data) => {
@@ -7,9 +8,16 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       Takes the response from Rasa and outputs a message box.
       Called by Message Parser
     */
-    const botMessage = data.map(d => createChatBotMessage(d.text));
 
-    // TODO: check if allow photos
+    /* Widget example */
+    // const botMessage = data.map(d => d.text ? createChatBotMessage(d.text) : createChatBotMessage("", {
+    //   widget: 'imageWidget',
+    //   payload: d.image
+    // }));
+
+    const botMessage = data.map(d => d.text ? createChatBotMessage(d.text) : createCustomMessage("", "imageMessage", {
+      payload: d.image,
+    }));
 
     setState((prev) => ({
       ...prev,
