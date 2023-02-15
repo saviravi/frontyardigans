@@ -25,7 +25,7 @@ from typing import Any, Text, Dict, List
 from rasa_sdk.types import DomainDict
 from rasa_sdk import Action, Tracker, FormValidationAction
 
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import AllSlotsReset, SlotSet
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
@@ -98,3 +98,16 @@ class ValidateTravelForm(FormValidationAction):
             return {"city": None}
         dispatcher.utter_message(text=f"OK! You liked visiting {city}.")
         return {"city": slot_value}
+
+class ActionClearSlots(Action):
+
+ def name(self) -> Text:
+     return "action_ClearSlots"
+
+ def run(self, dispatcher: CollectingDispatcher,
+         tracker: Tracker,
+         domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+         dispatcher.utter_message("Slots are cleared.")
+
+         return [AllSlotsReset()]

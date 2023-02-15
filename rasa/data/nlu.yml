@@ -97,3 +97,11 @@ nlu:
   examples: |
     - [Chicago](city)
     - I prefer [Paris](city)
+- intent: clear_slots
+  examples: |
+    - clear slots
+    - clear all slots
+    - clear up slots
+    - empty slots
+    - delete slots
+    - delete all the slots

@@ -11,6 +11,7 @@ intents:
   - ask_me_anything
   - give_temp
   - give_city
+  - clear_slots
 
 entities:
 - temperature
@@ -85,11 +86,10 @@ responses:
   utter_ask_travel_form_city:
   - text: "What city did you recently visit/liked?"
 
-
-
 actions:
   - validate_travel_form
   - action_GetRecommendation
+  - action_ClearSlots
 
 session_config:
   session_expiration_time: 60

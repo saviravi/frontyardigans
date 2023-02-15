@@ -18,8 +18,6 @@ rules:
   - action: travel_form
   - active_loop: travel_form
 
-
-
 - rule: Submit form
   condition:
   - active_loop: travel_form
@@ -29,3 +27,8 @@ rules:
   - slot_was_set:
     - requested_slot: null
   - action: action_GetRecommendation
+
+- rule: Clear slots
+  steps:
+  - intent: clear_slots
+  - action: action_ClearSlots
