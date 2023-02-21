@@ -1,9 +1,22 @@
 import requests
 from urllib.parse import quote
+from dataclasses import dataclass
+
+@dataclass
+class WeatherDay:
+    date: str
+    min_f: float
+    max_f: float
+    precipitation: float
+
+@dataclass
+class Station:
+    city_name: str
+    station_name: str
+    weather: list[WeatherDay]
 
 WEATHER_API_URL = "https://travis-weatherapi.fly.dev"
 WEATHER_CITIES_API_URL_SUFFIX = "/cities"
-
 
 class WeatherAPIException(Exception):
     """
@@ -18,7 +31,7 @@ def get_cities():
     )
     return response.json()
 
-def get_weather(city: str):
+def get_weather(city: str) -> list[WeatherDay]:
     response = requests.get(
         WEATHER_API_URL
         + WEATHER_CITIES_API_URL_SUFFIX
