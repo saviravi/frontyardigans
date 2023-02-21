@@ -8,6 +8,39 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - ask_me_anything
+  - give_temp
+  - give_city
+  - clear_slots
+
+entities:
+- temperature
+- city
+
+slots:
+  temperature:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: temperature
+      conditions:
+      - active_loop: travel_form
+  city:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: city
+      conditions:
+      - active_loop: travel_form
+
+
+forms:
+  travel_form:
+    required_slots:
+      - temperature
+      - city
 
 stories:
   - story: collecting info
@@ -15,6 +48,11 @@ stories:
 responses:
   utter_greet:
   - text: "Hey! How are you?"
+  - text: "Hello! How are you?"
+  - text: "Hi! How are you?"
+  - text: "Hello! What can I help you with?"
+  - text: "Hey! What can I help you with?"
+  - text: "Hi! What can I help you with?"
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
@@ -22,18 +60,36 @@ responses:
 
   utter_did_that_help:
   - text: "Did that help you?"
+  - text: "Is that helpful?"
+  - text: "Are you happy with that answer?"
 
   utter_happy:
   - text: "Great, carry on!"
+  - text: "Awesome!"
+  - text: "Nice!"
 
   utter_goodbye:
   - text: "Bye"
+  - text: "Goodbye!"
+  - text: "Have a great day!!"
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+  - text: "I am a Rasa chatbot."
+  
+  utter_remember:
+  - text: "Thanks. I'll remember that."
+
+  utter_ask_travel_form_temperature:
+  - text: "What weather do you prefer?"
+  
+  utter_ask_travel_form_city:
+  - text: "What city did you recently visit/liked?"
 
 actions:
-  - action_search_yelp_resturants
+  - validate_travel_form
+  - action_GetRecommendation
+  - action_ClearSlots
 
 session_config:
   session_expiration_time: 60

@@ -1,3 +1,7 @@
+.DS_Store
+weather.pickle
+Recommendation/weather/flyio/weather/stations/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -133,3 +137,4 @@ dmypy.json
 rasa/.rasa/cache/*
 rasa/models/
 
+node_modules
