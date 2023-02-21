@@ -25,6 +25,7 @@ class YelpCategory(Enum):
     ChristmasMarkets = "xmasmarkets"
     Festivals = "generalfestivals,funfair"
     Museums = "museums"
+    ArtMuseums = "artmuseums"
     Observatories = "observatories"
     Opera = "opera"
     Theater = "theater"
