@@ -15,6 +15,21 @@ class Station:
     station_name: str
     weather: list[WeatherDay]
 
+def weather_day_from_json(json: dict[str, any]) -> WeatherDay:
+    return WeatherDay(
+        date=json["date"],
+        min_f=json["min_f"],
+        max_f=json["max_f"],
+        precipitation=json["precipitation"]
+    )
+
+def station_from_json(json: dict[str, any]) -> Station:
+    return Station(
+        city_name=json["city_name"],
+        station_name=json["station_name"],
+        weather=list(map(weather_day_from_json, json["weather"]))
+    )
+
 WEATHER_API_URL = "https://travis-weatherapi.fly.dev"
 WEATHER_CITIES_API_URL_SUFFIX = "/cities"
 
@@ -38,10 +53,13 @@ def get_weather(city: str) -> list[WeatherDay]:
         + "/" + quote(city)
     )
     if response.status_code == 200:
-        return response.json()
+        return list(map(weather_day_from_json, response.json()))
     else:
         raise WeatherAPIException(str(response.content))
 
-def get_all_data():
+def get_all_data() -> list[Station]:
     response = requests.get(WEATHER_API_URL)
-    return response.json()
+    if response.status_code == 200:
+        return list(map(station_from_json, response.json()))
+    else:
+        raise WeatherAPIException(str(response.content))
