@@ -3,3 +3,4 @@ rasa
 airportsdata
 elasticsearch==7.13.0
 pytest
+nltk

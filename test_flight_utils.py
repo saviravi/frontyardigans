@@ -7,8 +7,6 @@
 # # setting path
 # sys.path.append("../")
 
-
-
 # # sys.path.append('..')
 
 import flight_utils

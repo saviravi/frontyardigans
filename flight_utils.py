@@ -68,7 +68,7 @@ def load_airport_data():
 
 # classes for getting flight offers
 
-class FlightSlice:
+class FlightSlice(object):
 	def __init__(self, origin, dest, depart_day, depart_month, depart_year):
 		return {"origin": origin, "destination": dest, "departure_day": "{2}-{1}-{0}".format(depart_day, depart_month, depart_year) }
 
@@ -83,16 +83,24 @@ class Cabin(Enum):
 	BUSINESS = "business"
 	FIRST = "first"
 
-class Airport:
-	def __init__(self, name, iata, lat, lon, time_zone, city, country):
+class Airport(object):
+	def __init__(self, name, iata, icao, lat, lon, time_zone, city, country):
 		self.name = name
 		self.iata = iata
+		self.icao = icao
 		self.lat = lat
 		self.lon = lon
 		self.time_zone = time_zone
 		self.city = city
 		self.country = country
 		return
+	
+	def from_duffel(place):
+		info = place.__dict__
+		airport = Airport(info["name"], info.get("iata_code"), info["icao_code"], info["latitude"], info["longitude"], info["time_zone"], info["city"].__dict__["name"], info["iata_country_code"])
+		return airport
+	
+
 	
 
 # calls Duffel API
@@ -101,30 +109,31 @@ def get_flights(slices: list[FlightSlice], passengers: list(Passenger), cabin_cl
 	""" gets a list of flight offers, sorted by total_amount or total_duration (default: by price) """
 	passengers_list = [{"type": passenger.value} for passenger in passengers]
 	reqs = CLIENT.offer_requests.create().slices(slices).passengers(passengers_list).cabin_class(cabin_class.value).execute()
+	# CLIENT.offers.list(reqs.id, "total_amount" if sort_by_price else "total_duration", None)
 	offers_list = list(CLIENT.offers.list(reqs.id, "total_amount" if sort_by_price else "total_duration", None))
 	utils.log(msg=f"Found {len(offers_list)} offers")
 	return offers_list
 
+
+
 def pretty_print_flight_offers(offers_list):
 	for offer in offers_list:
 		offer = offer.__dict__
-		# print(offer)
+		# print(json.dumps(offer))
+		print(offer)
 		# print("\n\n\n\n")
 		print(offer["slices"][0].__dict__.keys())
-		print(offer["slices"][0].__dict__)
-		slice = {"origin": "origin", "destination": "dest"}
-		break
-		# break
-		# simple_offer = {
-		#   "id": offer["id"],
-		#   "base_currency": offer["base_currency"],
-		#   "created_at": offer["created_at"],
-		#   "airline": offer["owner"].__dict__["name"],
-		#   "passengers": [passenger["type"] for passenger in offer["passengers"]],
-		#   # "slices": [{"start_airport": slice.__dict__["destination"].__dict__["name"], "end_airport": slice.__dict__[""]} for slice in offer["slices"]],
-		# }
-		# print(offer)
-		# print("\n\n")
+		simple_offer = {
+		  "id": offer["id"],
+		  "base_currency": offer["base_currency"],
+		  "created_at": offer["created_at"],
+		  "airline": offer["owner"].__dict__["name"],
+		  "passengers": [passenger.__dict__["type"] for passenger in offer["passengers"]],
+		  "slices": [{"origin": Airport.from_duffel(slice.__dict__["origin"]), "destination": Airport.from_duffel(slice.__dict__["destination"])} for slice in offer["slices"]],
+		  "price": offer["total_amount"],
+		  # "slices": [{"start_airport": slice.__dict__["destination"].__dict__["name"], "end_airport": slice.__dict__[""]} for slice in offer["slices"]],
+		}
+		print(simple_offer)
 
 
 
