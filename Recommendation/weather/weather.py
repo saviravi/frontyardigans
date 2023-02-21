@@ -72,6 +72,21 @@ def closest_station(latitude: float, longitude: float, range: int = 30) -> tuple
     # Return closest weather station and its corresponding distance to the given latitude and longitude
     return closest_station, distances[0][1]
 
+def closest_station_bf(latitude: float, longitude: float) -> tuple[Station, float]:
+    best_station_idx = 0
+    closest_distance = float('inf')
+    for i, station in enumerate(weather_data):
+        station_lat = station["LATITUDE"][0]
+        station_long = station["LONGITUDE"][0]
+        distance = vincenty((latitude, longitude), (station_lat, station_long))
+        if distance is None:
+            continue
+        if distance < closest_distance:
+            closest_distance = distance
+            best_station_idx = i
+    
+    return weather_data[best_station_idx], closest_distance
+
 @dataclass
 class WeatherDay:
     """Class representing one day of weather API result"""
