@@ -1,4 +1,8 @@
 duffel-api
 rasa
+airportsdata
+elasticsearch==7.13.0
+pytest
+nltk
 python-dotenv
 vincenty
