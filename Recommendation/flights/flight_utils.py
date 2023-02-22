@@ -1,10 +1,14 @@
 import os
+import sys
+
 from enum import Enum
 from duffel_api import Duffel
 import airportsdata
 import json
-import es_utils
+
 from elasticsearch import helpers
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import es_utils
 import utils
 
 

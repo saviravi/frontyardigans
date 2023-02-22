@@ -1,14 +1,3 @@
-# import sys
-# # import path
-
-# # directory reach
-# # directory = path.path(__file__).abspath()
- 
-# # setting path
-# sys.path.append("../")
-
-# # sys.path.append('..')
-
 import flight_utils
 
 def test_get_flights():
