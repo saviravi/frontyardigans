@@ -1,4 +1,15 @@
+from __future__ import annotations
 from enum import Enum
+from dataclasses import dataclass
+from typing import Union
+
+@dataclass
+class UnknownYelpCategory:
+    """
+    Placeholder for Yelp categories that haven't been enumerated yet.
+    """
+    alias: str
+    title: str
 
 class YelpCategory(Enum):
     """
@@ -64,10 +75,43 @@ class YelpCategory(Enum):
     CarRental = "carrental"
     Tours = "tours"
 
+    # All
+    All = "all"
 
+    @staticmethod
+    def values() -> list[str]:
+        return [x.value for x in YelpCategory]
 
-def any_of(*args) -> str:
+    @staticmethod
+    def from_json(category: dict) -> Union[YelpCategory, UnknownYelpCategory]:
+        """
+        Attempts to convert a `{'alias': ..., 'name': ...}` category result from the Yelp Fusion API to a `YelpCategory` instance.
+        If no matching `YelpCategory` is found, returns an instance of `UnknownYelpCategory`.
+        """
+        alias: str = category["alias"]
+        title: str = category["title"]
+
+        values = YelpCategory.values()
+
+        if alias in values:
+            return YelpCategory(alias)
+        elif title.lower() in values:
+            return YelpCategory(title.lower())
+
+        for value in values:
+            if alias in value or title in value:
+                return YelpCategory(value)
+    
+        return UnknownYelpCategory(alias, title)
+
+def any_of(categories: list[Union[UnknownYelpCategory, YelpCategory]]) -> str:
     """
     Returns query string that combines multiple categories.
     """
-    return ",".join([x.value for x in args])
+    filter = []
+    for category in categories:
+        if isinstance(category, UnknownYelpCategory):
+            filter.append(category.alias)
+        else:
+            filter.append(category.value)
+    return ",".join(filter)
