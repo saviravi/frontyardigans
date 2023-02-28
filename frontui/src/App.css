@@ -115,3 +115,14 @@ img.image-message {
   background: transparent;
   text-align: center;
 }
+
+.option-button:hover {
+  margin: 5px;
+  border-radius: 25px;
+  padding: 8px;
+  border-color: #6f4394;
+  background: transparent;
+  text-align: center;
+  background-color: rgb(175, 175, 175);
+  transition: 0.3s;
+}
