@@ -1,5 +1,6 @@
 import React from "react";
 import Chatbot from "react-chatbot-kit";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-chatbot-kit/build/main.css'
 import './App.css'
 
