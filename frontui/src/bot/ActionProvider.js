@@ -9,19 +9,28 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       Called by Message Parser
     */
 
-    /* Widget example */
-    // const botMessage = data.map(d => d.text ? createChatBotMessage(d.text) : createChatBotMessage("", {
-    //   widget: 'imageWidget',
-    //   payload: d.image
-    // }));
+    // console.log(data)
 
-    const botMessage = data.map(d => d.text ? createChatBotMessage(d.text) : createCustomMessage("", "imageMessage", {
-      payload: d.image,
-    }));
+    const botMessages = data.map(d => {
+      if (d.text) {
+        if (d.buttons) {
+          return createChatBotMessage(d.text, {
+              widget: 'buttonWidget',
+              payload: d.buttons
+          })
+        } else {
+          return createChatBotMessage(d.text);
+        }
+      } else {
+        return createCustomMessage("", "imageMessage", {
+          payload: d.image,
+        })
+      }
+    });
 
     setState((prev) => ({
       ...prev,
-      messages: [...prev.messages].concat(botMessage),
+      messages: [...prev.messages].concat(botMessages),
     }));
   };
 

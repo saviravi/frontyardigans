@@ -1,9 +1,10 @@
 import React from 'react';
 
-const ImageMessage = props => {
+const ImageMessage = ({payload}) => {
   return (
     <img
-      src={props.payload}
+      src={payload}
+      alt={payload}
       style={{ width: '100%' }}
     />
   );

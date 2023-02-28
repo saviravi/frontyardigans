@@ -8,7 +8,7 @@ const MessageParser = ({ children, actions }) => {
   */
   const parse = (message) => {
     axios.post('http://localhost:5005/webhooks/rest/webhook', {
-      sender: "User", // This is supposed to be a recipient ID, this is all local tho so whatever
+      sender: "User", 
       message: message
     }).then(response => {
         actions.handleMessage(response.data);
@@ -22,7 +22,7 @@ const MessageParser = ({ children, actions }) => {
       {React.Children.map(children, (child) => {
         return React.cloneElement(child, {
           parse: parse,
-          actions: {},
+          actions,
         });
       })}
     </div>
