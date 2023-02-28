@@ -1,11 +1,12 @@
 import React from 'react';
+import '../../App.css'
 
 const ImageMessage = ({payload}) => {
   return (
     <img
       src={payload}
       alt={payload}
-      style={{ width: '100%' }}
+      className="image-message"
     />
   );
 };

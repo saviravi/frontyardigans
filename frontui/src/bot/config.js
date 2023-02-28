@@ -6,10 +6,10 @@ import ImageWidget from './custom_components/ImageWidget';
 import ButtonWidget from './custom_components/ButtonWidget';
 import ImageMessage from './custom_components/ImageMessage';
 
-const botName = "Frontyadigans recommendation bot";
+const botName = "Travis, the travel agent";
 
 const config = {
-  initialMessages: [createChatBotMessage(`Hello there, I'm ${botName}!`), ],
+  initialMessages: [createChatBotMessage(`Hello there, I'm ${botName}! Send me anything to get started.`)],
   botName: botName,
   customComponents: {
     botAvatar: (props) => <BotAvatar {...props} />,
