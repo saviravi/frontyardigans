@@ -114,6 +114,7 @@ img.image-message {
   border-color: #6f4394;
   background: transparent;
   text-align: center;
+  transition: all 0.2s ease-in-out;
 }
 
 .option-button:hover {
@@ -124,5 +125,4 @@ img.image-message {
   background: transparent;
   text-align: center;
   background-color: rgb(175, 175, 175);
-  transition: 0.3s;
 }

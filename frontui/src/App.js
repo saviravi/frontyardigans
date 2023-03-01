@@ -1,23 +1,24 @@
 import React from "react";
-import Chatbot from "react-chatbot-kit";
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Navbar from './navbar/Navbar'
+import TravisBot from "./bot/Chatbot";
+import Highlights from "./pages/highlights";
+import About from './pages/about'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-chatbot-kit/build/main.css'
 import './App.css'
 
-import config from './bot/config.js';
-import MessageParser from './bot/MessageParser.js';
-import ActionProvider from './bot/ActionProvider.js';
-
-const BotFrontend = () => {
-  return (
-    <div>
-      <Chatbot
-        config={config}
-        messageParser={MessageParser}
-        actionProvider={ActionProvider}
-      />
-    </div>
+function App() {
+  return(
+    <Router>
+      <Navbar sticky="top" />
+      <Routes>
+        <Route exact path='/' element={<TravisBot />} />
+        <Route exact path='/home' element={<TravisBot />} />
+        <Route path='/highlights' element={<Highlights />} />
+        <Route path='/about' element={<About />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
-export default BotFrontend;
+export default App;
