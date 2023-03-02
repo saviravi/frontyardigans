@@ -61,7 +61,6 @@ class YelpCategory(Enum):
     FashionStores = "fashion"
     GiftStores = "giftshops"
     
-
     # Nightlife
     Bars = "bars"
     ComedyClub = "comedyclubs"

@@ -148,9 +148,10 @@ def get_duffel_airports() -> List[Airport]:
 def get_next_activity(activity_preferences: List[YelpCategory],
                       price_preference: Union[int, str],
                       previous_activity: Activity,
-                      radius_meters=3000) -> Activity:
+                      radius_meters=3000,
+                      exclude: List[YelpCategory] = []) -> Activity:
     """
-
+    
     """
     previous_latitude = previous_activity.business.latitude
     previous_longitude = previous_activity.business.longitude
@@ -159,6 +160,9 @@ def get_next_activity(activity_preferences: List[YelpCategory],
     for previous_category in previous_activity.business.categories:
         if not isinstance(previous_category, UnknownYelpCategory) and previous_category in activity_preferences:
             activity_preferences.remove(previous_category)
+    for category in exclude:
+        if category in activity_preferences:
+            activity_preferences.remove(category)
     filter = any_of(activity_preferences)
 
     # Find a nearby activity within ~2 miles
