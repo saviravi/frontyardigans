@@ -10,7 +10,7 @@ import requests
 import json
 import sys
 from urllib.parse import urlencode
-from .yelp import get_businesses_by_lat_long, YelpAPIException, YelpCategory, any_of, UnknownYelpCategory, YelpResult
+from yelp import get_businesses_by_lat_long, YelpAPIException, YelpCategory, any_of, UnknownYelpCategory, YelpResult
 
 # Load environment variables
 load_dotenv()

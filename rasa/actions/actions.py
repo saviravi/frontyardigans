@@ -35,6 +35,11 @@ class ActionSayTemperature(Action):
         return "action_say_temperature"
 
 ALLOWED_TEMP = ["hot","cold"]
+ALLOWED_CITIES = ["paris", "london", "rome", "barcelona", "amsterdam", "istanbul", "tokyo", "new york city",
+    "maui","cancun","sydney","venice","san francisco","miami","honolulu","rio de janeiro",
+    "prague","hong kong","mexico city","los angeles","las vegas","orlando","ibiza","vienna",
+    "seville","madrid","lake tahoe","cairns","queenstown","tulum" ]
+
 
 
 from typing import Any, Text, Dict, List
@@ -95,6 +100,9 @@ class ValidateTravelForm(FormValidationAction):
         city = tracker.get_slot("city")
         if not city:
             dispatcher.utter_message(text=f"No city was entered")
+            return {"city": None}
+        if slot_value.lower() not in ALLOWED_CITIES:
+            dispatcher.utter_message(text=f"We only allow the most popular 30 cities.")
             return {"city": None}
         dispatcher.utter_message(text=f"OK! You liked visiting {city}.")
         return {"city": slot_value}
