@@ -4,7 +4,7 @@ from duffel_api import Duffel
 from dotenv import load_dotenv
 import os
 from time import sleep
-from typing import List
+from typing import List, Union
 from dataclasses import dataclass
 import requests
 import json
@@ -12,6 +12,8 @@ import sys
 from urllib.parse import urlencode
 from yelp import get_businesses_by_location_name, YelpAPIException
 import datetime
+from .yelp import get_businesses_by_lat_long, YelpAPIException, YelpCategory, any_of, UnknownYelpCategory, YelpResult
+
 # Load environment variables
 load_dotenv()
 DUFFEL_ACCESS_TOKEN = os.getenv('DUFFEL_ACCESS_TOKEN')
@@ -47,8 +49,10 @@ class Activity:
     """
     Class representing an activity on your trip
     """
-    location: Location
-    price: int
+    business: YelpResult
+    time: str
+    duration: str
+
 
 @dataclass
 class Day_Schedulue:
@@ -150,6 +154,7 @@ def get_duffel_airports() -> List[Airport]:
 
     return result
 
+
 def isInMorning(start_time):
     if start_time.hour < 12:
         return True
@@ -223,6 +228,51 @@ setUpSchedulue(start_city, destination, start_date,  duration, preferances):
     theSchedulue = Schedulue()
     theSchedule.setList(days)
     return theSchedule
+
+def get_next_activity(activity_preferences: List[YelpCategory],
+                      price_preference: Union[int, str],
+                      previous_activity: Activity,
+                      radius_meters=3000,
+                      exclude: List[YelpCategory] = []) -> Activity:
+    """
+    
+    """
+    previous_latitude = previous_activity.business.latitude
+    previous_longitude = previous_activity.business.longitude
+
+    # Create filter given user preferences without last activity categories
+    for previous_category in previous_activity.business.categories:
+        if not isinstance(previous_category, UnknownYelpCategory) and previous_category in activity_preferences:
+            activity_preferences.remove(previous_category)
+    for category in exclude:
+        if category in activity_preferences:
+            activity_preferences.remove(category)
+    filter = any_of(activity_preferences)
+
+    # Find a nearby activity within ~2 miles
+    # TODO: filter by open time
+    businesses = get_businesses_by_lat_long(
+        previous_latitude, previous_longitude,
+        radius=radius_meters,
+        price=price_preference,
+        categories=filter
+    )
+
+    # Sort businesses by best rating
+    businesses.sort(key=lambda b: b.rating, reverse=True)
+
+    # Choose the next activity as the business with the best rating
+    business = businesses[0]
+
+    # Convert business to activity
+    activity = Activity(
+        business=business,
+        time=None,
+        duration=None
+    )
+
+    return activity
+
 
 def get_local_businesses_from_yelp(city_name, number_to_fetch, api_key_filename):
     # Reads the API key from a file

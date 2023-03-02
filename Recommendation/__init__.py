@@ -1,2 +1,1 @@
-from . import yelp
-from . import weather
+from .Recommendation import get_next_activity, Activity, Location

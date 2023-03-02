@@ -132,8 +132,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# tokens
-tokens
 
 # rasa
 rasa/.rasa/cache/*

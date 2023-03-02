@@ -42,17 +42,56 @@ forms:
       - temperature
       - city
 
-stories:
-  - story: collecting info
-  - itent:
 responses:
   utter_greet:
   - text: "Hey! How are you?"
+    buttons:
+    - title: "I'm doing well!"
+      payload: "/mood_great"
+    - title: "I'm depressed."
+      payload: "/mood_unhappy"
+    - title: "I feel like traveling!"
+      payload: "/ask_me_anything" 
   - text: "Hello! How are you?"
+    buttons:
+      - title: "Doing super!"
+        payload: "/mood_great"
+      - title: "I hate it here!!"
+        payload: "/mood_unhappy"
+      - title: "Let's go somewhere fun!"
+        payload: "/ask_me_anything" 
   - text: "Hi! How are you?"
+    buttons:
+    - title: "Pretty good!"
+      payload: "/mood_great"
+    - title: "I'm so sad."
+      payload: "/mood_unhappy"
+    - title: "I feel like traveling!"
+      payload: "/ask_me_anything" 
   - text: "Hello! What can I help you with?"
+    buttons:
+    - title: "I'm doing well!"
+      payload: "/mood_great"
+    - title: "I'm depressed."
+      payload: "/mood_unhappy"
+    - title: "I feel like traveling!"
+      payload: "/ask_me_anything" 
   - text: "Hey! What can I help you with?"
+    buttons:
+    - title: "Doing super!"
+      payload: "/mood_great"
+    - title: "I hate it here!!"
+      payload: "/mood_unhappy"
+    - title: "Let's go somewhere fun!"
+      payload: "/ask_me_anything" 
   - text: "Hi! What can I help you with?"
+    buttons:
+    - title: "Pretty good!"
+      payload: "/mood_great"
+    - title: "I'm so sad."
+      payload: "/mood_unhappy"
+    - title: "I feel like traveling!"
+      payload: "/ask_me_anything" 
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
@@ -60,8 +99,23 @@ responses:
 
   utter_did_that_help:
   - text: "Did that help you?"
+    buttons:
+    - title: "Yeah it did"
+      payload: "/affirm"
+    - title: "Na"
+      payload: "/deny"
   - text: "Is that helpful?"
+    buttons:
+    - title: "Yeah!"
+      payload: "/affirm"
+    - title: "No, it wasn't!"
+      payload: "/deny"
   - text: "Are you happy with that answer?"
+    buttons:
+    - title: "Yes I am"
+      payload: "/affirm"
+    - title: "Hell no"
+      payload: "/deny" 
 
   utter_happy:
   - text: "Great, carry on!"
@@ -82,9 +136,19 @@ responses:
 
   utter_ask_travel_form_temperature:
   - text: "What weather do you prefer?"
+    buttons:
+      - title: "hot"
+        payload: '/give_temp{{"temperature":"hot"}}'
+      - title: "cold"
+        payload: '/give_temp{{"temperature":"cold"}}'
   
   utter_ask_travel_form_city:
   - text: "What city did you recently visit/liked?"
+    buttons:
+      - title: "Chicago"
+        payload: '/give_city{{"city":"chicago"}}'
+      - title: "Paris"
+        payload: '/give_city{{"city":"paris"}}'
 
 actions:
   - validate_travel_form

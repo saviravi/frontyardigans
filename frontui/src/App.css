@@ -21,11 +21,11 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgba(255, 255, 255, 0.496);
 }
 
 .App-link {
-  color: #61dafb;
+  color: #b18ad2;
 }
 
 @keyframes App-logo-spin {
@@ -38,13 +38,91 @@
 }
 
 body {
-  background-color: #61dafb;
+  background: url("images/wallpaper.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-color: #301381;
+}
+
+.react-chatbot-kit-chat-bot-message {
+  width: auto;
 }
 
 .react-chatbot-kit-chat-container {
   position: absolute;
-  top: 50%;
+  top: 55%;
   left: 50%;
   margin-right: -50%;
+  width: 60%;
   transform: translate(-50%, -50%);
+}
+
+.react-chatbot-kit-chat-inner-container {
+  background-color: rgba(255, 255, 255, 0.715);
+}
+
+.react-chatbot-kit-chat-bot-message {
+  margin-right: auto;
+  margin-left: 0;
+  background-color: #6f4394;
+}
+
+.react-chatbot-kit-chat-btn-send {
+  background-color: #6f4394;
+}
+
+.react-chatbot-kit-chat-bot-message-arrow {
+  border-right: 8px solid #6f4394;
+}
+
+img.logo-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100px;
+  transform: translate(-50%, -50%);
+}
+
+.logo-title {
+  position: absolute; 
+  top: 3%; 
+  left: 50%; 
+  margin-top: 5%; 
+  transform: translate(-50%, -50%);
+}
+
+.bot-avatar {
+  -webkit-filter: hue-rotate(40deg);
+  filter: hue-rotate(40deg);
+}
+
+img.image-message {
+  width: 50%
+}
+
+.options-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.option-button {
+  margin: 5px;
+  border-radius: 25px;
+  padding: 8px;
+  border-color: #6f4394;
+  background: transparent;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.option-button:hover {
+  margin: 5px;
+  border-radius: 25px;
+  padding: 8px;
+  border-color: #6f4394;
+  background: transparent;
+  text-align: center;
+  background-color: rgb(175, 175, 175);
 }

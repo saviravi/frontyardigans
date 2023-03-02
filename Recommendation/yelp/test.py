@@ -9,8 +9,8 @@ class TestYelpAPI(unittest.TestCase):
     def test_get_businesses_city_name_NYC(self):
         response = get_businesses_by_location_name("NYC")
         has_katz = False
-        for business in response["businesses"]:
-            if "Katz" in business["name"]:
+        for business in response:
+            if "Katz" in business.name:
                 has_katz = True
         
         self.assertTrue(has_katz)
@@ -23,8 +23,8 @@ class TestYelpAPI(unittest.TestCase):
         nyc_longitude = -74.0060
         response = get_businesses_by_lat_long(nyc_latitude, nyc_longitude)
         has_katz = False
-        for business in response["businesses"]:
-            if "Katz" in business["name"]:
+        for business in response:
+            if "Katz" in business.name:
                 has_katz = True
         
         self.assertTrue(has_katz)
@@ -40,10 +40,10 @@ class TestYelpAPI(unittest.TestCase):
         """
         Tests getting museums in NYC using category filter.
         """
-        categories = any_of(YelpCategory.Museums, YelpCategory.ArtMuseums)
+        categories = any_of([YelpCategory.Museums, YelpCategory.ArtMuseums])
         response = get_businesses_by_location_name("NYC", price="1,2,3,4", radius=40000, categories=categories)
         has_moma = False
-        for business in response["businesses"]:
-            if "MoMA" in business["name"]:
+        for business in response:
+            if "MoMA" in business.name:
                 has_moma = True
         self.assertTrue(has_moma)
