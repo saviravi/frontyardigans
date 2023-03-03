@@ -1,0 +1,16 @@
+version: "3.0"
+nlu:
+  - lookup: city
+    examples: |
+      - Columbus
+      - Paris
+      - Chicago
+      - Cleveland
+      - Los Angeles
+      - San Diego
+      - Portland
+      - Miami
+      - Dallas
+      - Boston
+      - Nashville
+      - London

@@ -97,6 +97,8 @@ nlu:
   examples: |
     - [Chicago](city)
     - I prefer [Paris](city)
+    - I like [Cleveland](city)
+    - [Los Angeles](city) is cool
 - intent: clear_slots
   examples: |
     - clear slots
@@ -105,3 +107,15 @@ nlu:
     - empty slots
     - delete slots
     - delete all the slots
+- lookup: temperature
+  examples: |
+    - warm
+    - cold
+    - hot
+    - lukewarm
+    - frigid
+    - humid
+    - rainy
+
+
+
