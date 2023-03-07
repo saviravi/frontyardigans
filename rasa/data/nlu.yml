@@ -127,6 +127,15 @@ nlu:
     - [Tulum](city)
     - I like [Cleveland](city)
     - [Los Angeles](city) is cool
+- intent: give_activity
+  examples: |
+    - [Active Life](activity)
+    - [Arts & Entertainment](activity)
+    - [Arts and Entertainment](activity)
+    - [Food](activity)
+    - [shopping](activity)
+    - [nightlife](activity)
+    - [travel](activity)
 - intent: clear_slots
   examples: |
     - clear slots
