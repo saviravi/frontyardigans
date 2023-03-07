@@ -35,6 +35,7 @@ class ActionSayTemperature(Action):
         return "action_say_temperature"
 
 ALLOWED_TEMP = ["hot","cold"]
+
 ALLOWED_CITIES = ["paris", "london", "rome", "barcelona", "amsterdam", "istanbul", "tokyo", "new york city",
     "maui","cancun","sydney","venice","san francisco","miami","honolulu","rio de janeiro",
     "prague","hong kong","mexico city","los angeles","las vegas","orlando","ibiza","vienna",

@@ -97,6 +97,34 @@ nlu:
   examples: |
     - [Chicago](city)
     - I prefer [Paris](city)
+    - [Rome](city) is cool.
+    - [Barcelona](city)
+    - I liked [Amsterdam](city)
+    - I visited [Istanbul](city)
+    - [tokyo](city) was awesome.
+    - [New york City](city) is exciting.
+    - [Maui](city)
+    - [Cancun](city)
+    - [Sydney](city)
+    - [Venice](city)
+    - [San Francisco](city)
+    - [Miami](city)
+    - [Honolulu](city)
+    - [Rio de Janeiro](city)
+    - [Prague](city) was interesting
+    - [Hong Kong](city)
+    - [Mexico City](city)
+    - [Los Angeles](city)
+    - [Las Vegas](city)
+    - like [Orlando](city)
+    - [Ibiza](city)
+    - [Vienna](city)
+    - [Seville](city)
+    - [Madrid](city) is cool
+    - [Lake Tahoe](city)
+    - [Cairns](city)
+    - [Queenstown](city)
+    - [Tulum](city)
 - intent: clear_slots
   examples: |
     - clear slots
