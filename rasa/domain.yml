@@ -144,11 +144,11 @@ responses:
   
   utter_ask_travel_form_city:
   - text: "What city did you recently visit/liked?"
-    buttons:
-      - title: "Chicago"
-        payload: '/give_city{{"city":"chicago"}}'
-      - title: "Paris"
-        payload: '/give_city{{"city":"paris"}}'
+    # buttons:
+    #   - title: "Chicago"
+    #     payload: '/give_city{{"city":"chicago"}}'
+    #   - title: "Paris"
+    #     payload: '/give_city{{"city":"paris"}}'
 
 actions:
   - validate_travel_form
