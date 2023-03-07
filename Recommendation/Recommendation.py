@@ -10,6 +10,8 @@ import requests
 import json
 import sys
 from urllib.parse import urlencode
+from yelp import get_businesses_by_location_name, YelpAPIException
+import datetime
 from .yelp import get_businesses_by_lat_long, YelpAPIException, YelpCategory, any_of, UnknownYelpCategory, YelpResult
 
 # Load environment variables
@@ -51,6 +53,7 @@ class Activity:
     time: str
     duration: str
 
+
 @dataclass
 class Day_Schedulue:
     """
@@ -58,9 +61,14 @@ class Day_Schedulue:
     """
     # start_state and end_state should  be type Lodging or type Flight
     date: str
-    start_state = None
-    list[Activity]
-    end_state = None
+    activities: list[Activity]
+    def setDate(this, day):
+        this.date = day
+    def setActivities(this, stuff):
+        for a in stuff:
+            this.activities.append(a)
+    def addActivity(this, a):
+        this.activities.append(a)
 
 
 
@@ -69,8 +77,9 @@ class Schedulue:
     """
     Class representing the lodging for the trip
     """
-    day_schedulue_list = list[Day_Schedulue]
-
+    day_schedulue_list: list[Day_Schedulue]
+    def setList(this, day_list):
+        this.day_schedule_list = day_list
 
 
 @dataclass
@@ -78,10 +87,10 @@ class Flight:
     """
     Class representing a flight
     """
-    departure_time: str
+    departure_time: datetime
     departure_location: Location
     arrival_location: Location
-    arrival_time: str
+    arrival_time: datetime
     price: int
     airline: str
 
@@ -144,6 +153,81 @@ def get_duffel_airports() -> List[Airport]:
         ))
 
     return result
+
+
+def isInMorning(start_time):
+    if start_time.hour < 12:
+        return True
+    return False
+def isInAfternoon(start_time):
+    if start_time.hour > 12 and start_time.hour < 16:
+        return True
+    return False
+
+
+def getDayOfActivities(prefs, previous_activities, eventually=None, immediates=None, number_of_activities=6):
+    activities_to_return = immediates
+    for _ in range(number_of_activities):
+        next_activity = getNextActivity(prefs, previous activities)
+        activities_to_return.append(next_activity)
+        previous_activities.append(next_activity)
+    activities_to_return += eventually
+    return activities_to_return
+
+#   returns a fully formed schedulue
+setUpSchedulue(start_city, destination, start_date,  duration, preferances):
+    first_day = Day_Schedulue()
+    last_day = Day_Schedulue()
+    flight_in = getFlight(origin, destination, start_date)
+    lodging = getLodging(destination, preferances)
+    date = start_date
+    days = []
+    #   Set up first day
+    day_sched = Day_Schedulue()
+    activities_list = [flight_in, lodging]
+    day_sched.setDate(date)
+    first_day_activities = getDayOfActivities(preferances, activities_list, eventually = [lodging], immediates=[flight_in, lodging])
+    if isInMorning(flight_out.arrival_time):
+        number_of_activities = 0
+    elif isInAfterNoon(flight_out.arrival_time):
+        number_of_activities = 2
+    else:
+        number_of_activities = 4
+    first_day_activities = [number_of_activities:]
+    day_sched.setActivities(first_day_activities)
+    date += datetime.timedelta(days = 1)
+    days.append(day_sched)
+
+    #   Set up middle days
+    for _ in duration - 2:
+        day_sched = Day_Schedulue()
+        day_sched.setDate(date)
+        day_sched.setActivities(getDayOfActivities(preferances, activities_list, eventually = [lodging], immediates = [lodging]))
+        date += datetime.timedelta(days = 1)
+        days.append(day_sched)
+
+    #   Set up final day
+    flight_out = getFlight(destination, origin, start_date + duration)
+    day_sched = Day_Schedulue()
+    day_sched.setDate(date)
+    activites = []
+    event = [lodging]
+    if isInMorning(flight_out.departure_time):
+        number_of_activities = 0
+        event = []
+    elif isInAfterNoon(flight_out.departure_time):
+        number_of_activities = 2
+    else:
+        number_of_activities = 4
+    activites = getDayOfActivities(preferances, activities_list, eventually = event, immediates = [lodging], number_of_activities=number_of_activities)
+    activites += flight_out
+    day_sched.setActivities(activities)
+    days.append(day_sched)
+
+    #   Return the list
+    theSchedulue = Schedulue()
+    theSchedule.setList(days)
+    return theSchedule
 
 def get_next_activity(activity_preferences: List[YelpCategory],
                       price_preference: Union[int, str],
