@@ -41,7 +41,7 @@ ALLOWED_CITIES = ["paris", "london", "rome", "barcelona", "amsterdam", "istanbul
     "prague","hong kong","mexico city","los angeles","las vegas","orlando","ibiza","vienna",
     "seville","madrid","lake tahoe","cairns","queenstown","tulum" ]
 
-ALLOWED_ACTIVITIES = ["active life", "arts & entertainment", "arts and entertainment", "food", "shopping", "shops", "nightlife", "travel", "travelling" ]
+ALLOWED_ACTIVITIES = ["being active", "active life", "arts & entertainment", "arts and entertainment", "food", "shopping", "shops", "nightlife", "travel", "travelling" ]
 
 
 
