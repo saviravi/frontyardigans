@@ -1,7 +1,7 @@
 .DS_Store
 weather.pickle
 Recommendation/weather/flyio/weather/stations/*.csv
-Recommendation/*.pickle
+Recommendation/weather/*.pickle
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
