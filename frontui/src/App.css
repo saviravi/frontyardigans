@@ -126,3 +126,8 @@ img.image-message {
   text-align: center;
   background-color: rgb(175, 175, 175);
 }
+
+.datepicker-container {
+  display: inline-flex;
+}
+
