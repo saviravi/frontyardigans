@@ -11,11 +11,13 @@ intents:
   - ask_me_anything
   - give_temp
   - give_city
+  - give_activity
   - clear_slots
 
 entities:
 - temperature
 - city
+- activity
 
 slots:
   temperature:
@@ -34,6 +36,14 @@ slots:
       entity: city
       conditions:
       - active_loop: travel_form
+  activity:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: activity
+      conditions:
+      - active_loop: travel_form
 
 
 forms:
@@ -41,6 +51,7 @@ forms:
     required_slots:
       - temperature
       - city
+      - activity
 
 responses:
   utter_greet:
@@ -144,11 +155,27 @@ responses:
   
   utter_ask_travel_form_city:
   - text: "What city did you recently visit/liked?"
+    # buttons:
+    #   - title: "Chicago"
+    #     payload: '/give_city{{"city":"chicago"}}'
+    #   - title: "Paris"
+    #     payload: '/give_city{{"city":"paris"}}'
+
+  utter_ask_travel_form_activity:
+  - text: "Which activity do you enjoy the most?"
     buttons:
-      - title: "Chicago"
-        payload: '/give_city{{"city":"chicago"}}'
-      - title: "Paris"
-        payload: '/give_city{{"city":"paris"}}'
+      - title: "Being Active"
+        payload: '/give_activity{{"activity":"being active"}}'
+      - title: "Arts & Entertainment"
+        payload: '/give_activity{{"activity":"arts & entertainment"}}'
+      - title: "Food"
+        payload: '/give_activity{{"activity":"food"}}'
+      - title: "Shopping"
+        payload: '/give_activity{{"activity":"shopping"}}'
+      - title: "Nightlife"
+        payload: '/give_activity{{"activity":"nightlife"}}'
+      - title: "Travel"
+        payload: '/give_activity{{"activity":"travel"}}'
 
 actions:
   - validate_travel_form
