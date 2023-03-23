@@ -74,7 +74,7 @@ def load_airport_data():
 
 class FlightSlice(object):
 	def __init__(self, origin, dest, depart_day, depart_month, depart_year):
-		return {"origin": origin, "destination": dest, "departure_day": "{2}-{1}-{0}".format(depart_day, depart_month, depart_year) }
+		return {"origin": origin, "destination": dest, "departure_date": "{2}-{1}-{0}".format(depart_day, depart_month, depart_year) }
 
 class Passenger(Enum):
 	ADULT = "adult"
