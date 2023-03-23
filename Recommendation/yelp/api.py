@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from urllib.parse import urlencode
 import requests
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from .categories import YelpCategory, UnknownYelpCategory
 
 # Load environment variables
@@ -33,6 +33,9 @@ class YelpResult():
     latitude: float
     longitude: float
     city_name: str
+
+    def jsonify(self) -> dict:
+        return asdict(self)
 
 def _send_yelp_request(url, params):
     """

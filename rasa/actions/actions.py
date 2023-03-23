@@ -35,10 +35,13 @@ class ActionSayTemperature(Action):
         return "action_say_temperature"
 
 ALLOWED_TEMP = ["hot","cold"]
+
 ALLOWED_CITIES = ["paris", "london", "rome", "barcelona", "amsterdam", "istanbul", "tokyo", "new york city",
     "maui","cancun","sydney","venice","san francisco","miami","honolulu","rio de janeiro",
     "prague","hong kong","mexico city","los angeles","las vegas","orlando","ibiza","vienna",
     "seville","madrid","lake tahoe","cairns","queenstown","tulum" ]
+
+ALLOWED_ACTIVITIES = ["being active", "active life", "arts & entertainment", "arts and entertainment", "food", "shopping", "shops", "nightlife", "travel", "travelling" ]
 
 
 
@@ -106,6 +109,25 @@ class ValidateTravelForm(FormValidationAction):
             return {"city": None}
         dispatcher.utter_message(text=f"OK! You liked visiting {city}.")
         return {"city": slot_value}
+
+    def validate_activity(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `activity` value."""
+
+        activity = tracker.get_slot("activity")
+        if not activity:
+            dispatcher.utter_message(text=f"No activity was entered")
+            return {"activity": None}
+        if slot_value.lower() not in ALLOWED_ACTIVITIES:
+            dispatcher.utter_message(text=f"We only the 6 activities shown.")
+            return {"activity": None}
+        dispatcher.utter_message(text=f"OK! You enjoy {activity} the most.")
+        return {"activity": slot_value}
 
 class ActionClearSlots(Action):
 

@@ -4,7 +4,7 @@ import re
 
 entity = input('Enter entity name: ')
 
-text  = 'version: "3.0"\n'
+text  = 'version: "3.1"\n'
 text += 'nlu:\n'
 text += '  - lookup: {}\n'.format(entity)
 text += '    examples: |\n'

@@ -96,9 +96,6 @@ nlu:
 - intent: give_city
   examples: |
     - [Chicago](city)
-    - I prefer [Paris](city)
-    - I like [Cleveland](city)
-    - [Los Angeles](city) is cool
 - intent: clear_slots
   examples: |
     - clear slots
