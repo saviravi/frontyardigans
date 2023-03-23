@@ -168,14 +168,14 @@ def isInAfternoon(start_time):
 def getDayOfActivities(prefs, previous_activities, eventually=None, immediates=None, number_of_activities=6):
     activities_to_return = immediates
     for _ in range(number_of_activities):
-        next_activity = getNextActivity(prefs, previous activities)
+        next_activity = get_next_activity(prefs, previous_activities)
         activities_to_return.append(next_activity)
         previous_activities.append(next_activity)
     activities_to_return += eventually
     return activities_to_return
 
 #   returns a fully formed schedulue
-setUpSchedulue(start_city, destination, start_date,  duration, preferances):
+def setUpSchedulue(start_city, destination, start_date,  duration, preferances):
     first_day = Day_Schedulue()
     last_day = Day_Schedulue()
     flight_in = getFlight(origin, destination, start_date)
@@ -193,7 +193,7 @@ setUpSchedulue(start_city, destination, start_date,  duration, preferances):
         number_of_activities = 2
     else:
         number_of_activities = 4
-    first_day_activities = [number_of_activities:]
+    first_day_activities = [number_of_activities]
     day_sched.setActivities(first_day_activities)
     date += datetime.timedelta(days = 1)
     days.append(day_sched)

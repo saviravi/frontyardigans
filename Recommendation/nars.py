@@ -35,7 +35,7 @@ def read_city_info(filename):
     pickleFile = open(filename,"rb")
     city_info = pickle.load(open(filename, "rb")) # list of yelp results
     
-    print(city_info[1])
+    print(city_info[234])
 
 
 
@@ -67,7 +67,7 @@ def calc_well_rounded_score():
     return 
 
 
-filename = "rome_businesses.pickle"
+filename = "/Users/savitharavi/cse5914/frontyardigans/Recommendation/rome_businesses.pickle"
 # read_city_info(directory + "/" + filename)
 read_city_info(filename)
 # print(sys.path)
