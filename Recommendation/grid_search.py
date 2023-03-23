@@ -67,12 +67,73 @@ amsterdam_border = [
     (4.810638, 52.337017)
 ]
 
+istanbul_border = [
+    (28.764659, 40.995862),
+    (28.763286, 41.059058),
+    (29.064037, 41.143915),
+    (29.154674, 41.036273),
+    (29.302989, 40.940905),
+    (29.283763, 40.853708),
+    (28.980266, 41.022806),
+    (28.820964, 40.956463)
+]
+
+tokyo_border = [
+    (139.486036, 35.778446),
+    (139.472550, 35.622376),
+    (139.572014, 35.640189),
+    (139.796232, 35.531880),
+    (139.762515, 35.645669),
+    (139.824891, 35.657998),
+    (139.885581, 35.663477),
+    (139.872095, 35.793490),
+    (139.560213, 35.762032)
+]
+
+new_york_city_border = [
+    (-73.966827, 40.808872),
+    (-74.009056, 40.746477),
+    (-74.018326, 40.701203),
+    (-73.978157, 40.711614),
+    (-73.943825, 40.775602),
+    (-73.930435, 40.797437)
+]
+
+maui_border = [
+    (-156.494732, 20.914727),
+    (-156.595500, 21.027373),
+    (-156.674978, 20.980999),
+    (-156.696267, 20.921355),
+    (-156.677817, 20.866992),
+    (-156.542987, 20.778113),
+    (-156.498990, 20.795362),
+    (-156.449595, 20.727446),
+    (-156.430913, 20.595980),
+    (-156.286324, 20.590132),
+    (-155.987326, 20.717912),
+    (-156.001607, 20.791357),
+    (-156.253300, 20.935641),
+    (-156.338090, 20.938975),
+    (-156.474647, 20.881446)
+]
+
+cancun_border = [
+    (-86.932460, 21.165504),
+    (-86.837399, 21.102170),
+    (-86.790434, 21.135952),
+    (-86.775722, 21.115895),
+    (-86.791565, 21.045675),
+    (-86.778551, 21.043034),
+    (-86.739508, 21.141229),
+    (-86.798356, 21.160228)
+]
+
 fig, ax = plt.subplots()
 
-london = Polygon(amsterdam_border)
+london = Polygon(maui_border)
 
 minx, miny, maxx, maxy = london.bounds
-delta = 0.007
+delta = 0.035
 x = np.arange(minx, maxx + delta, delta)
 y = np.arange(miny, maxy + delta, delta)
 
@@ -111,7 +172,7 @@ for b in grid:
 
 print("search will take %d API calls" % (len(grid) * 5))
 
-# with open('businesses.pickle', 'rb') as f:
+# with open('london_businesses.pickle', 'rb') as f:
 #     businesses = pickle.load(f)
 
 # nar = dict()
@@ -124,11 +185,12 @@ print("search will take %d API calls" % (len(grid) * 5))
 #     if t not in nar:
 #         nar[t] = 0
 #     nar[t] += 1
-#     #plt.plot(b.longitude, b.latitude, 'x', color='c')
+#     if b.longitude is not None and b.latitude is not None:
+#         plt.plot(b.longitude, b.latitude, 'x', color='c')
 
 # print(nar)
 
-plt.xlabel("Longitude")
+# plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 plt.title("London Gridded Search")
 plt.show()
@@ -155,5 +217,5 @@ for lat, long in tqdm.tqdm(search_points):
 
     print("found %d duplicates" % duplicates)
 print("found", len(all_businesses), "total")
-with open('amsterdam_businesses.pickle', 'wb') as f:
+with open('maui_businesses.pickle', 'wb') as f:
     pickle.dump(all_businesses, f)
