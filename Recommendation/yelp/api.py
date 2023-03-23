@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 import requests
 from dataclasses import dataclass, asdict
 from .categories import YelpCategory, UnknownYelpCategory
+from .parsed_categories import parse_alias
 
 # Load environment variables
 load_dotenv()
@@ -57,7 +58,7 @@ def _json_business_to_result(business: dict) -> YelpResult:
                 image_url=business["image_url"],
                 is_closed=business["is_closed"],
                 url=business["url"],
-                categories=list(map(YelpCategory.from_json, business["categories"])),
+                categories=list(map(parse_alias, [c["alias"] for c in business["categories"]])),
                 review_count=business["review_count"],
                 rating=business["rating"],
                 price=len(business["price"]),
