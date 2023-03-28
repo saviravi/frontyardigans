@@ -287,6 +287,64 @@ seville_border = [
     (-5.972570, 37.354612)
 ]
 
+madrid_border = [
+    (-3.791359, 40.393204),
+    (-3.735485, 40.424607),
+    (-3.753444, 40.477755),
+    (-3.682936, 40.525804),
+    (-3.555222, 40.510129),
+    (-3.532606, 40.446883),
+    (-3.579834, 40.433214),
+    (-3.572517, 40.410933),
+    (-3.591142, 40.356212),
+    (-3.720186, 40.331877),
+    (-3.724842, 40.367869),
+    (-3.798011, 40.364322)
+]
+    
+cairns_border = [
+    (145.666883, -16.735478),
+    (145.774839, -16.879382),
+    (145.761862, -16.903667),
+    (145.780371, -16.919830),
+    (145.766873, -16.960611),
+    (145.753631, -16.958133),
+    (145.755646, -16.984014),
+    (145.749665, -17.031558),
+    (145.711847, -17.033000),
+    (145.733467, -16.973643),
+    (145.719286, -16.929835),
+    (145.685567, -16.892368),
+    (145.663016, -16.790978),
+    (145.649169, -16.763138)
+]
+    
+queenstown_border = [
+    (168.624266, -45.046330),
+    (168.654103, -45.021816),
+    (168.615433, -44.964269),
+    (168.652758, -44.963793),
+    (168.667553, -44.981397),
+    (168.690082, -44.977115),
+    (168.704205, -44.958321),
+    (168.756325, -44.942614),
+    (168.756815, -44.950792),
+    (168.741388, -44.954042),
+    (168.744501, -44.977373),
+    (168.784229, -45.006063),
+    (168.748257, -45.034423),
+    (168.720994, -45.016974),
+    (168.660652, -45.042872)
+]
+
+tulum_mexico = [
+    (-87.494175, 20.209174),
+    (-87.479698, 20.220271),
+    (-87.450171, 20.218718),
+    (-87.451753, 20.208688),
+    (-87.479260, 20.199640),
+]
+
 fig, ax = plt.subplots()
 
 london = Polygon(san_francisco_border)
@@ -332,23 +390,23 @@ for b in grid:
 remaining_calls = get_remaining_calls()
 print("search will take %d calls, currently have %d API calls left" % (len(grid) * 5, remaining_calls))
 
-with open('san_francisco_businesses.pickle', 'rb') as f:
-    businesses = pickle.load(f)
+# with open('san_francisco_businesses.pickle', 'rb') as f:
+#     businesses = pickle.load(f)
 
-nar = dict()
-for b in businesses:
-    # for c in b.categories:
-    #     if type(c) == YelpCategory:
-    #         t = type(parse_alias(c.value))
-    #     else:
-    #         t = type(parse_alias(c.alias))
-    # if t not in nar:
-    #     nar[t] = 0
-    # nar[t] += 1
-    if b.longitude is not None and b.latitude is not None:
-        plt.plot(b.longitude, b.latitude, 'x', color='c')
+# nar = dict()
+# for b in businesses:
+#     # for c in b.categories:
+#     #     if type(c) == YelpCategory:
+#     #         t = type(parse_alias(c.value))
+#     #     else:
+#     #         t = type(parse_alias(c.alias))
+#     # if t not in nar:
+#     #     nar[t] = 0
+#     # nar[t] += 1
+#     if b.longitude is not None and b.latitude is not None:
+#         plt.plot(b.longitude, b.latitude, 'x', color='c')
 
-print(nar)
+# print(nar)
 
 # plt.xlabel("Longitude")
 plt.ylabel("Latitude")
