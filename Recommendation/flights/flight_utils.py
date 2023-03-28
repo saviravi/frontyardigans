@@ -37,7 +37,7 @@ def create_airport_index():
 		"timezone": {"type": "text"}
 	}
 	es_utils.ElasticSearcher.create_index("airport-info", properties=properties)
-	return 
+	return
 
 def generate_actions():
     elasticdocs = open(DOCSFILE, "w")
@@ -74,7 +74,14 @@ def load_airport_data():
 
 class FlightSlice(object):
 	def __init__(self, origin, dest, depart_day, depart_month, depart_year):
-		return {"origin": origin, "destination": dest, "departure_day": "{2}-{1}-{0}".format(depart_day, depart_month, depart_year) }
+		self.origin = origin
+		self.dest = dest
+		self.depart_day = depart_day
+		self.depart_month = depart_month
+		self.depart_year = depart_year
+		return
+	def get_slice(self):
+		return {"origin": self.origin, "destination": self.dest, "departure_date": "{2}-{1}-{0}".format(self.depart_day, self.depart_month, self.depart_year) }
 
 class Passenger(Enum):
 	ADULT = "adult"
@@ -98,18 +105,18 @@ class Airport(object):
 		self.city = city
 		self.country = country
 		return
-	
+
 	def from_duffel(place):
 		info = place.__dict__
 		airport = Airport(info["name"], info.get("iata_code"), info["icao_code"], info["latitude"], info["longitude"], info["time_zone"], info["city"].__dict__["name"], info["iata_country_code"])
 		return airport
-	
 
-	
+
+
 
 # calls Duffel API
 
-def get_flights(slices: list[FlightSlice], passengers: list(Passenger), cabin_class: Cabin, sort_by_price=True):
+def get_flights(slices, passengers: list(Passenger), cabin_class: Cabin, sort_by_price=True):
 	""" gets a list of flight offers, sorted by total_amount or total_duration (default: by price) """
 	passengers_list = [{"type": passenger.value} for passenger in passengers]
 	reqs = CLIENT.offer_requests.create().slices(slices).passengers(passengers_list).cabin_class(cabin_class.value).execute()
@@ -138,12 +145,3 @@ def pretty_print_flight_offers(offers_list):
 		  # "slices": [{"start_airport": slice.__dict__["destination"].__dict__["name"], "end_airport": slice.__dict__[""]} for slice in offer["slices"]],
 		}
 		print(simple_offer)
-
-
-
-
-
-
-
-
-
