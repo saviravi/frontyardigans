@@ -55,3 +55,69 @@ def wnar(businesses: list[YelpResult]) -> np.ndarray:
     wnar[4] = ratings[YelpActiveLifeCategory] / counts[YelpActiveLifeCategory]
 
     return wnar
+
+if __name__ == "__main__":
+    from glob import glob
+    from pickle import load
+    import matplotlib.pyplot as plt
+
+    paths = glob("yelp/business_data/*.pickle")
+    nars = []
+    wnars = []
+    avg_nar = np.zeros((5,))
+    avg_wnar = np.zeros((5,))
+
+    for p in paths:
+        with open(p, 'rb') as f:
+            businesses = load(f)
+
+            city_nar = nar(businesses)
+            city_wnar = wnar(businesses)
+            nars.append(city_nar)
+            wnars.append(city_wnar)
+            avg_nar += city_nar
+            avg_wnar += city_wnar
+    
+    avg_nar /= len(paths)
+    avg_wnar /= len(paths)
+
+    print("Avg NAR:", avg_nar)
+    print("Avg WNAR:", avg_wnar)
+
+    nar_0 = [n[0] for n in nars]
+    nar_1 = [n[1] for n in nars]
+    nar_2 = [n[2] for n in nars]
+    nar_3 = [n[3] for n in nars]
+    nar_4 = [n[4] for n in nars]
+    fig, axs = plt.subplots(1, 5)
+    bins = np.linspace(0, 1, 100)
+    axs[0].hist(nar_0, bins)
+    axs[0].set_title("Shopping")
+    axs[1].hist(nar_1, bins)
+    axs[1].set_title("Nightlife")
+    axs[2].hist(nar_2, bins)
+    axs[2].set_title("Restaurants")
+    axs[3].hist(nar_3, bins)
+    axs[3].set_title("Arts and Entertainment")
+    axs[4].hist(nar_4, bins)
+    axs[4].set_title("Active Life")
+    plt.show()
+
+    wnar_0 = [n[0] for n in wnars]
+    wnar_1 = [n[1] for n in wnars]
+    wnar_2 = [n[2] for n in wnars]
+    wnar_3 = [n[3] for n in wnars]
+    wnar_4 = [n[4] for n in wnars]
+    fig, axs = plt.subplots(1, 5)
+    bins = np.linspace(0, 4, 100)
+    axs[0].hist(wnar_0, bins)
+    axs[0].set_title("Shopping")
+    axs[1].hist(wnar_1, bins)
+    axs[1].set_title("Nightlife")
+    axs[2].hist(wnar_2, bins)
+    axs[2].set_title("Restaurants")
+    axs[3].hist(wnar_3, bins)
+    axs[3].set_title("Arts and Entertainment")
+    axs[4].hist(wnar_4, bins)
+    axs[4].set_title("Active Life")
+    plt.show()
