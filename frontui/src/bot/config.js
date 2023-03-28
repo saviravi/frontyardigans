@@ -5,6 +5,7 @@ import UserAvatar from './UserAvatar';
 import ImageWidget from './custom_components/ImageWidget';
 import ButtonWidget from './custom_components/ButtonWidget';
 import ImageMessage from './custom_components/ImageMessage';
+import DatePickerWidget from './custom_components/DatePickerWidget';
 
 const botName = "Travis, the travel agent";
 
@@ -23,6 +24,10 @@ const config = {
     {
       widgetName: "buttonWidget",
       widgetFunc: (props) => <ButtonWidget {...props} />,
+    },
+    {
+      widgetName: "datePickerWidget",
+      widgetFunc: (props) => <DatePickerWidget {...props} />,
     },
   ],
   customMessages: {

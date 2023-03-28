@@ -6,3 +6,4 @@ pytest
 nltk
 python-dotenv
 vincenty
+shapely

@@ -17,6 +17,7 @@ class YelpCategory(Enum):
     See https://docs.developer.yelp.com/docs/resources-categories
     """
     # Active life
+    AllActiveLife = "active"
     Aquariums = "aquariums"
     Beaches = "beaches"
     BikeRentals = "bikerentals"
@@ -28,6 +29,7 @@ class YelpCategory(Enum):
     Zoos = "zoos"
 
     # Arts & Entertainment
+    AllArtsAndEntertainment = "arts"
     ArtGalleries = "galleries"
     Casinos = "casinos"
     Castles = "castles"
@@ -45,7 +47,7 @@ class YelpCategory(Enum):
     Wineries = "wineries"
 
     # Food
-    Food = "food"
+    AllFood = "food"
     Breakfast = "breakfast_brunch"
     Bagels = "bagels"
     Bakeries = "bakeries"
@@ -56,12 +58,14 @@ class YelpCategory(Enum):
     FoodTrucks = "foodtrucks"
 
     # Shopping
+    AllShopping = "shopping"
     MediaStores = "media"
     DepartmentStores = "deptstores"
     FashionStores = "fashion"
     GiftStores = "giftshops"
     
     # Nightlife
+    AllNightlife = "nightlife"
     Bars = "bars"
     ComedyClub = "comedyclubs"
 

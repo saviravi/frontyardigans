@@ -3,8 +3,9 @@ from dotenv import load_dotenv
 import os
 from urllib.parse import urlencode
 import requests
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from .categories import YelpCategory, UnknownYelpCategory
+from .parsed_categories import parse_alias
 
 # Load environment variables
 load_dotenv()
@@ -34,6 +35,9 @@ class YelpResult():
     longitude: float
     city_name: str
 
+    def jsonify(self) -> dict:
+        return asdict(self)
+
 def _send_yelp_request(url, params):
     """
     Send a request to the Yelp Fusion API.
@@ -54,7 +58,7 @@ def _json_business_to_result(business: dict) -> YelpResult:
                 image_url=business["image_url"],
                 is_closed=business["is_closed"],
                 url=business["url"],
-                categories=list(map(YelpCategory.from_json, business["categories"])),
+                categories=list(map(parse_alias, [c["alias"] for c in business["categories"]])),
                 review_count=business["review_count"],
                 rating=business["rating"],
                 price=len(business["price"]),
@@ -86,3 +90,11 @@ def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, p
         return list(map(_json_business_to_result, api_results["businesses"]))
     else:
         raise YelpAPIException(str(response.content))
+
+def get_remaining_calls() -> int:
+    """
+    Gets the number of remaing Yelp Fusion API calls and returns it.
+    """
+    response = _send_yelp_request(YELP_BUSINESS_SEARCH_URL, {"location": "NYC", "price": 1, "limit": 1})
+    num_remaining = response.headers["ratelimit-remaining"]
+    return int(float(num_remaining))
