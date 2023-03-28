@@ -4,7 +4,7 @@ from shapely.set_operations import intersection
 from shapely.geometry import box
 import numpy as np
 from vincenty import vincenty
-from yelp import get_businesses_by_lat_long, YelpCategory, any_of, parse_alias
+from yelp import get_businesses_by_lat_long, YelpCategory, any_of, parse_alias, get_remaining_calls
 import matplotlib.patches as pat
 import pickle
 import tqdm
@@ -241,7 +241,8 @@ for b in grid:
         ax.add_patch(c)
         plt.plot(cx, cy, '.', color='tab:red')
 
-print("search will take %d API calls" % (len(grid) * 5))
+remaining_calls = get_remaining_calls()
+print("search will take %d calls, currently have %d API calls left" % (len(grid) * 5, remaining_calls))
 
 # with open('london_businesses.pickle', 'rb') as f:
 #     businesses = pickle.load(f)
