@@ -32,6 +32,7 @@ def wnar(businesses: list[YelpResult]) -> np.ndarray:
     Takes in a list of businesses and calculates the WNAR.
     WNAR = (sum of star ratings for businesses of category x) / (number of businesses in category x)
     Returns the WNAR vector for the categories in the order: Shopping, Nightlife, Restaurants, Arts and Entertainment, Active Life.
+    The WNAR is representitive of the quality of businesses in a certain city per category.
     """
     ratings = dict()
     counts = dict()
