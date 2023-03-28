@@ -3,6 +3,9 @@ import os
 import json
 import re
 import es_utils
+import dotenv
+
+dotenv.load_dotenv("../.env")
 
 def create_index(es):
     es.indices.create(
@@ -107,9 +110,9 @@ es_header = [{
 }]
 # Instantiate the new Elasticsearch connection:
 es = Elasticsearch(es_header)
-# create_index(es)
+#create_index(es)
 
-# generate_actions()
+#generate_actions()
 with open("elasticdocs.json", mode="r") as file:
     docs = json.loads(file.read())
     helpers.bulk(es, docs)

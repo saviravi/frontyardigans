@@ -47,4 +47,10 @@ class TestGetNextActivity(unittest.TestCase):
             previous_activity=result
         )
 
+        result = get_next_activity(
+            activity_preferences=preferences,
+            price_preference="1",
+            previous_activity=result
+        )
+
         print(result)
