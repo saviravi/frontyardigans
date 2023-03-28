@@ -96,4 +96,5 @@ def get_remaining_calls() -> int:
     Gets the number of remaing Yelp Fusion API calls and returns it.
     """
     response = _send_yelp_request(YELP_BUSINESS_SEARCH_URL, {"location": "NYC", "price": 1, "limit": 1})
-    return int(response.headers["ratelimit-remaining"])
+    num_remaining = response.headers["ratelimit-remaining"]
+    return int(float(num_remaining))

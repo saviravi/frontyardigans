@@ -199,12 +199,47 @@ prague_border = [
     (14.473898, 50.108967)
 ]
 
+hong_kong_border = [
+    (114.097107, 22.386254),
+    (114.214550, 22.382557),
+    (114.191312, 22.309525),
+    (114.213801, 22.280856),
+    (114.141336, 22.282706),
+    (114.157578, 22.317384)
+]
+
+mexico_city_border = [
+    (-99.203066, 19.510048),
+    (-99.258040, 19.311645),
+    (-99.109386, 19.290468),
+    (-99.065631, 19.482551)
+]
+
+los_angeles_border = [
+    (-118.198154, 34.146173),
+    (-118.206893, 34.015880),
+    (-118.288462, 33.932130),
+    (-118.375858, 34.064965),
+    (-118.498187, 33.992960),
+    (-118.545840, 34.039919),
+    (-118.445240, 34.127185)
+]
+
+las_vegas_border = [
+    (-115.343708, 36.144739),
+    (-115.099444, 36.146959),
+    (-115.107694, 36.188396),
+    (-115.203933, 36.200970),
+    (-115.208057, 36.244226),
+    (-115.334543, 36.240530)
+]
+
 fig, ax = plt.subplots()
 
-london = Polygon(prague_border)
+london = Polygon(las_vegas_border)
 
 minx, miny, maxx, maxy = london.bounds
-delta = 0.0045
+delta = 0.009
 x = np.arange(minx, maxx + delta, delta)
 y = np.arange(miny, maxy + delta, delta)
 
@@ -289,5 +324,5 @@ for lat, long in tqdm.tqdm(search_points):
 
     print("found %d duplicates" % duplicates)
 print("found", len(all_businesses), "total")
-with open('prague_businesses.pickle', 'wb') as f:
+with open('las_vegas_businesses.pickle', 'wb') as f:
     pickle.dump(all_businesses, f)
