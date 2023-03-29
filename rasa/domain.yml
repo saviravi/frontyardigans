@@ -20,8 +20,7 @@ entities:
   - temperature
   - city
   - activity
-  - startdate
-  - enddate
+  - date
 
 slots:
   temperature:
@@ -53,7 +52,8 @@ slots:
     influence_conversation: true
     mappings:
     - type: from_entity
-      entity: startdate
+      entity: date
+      role: start
       conditions:
       - active_loop: travel_form
   enddate:
@@ -61,7 +61,8 @@ slots:
     influence_conversation: true
     mappings:
     - type: from_entity
-      entity: enddate
+      entity: date
+      role: start
       conditions:
       - active_loop: travel_form
 
@@ -199,10 +200,10 @@ responses:
         payload: '/give_activity{{"activity":"travel"}}'
   
   utter_ask_travel_form_startdate:
-  - text: "When travel start"
+  - text: "When do you want your trip to start?"
 
   utter_ask_travel_form_enddate:
-  - text: "When travel end"
+  - text: "When do you want your trip to end?"
 
 actions:
   - validate_travel_form
