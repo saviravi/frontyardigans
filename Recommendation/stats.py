@@ -7,14 +7,18 @@ def nar(businesses: list[YelpResult]) -> np.ndarray:
     NAR = (number of businesses of category x) / (total number of businesses)
     Returns the NAR vector for the categories in the order: Shopping, Nightlife, Restaurants, Arts and Entertainment, Active Life.
     """
-    counts = dict()
+    counts = {
+        YelpShoppingCategory: 0,
+        YelpNightlifeCategory: 0,
+        YelpRestaurantsCategory: 0,
+        YelpArtsAndEntertainmentCategory: 0,
+        YelpActiveLifeCategory: 0,
+    }
+
     for business in businesses:
         for category in business.categories:
-            if category is None:
+            if type(category) not in list(counts):
                 continue
-
-            if type(category) not in counts:
-                counts[type(category)] = 0
             
             counts[type(category)] += 1
     
@@ -34,16 +38,25 @@ def wnar(businesses: list[YelpResult]) -> np.ndarray:
     Returns the WNAR vector for the categories in the order: Shopping, Nightlife, Restaurants, Arts and Entertainment, Active Life.
     The WNAR is representitive of the quality of businesses in a certain city per category.
     """
-    ratings = dict()
-    counts = dict()
+    ratings = {
+        YelpShoppingCategory: 0,
+        YelpNightlifeCategory: 0,
+        YelpRestaurantsCategory: 0,
+        YelpArtsAndEntertainmentCategory: 0,
+        YelpActiveLifeCategory: 0,
+    }
+    # Initialize to 1 to avoid division by zero
+    counts = {
+        YelpShoppingCategory: 1,
+        YelpNightlifeCategory: 1,
+        YelpRestaurantsCategory: 1,
+        YelpArtsAndEntertainmentCategory: 1,
+        YelpActiveLifeCategory: 1,
+    }
     for business in businesses:
         for category in business.categories:
-            if category is None:
+            if type(category) not in list(counts):
                 continue
-
-            if type(category) not in counts:
-                counts[type(category)] = 0
-                ratings[type(category)] = 0
             
             counts[type(category)] += 1
             ratings[type(category)] += business.rating
@@ -102,6 +115,7 @@ if __name__ == "__main__":
     axs[3].set_title("Arts and Entertainment")
     axs[4].hist(nar_4, bins)
     axs[4].set_title("Active Life")
+    fig.suptitle("NAR Distributions")
     plt.show()
 
     wnar_0 = [n[0] for n in wnars]
@@ -121,4 +135,5 @@ if __name__ == "__main__":
     axs[3].set_title("Arts and Entertainment")
     axs[4].hist(wnar_4, bins)
     axs[4].set_title("Active Life")
+    fig.suptitle("WNAR Distributions")
     plt.show()
