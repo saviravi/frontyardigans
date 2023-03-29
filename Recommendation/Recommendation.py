@@ -12,7 +12,15 @@ import sys
 from urllib.parse import urlencode
 from yelp import get_businesses_by_location_name, YelpAPIException
 import datetime
-from .yelp import get_businesses_by_lat_long, YelpAPIException, YelpCategory, any_of, UnknownYelpCategory, YelpResult
+from yelp import get_businesses_by_lat_long, YelpAPIException, YelpCategory, any_of, UnknownYelpCategory, YelpResult
+
+
+sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "flights")
+
+import flight_utils
+from flight_utils import Passenger
+from flight_utils import Cabin
+
 
 # Load environment variables
 load_dotenv()
@@ -62,13 +70,17 @@ class Day_Schedulue:
     # start_state and end_state should  be type Lodging or type Flight
     date: str
     activities: list[Activity]
-    def setDate(this, day):
-        this.date = day
-    def setActivities(this, stuff):
+    def __init__(self):
+        date = ""
+        activities = []
+
+    def setDate(self, day):
+        self.date = day
+    def setActivities(self, this, stuff):
         for a in stuff:
-            this.activities.append(a)
-    def addActivity(this, a):
-        this.activities.append(a)
+            self.activities.append(a)
+    def addActivity(self, a):
+        self.activities.append(a)
 
 
 
@@ -118,7 +130,7 @@ def handleInput(inputData):
     """
     Handles input and returns a list of possible trips :)
     """
-    print(inputData[0])
+    print(setUpSchedulue("CMH", "ORD", datetime.date(2023, 12, 10),  5, ["hiking", "nightclubs"]))
     return "Okay, let me find you some cities that are " + inputData[0] + "[TODO WEATHER API]"
 
 # This takes a couple of seconds and doesn't change between calls so could be cached
@@ -168,32 +180,75 @@ def isInAfternoon(start_time):
 def getDayOfActivities(prefs, previous_activities, eventually=None, immediates=None, number_of_activities=6):
     activities_to_return = immediates
     for _ in range(number_of_activities):
-        next_activity = getNextActivity(prefs, previous activities)
+        next_activity = get_next_activity(prefs, 1, previous_activities[-1])
         activities_to_return.append(next_activity)
         previous_activities.append(next_activity)
     activities_to_return += eventually
     return activities_to_return
 
+def getLodging(airport):
+    businesses = get_businesses_by_lat_long(
+        airport.location.latitude, airport.location.longitude,
+        radius=5000,
+        price=1,
+        categories=filter
+    )
+
+    # Sort businesses by best rating
+    businesses.sort(key=lambda b: b.rating, reverse=True)
+
+    # Choose the next activity as the business with the best rating
+    business = businesses[0]
+    return Activity(
+        business=business,
+        time=None,
+        duration=None
+    )
+
+def getAirportLocation(flights_in):
+    lat = flights_in[0].slices[0].destination.latitude
+    long = flights_in[0].slices[0].destination.longitude
+    name = flights_in[0].slices[0].destination.name
+    city_name = flights_in[0].slices[0].destination.city_name
+    time_zone = flights_in[0].slices[0].destination.time_zone
+    return Airport(airport_name=name, location=Location(city_name=city_name, latitude=lat, longitude=long, time_zone=time_zone))
+
+
+# Polymorphism Abuse
+@dataclass
+class AirportBusiness:
+    """
+    Class representing a business that is actually an airport
+    """
+    latitude: float
+    longitude: float
+def flightToActivity(flights_in):
+    return Activity(business=AirportBusiness(latitude = flights_in[0].slices[0].destination.latitude, longitude = flights_in[0].slices[0].destination.longitude), time="NONE", duration="NONE")
+
+
+
 #   returns a fully formed schedulue
-setUpSchedulue(start_city, destination, start_date,  duration, preferances):
+def setUpSchedulue(start_city, destination, start_date,  duration, preferances):
     first_day = Day_Schedulue()
     last_day = Day_Schedulue()
-    flight_in = getFlight(origin, destination, start_date)
-    lodging = getLodging(destination, preferances)
+    flights_in = flight_utils.get_flights([flight_utils.FlightSlice(start_city, destination, start_date.day, start_date.month, start_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
+    airportIn = getAirportLocation(flights_in)
+    flightInActivity = flightToActivity(flights_in)
+    lodging = getLodging(airportIn)
     date = start_date
     days = []
     #   Set up first day
     day_sched = Day_Schedulue()
-    activities_list = [flight_in, lodging]
+    activities_list = [flightInActivity, lodging]
     day_sched.setDate(date)
-    first_day_activities = getDayOfActivities(preferances, activities_list, eventually = [lodging], immediates=[flight_in, lodging])
+    first_day_activities = getDayOfActivities(preferances, activities_list, eventually = [lodging], immediates=[flightInActivity, lodging])
     if isInMorning(flight_out.arrival_time):
         number_of_activities = 0
     elif isInAfterNoon(flight_out.arrival_time):
         number_of_activities = 2
     else:
         number_of_activities = 4
-    first_day_activities = [number_of_activities:]
+    first_day_activities = first_day_activities[number_of_activities:]
     day_sched.setActivities(first_day_activities)
     date += datetime.timedelta(days = 1)
     days.append(day_sched)
@@ -207,7 +262,9 @@ setUpSchedulue(start_city, destination, start_date,  duration, preferances):
         days.append(day_sched)
 
     #   Set up final day
-    flight_out = getFlight(destination, origin, start_date + duration)
+    final_date = start_date + timedelta(duration)
+    flight_utils.get_flights([flight_utils.FlightSlice(destination, start_date, final_date.day, final_date.month, final_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
+    flight_out = flight_utils.get_flights([flight_utils.FlightSlice(start_city, destination, final_date.day, final_date.month, final_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
     day_sched = Day_Schedulue()
     day_sched.setDate(date)
     activites = []
@@ -235,7 +292,7 @@ def get_next_activity(activity_preferences: List[YelpCategory],
                       radius_meters=3000,
                       exclude: List[YelpCategory] = []) -> Activity:
     """
-    
+
     """
     previous_latitude = previous_activity.business.latitude
     previous_longitude = previous_activity.business.longitude
@@ -286,3 +343,6 @@ def get_local_businesses_from_yelp(city_name, number_to_fetch, api_key_filename)
     # Print all the business names
     data = response.json()["businesses"]
     return data
+
+
+#handleInput(["cold"])
