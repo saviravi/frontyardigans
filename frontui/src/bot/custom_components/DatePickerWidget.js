@@ -7,11 +7,10 @@ import moment from 'moment'
 import "react-datepicker/dist/react-datepicker.css";
 
 const DatePickerWidget = (props) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
 
   const handler = () => {
-    const message = moment(startDate).format("MM/DD/YYYY") + " to " + moment(endDate).format("MM/DD/YYYY");
+    const message = moment(date).format("MM/DD/YYYY");
     props.setState((prev) => ({
       ...prev,
       messages: [...prev.messages, createClientMessage(message)],
@@ -28,9 +27,7 @@ const DatePickerWidget = (props) => {
 
   return (
       <div className="datepicker-container" >
-          <DatePicker className="option-button" selected={startDate} onChange={(date) => setStartDate(date)} />
-          <p style={{"margin": "auto"}}> {"to"}</p>
-          <DatePicker className="option-button" selected={endDate} onChange={(date) => setEndDate(date)} />
+          <DatePicker className="option-button" selected={date} onChange={(d) => setDate(d)} />
           <button onClick={handler} className="option-button">
                 {" GO "}
           </button>
