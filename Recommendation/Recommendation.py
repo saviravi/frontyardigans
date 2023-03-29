@@ -12,7 +12,7 @@ import sys
 from urllib.parse import urlencode
 from yelp import get_businesses_by_location_name, YelpAPIException
 import datetime
-from yelp import get_businesses_by_lat_long, YelpAPIException, YelpCategory, any_of, UnknownYelpCategory, YelpResult
+from yelp import get_businesses_by_lat_long, YelpAPIException, any_of, YelpResult, YelpCommonCategories, YelpAllCategories
 
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "flights")
@@ -286,13 +286,13 @@ def setUpSchedulue(start_city, destination, start_date,  duration, preferances):
     theSchedule.setList(days)
     return theSchedule
 
-def get_next_activity(activity_preferences: List[YelpCategory],
+def get_next_activity(activity_preferences: List[YelpCommonCategories],
                       price_preference: Union[int, str],
                       previous_activity: Activity,
                       radius_meters=3000,
-                      exclude: List[YelpCategory] = []) -> Activity:
+                      exclude: List[YelpCommonCategories] = []) -> Activity:
     """
-
+    Finds a nearby activity that matches preferences but does not include the same type of activity as the previous activity done.
     """
     previous_latitude = previous_activity.business.latitude
     previous_longitude = previous_activity.business.longitude
