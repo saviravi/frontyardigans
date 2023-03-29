@@ -299,7 +299,7 @@ def get_next_activity(activity_preferences: List[YelpCategory],
 
     # Create filter given user preferences without last activity categories
     for previous_category in previous_activity.business.categories:
-        if not isinstance(previous_category, UnknownYelpCategory) and previous_category in activity_preferences:
+        if previous_category in activity_preferences:
             activity_preferences.remove(previous_category)
     for category in exclude:
         if category in activity_preferences:

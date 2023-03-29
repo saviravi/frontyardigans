@@ -4,8 +4,8 @@ import os
 from urllib.parse import urlencode
 import requests
 from dataclasses import dataclass, asdict
-from .categories import YelpCategory, UnknownYelpCategory
-from .parsed_categories import parse_alias
+from .categories import YelpAllCategories
+from .categories import parse_alias
 
 # Load environment variables
 load_dotenv()
@@ -28,7 +28,7 @@ class YelpResult():
     is_closed: bool
     url: str
     review_count: int
-    categories: list[Union[UnknownYelpCategory, YelpCategory]]
+    categories: list[YelpAllCategories]
     rating: float
     price: int
     latitude: float

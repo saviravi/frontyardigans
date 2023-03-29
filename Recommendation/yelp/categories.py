@@ -1755,3 +1755,10 @@ def parse_alias(alias: str) -> YelpAllCategories:
 	for enum in enums:
 		if alias in get_values(enum):
 			return enum(alias)
+
+def any_of(categories: list[YelpAllCategories]) -> str:
+	"""
+	Returns query string that combines multiple categories.
+	"""
+	return ",".join([c.value for c in categories])
+	
