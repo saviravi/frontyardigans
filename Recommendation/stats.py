@@ -1,5 +1,6 @@
 import numpy as np
 from yelp import YelpResult, YelpFoodCategory, YelpShoppingCategory, YelpRestaurantsCategory, YelpActiveLifeCategory, YelpNightlifeCategory, YelpArtsAndEntertainmentCategory 
+import os
 
 category_index_mapping = {
     YelpShoppingCategory: 0,
@@ -141,7 +142,7 @@ if __name__ == "__main__":
     wnar_3 = [n[3] for n in wnars]
     wnar_4 = [n[4] for n in wnars]
     fig, axs = plt.subplots(1, 5)
-    bins = np.linspace(0, 4, 30)
+    bins = np.linspace(0, 5, 50)
     axs[0].hist(wnar_0, bins)
     axs[0].set_title("Shopping")
     axs[1].hist(wnar_1, bins)
@@ -155,4 +156,20 @@ if __name__ == "__main__":
     fig.suptitle("WNAR Distributions")
     plt.show()
 
-    
+    fig, ax = plt.subplots(3, 9)
+    for i, p in tqdm(enumerate(paths)):
+        with open(p, 'rb') as f:
+            city_name = os.path.basename(p).split(".")[0].replace("_businesses", "")
+            businesses = load(f)
+            businesses = list(map(YelpResult.from_dict, businesses))
+            ratings = [b.rating for b in businesses]
+            ax[i // 9][i % 9].hist(ratings)
+            ax[i // 9][i % 9].set_yticks([])
+            ax[i // 9][i % 9].set_yticklabels([])
+            ax[i // 9][i % 9].set_xticks([0, 5])
+            ax[i // 9][i % 9].set_xticklabels(["0", "5"])
+            ax[i // 9][i % 9].set_title(city_name, fontdict={'size': 10})
+            ax[i // 9][i % 9].set_box_aspect(1)
+    fig.suptitle("Business Rating Distribution")
+    plt.tight_layout()
+    plt.show()

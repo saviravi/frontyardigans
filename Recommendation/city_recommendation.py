@@ -1,9 +1,9 @@
 from yelp import YelpRecommendationCategories, City
 from stats import nar, wnar, category_index_mapping
 
-def recommend_cities_nar(preference: YelpRecommendationCategories, limit=1, exclude: list[City] = []) -> City:
+def recommend_cities_nar(preference: YelpRecommendationCategories, limit=1, exclude: list[City] = [City.Tulum, City.Queenstown]) -> list[City]:
     cities = list(City)
-    cities = [c for c in city if c not in exclude]
+    cities = [c for c in cities if c not in exclude]
     nars = []
     for city in cities:
         nars.append((city, nar(City.load_businesses(city))))
@@ -14,9 +14,9 @@ def recommend_cities_nar(preference: YelpRecommendationCategories, limit=1, excl
 
     return cities[:limit]
 
-def recommend_cities_wnar(preference: YelpRecommendationCategories, limit=1, exclude: list[City] = []) -> City:
+def recommend_cities_wnar(preference: YelpRecommendationCategories, limit=1, exclude: list[City] = [City.Tulum, City.Queenstown]) -> list[City]:
     cities = list(City)
-    cities = [c for c in city if c not in exclude]
+    cities = [c for c in cities if c not in exclude]
     wnars = []
     for city in cities:
         wnars.append((city, wnar(City.load_businesses(city))))
