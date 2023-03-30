@@ -72,19 +72,22 @@ def wnar(businesses: list[YelpResult]) -> np.ndarray:
 
 if __name__ == "__main__":
     from glob import glob
-    from pickle import load
+    from json import load
     import matplotlib.pyplot as plt
+    from tqdm import tqdm
 
-    paths = glob("yelp/business_data/*.pickle")
+    paths = glob("yelp/business_data/*.json")
     nars = []
     wnars = []
     avg_nar = np.zeros((5,))
     avg_wnar = np.zeros((5,))
+    total_businesses = 0
 
-    for p in paths:
+    for p in tqdm(paths):
         with open(p, 'rb') as f:
             businesses = load(f)
-
+            businesses = list(map(YelpResult.from_dict, businesses))
+            total_businesses += len(businesses)
             city_nar = nar(businesses)
             city_wnar = wnar(businesses)
             nars.append(city_nar)
@@ -95,6 +98,9 @@ if __name__ == "__main__":
     avg_nar /= len(paths)
     avg_wnar /= len(paths)
 
+    print("Total businesses:", total_businesses)
+    print("Number of cities:", len(paths))
+    print("Average businesses per city:", total_businesses / len(paths))
     print("Avg NAR:", avg_nar)
     print("Avg WNAR:", avg_wnar)
 

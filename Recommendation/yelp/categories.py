@@ -1724,36 +1724,41 @@ def get_values(enum: Enum) -> list[str]:
 	"""
 	return [enum(x).value for x in enum]
 
+_enums: list[Enum] = [YelpActiveLifeCategory,
+YelpArtsAndEntertainmentCategory,
+YelpAutomotiveCategory,
+YelpBeautyAndSpasCategory,
+YelpBicyclesCategory,
+YelpEducationCategory,
+YelpEventPlanningAndServicesCategory,
+YelpFinancialServicesCategory,
+YelpFoodCategory,
+YelpHealthAndMedicalCategory,
+YelpHomeServicesCategory,
+YelpHotelsAndTravelCategory,
+YelpLocalFlavorCategory,
+YelpLocalServicesCategory,
+YelpMassMediaCategory,
+YelpNightlifeCategory,
+YelpPetsCategory,
+YelpProfessionalServicesCategory,
+YelpPublicServicesAndGovernmentCategory,
+YelpRealEstateCategory,
+YelpReligiousOrganizationsCategory,
+YelpRestaurantsCategory,
+YelpShoppingCategory]
+
+_aliases = dict()
+for enum in _enums:
+	_aliases[enum] = set(get_values(enum))
+
 def parse_alias(alias: str) -> YelpAllCategories:
 	"""
 	Parses a Yelp category alias into the instance of its belonging Enum.
 	"""
-	enums: list[Enum] = [YelpActiveLifeCategory,
-	YelpArtsAndEntertainmentCategory,
-	YelpAutomotiveCategory,
-	YelpBeautyAndSpasCategory,
-	YelpBicyclesCategory,
-	YelpEducationCategory,
-	YelpEventPlanningAndServicesCategory,
-	YelpFinancialServicesCategory,
-	YelpFoodCategory,
-	YelpHealthAndMedicalCategory,
-	YelpHomeServicesCategory,
-	YelpHotelsAndTravelCategory,
-	YelpLocalFlavorCategory,
-	YelpLocalServicesCategory,
-	YelpMassMediaCategory,
-	YelpNightlifeCategory,
-	YelpPetsCategory,
-	YelpProfessionalServicesCategory,
-	YelpPublicServicesAndGovernmentCategory,
-	YelpRealEstateCategory,
-	YelpReligiousOrganizationsCategory,
-	YelpRestaurantsCategory,
-	YelpShoppingCategory]
 
-	for enum in enums:
-		if alias in get_values(enum):
+	for enum in _enums:
+		if alias in _aliases[enum]:
 			return enum(alias)
 
 def any_of(categories: list[YelpAllCategories]) -> str:

@@ -4,7 +4,7 @@ from shapely.set_operations import intersection
 from shapely.geometry import box
 import numpy as np
 from vincenty import vincenty
-from yelp import get_businesses_by_lat_long, YelpCategory, any_of, parse_alias, get_remaining_calls
+from yelp import get_businesses_by_lat_long, any_of, parse_alias, get_remaining_calls
 import matplotlib.patches as pat
 import pickle
 import tqdm
@@ -385,9 +385,9 @@ print("search will take %d calls, currently have %d API calls left" % (len(grid)
 
 # print(nar)
 
-# plt.xlabel("Longitude")
+plt.xlabel("Longitude")
 plt.ylabel("Latitude")
-plt.title("London Gridded Search")
+plt.title("Vienna Gridded Search")
 plt.show()
 
 all_businesses = []
