@@ -96,6 +96,18 @@ nlu:
 - intent: give_city
   examples: |
     - [Chicago](city)
+- intent: give_startdate
+  examples : |
+    - Start on [01/01/2025]{"entity": "date", "role": "start"}
+    - Start [01/01/2025]{"entity": "date", "role": "start"}
+    - Starts [01/01/2025]{"entity": "date", "role": "start"}
+    - Starts on [01/01/2025]{"entity": "date", "role": "start"}
+- intent: give_enddate
+  examples : |
+    - End on [01/01/2025]{"entity": "date", "role": "end"}
+    - Ends on [01/01/2025]{"entity": "date", "role": "end"}
+    - End [01/01/2025]{"entity": "date", "role": "end"}
+    - Ends [01/01/2025]{"entity": "date", "role": "end"}
 - intent: clear_slots
   examples: |
     - clear slots
@@ -113,6 +125,8 @@ nlu:
     - frigid
     - humid
     - rainy
-
+- regex: date
+  examples: |
+    - ^(0[1-9]|1[012])[- /.] (0[1-9]|[12][0-9]|3[01])[- /.] (19|20)\d\d$
 
 

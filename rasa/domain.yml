@@ -12,12 +12,15 @@ intents:
   - give_temp
   - give_city
   - give_activity
+  - give_startdate
+  - give_enddate
   - clear_slots
 
 entities:
-- temperature
-- city
-- activity
+  - temperature
+  - city
+  - activity
+  - date
 
 slots:
   temperature:
@@ -44,7 +47,24 @@ slots:
       entity: activity
       conditions:
       - active_loop: travel_form
-
+  startdate:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: date
+      role: start
+      conditions:
+      - active_loop: travel_form
+  enddate:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: date
+      role: start
+      conditions:
+      - active_loop: travel_form
 
 forms:
   travel_form:
@@ -52,6 +72,8 @@ forms:
       - temperature
       - city
       - activity
+      - startdate
+      - enddate
 
 responses:
   utter_greet:
@@ -155,11 +177,6 @@ responses:
   
   utter_ask_travel_form_city:
   - text: "What city did you recently visit/liked?"
-    # buttons:
-    #   - title: "Chicago"
-    #     payload: '/give_city{{"city":"chicago"}}'
-    #   - title: "Paris"
-    #     payload: '/give_city{{"city":"paris"}}'
 
   utter_ask_travel_form_activity:
   - text: "Which activity do you enjoy the most?"
@@ -176,6 +193,12 @@ responses:
         payload: '/give_activity{{"activity":"nightlife"}}'
       - title: "Travel"
         payload: '/give_activity{{"activity":"travel"}}'
+  
+  utter_ask_travel_form_startdate:
+  - text: "When do you want your trip to start?"
+
+  utter_ask_travel_form_enddate:
+  - text: "When do you want your trip to end?"
 
 actions:
   - validate_travel_form

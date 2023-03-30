@@ -43,6 +43,18 @@ stories:
   - slot_was_set:
     - city: Chicago
   - slot_was_set:
+    - requested_slot: activity
+  - slot_was_set:
+    - activity: Food
+  - slot_was_set:
+    - requested_slot: startdate
+  - slot_was_set:
+    - startdate: 12/01/2024
+  - slot_was_set:
+    - requested_slot: enddate
+  - slot_was_set:
+    - enddate: 12/01/2025
+  - slot_was_set:
     - requested_slot: null
   - active_loop: null
   - action: action_GetRecommendation
