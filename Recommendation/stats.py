@@ -1,6 +1,17 @@
 import numpy as np
 from yelp import YelpResult, YelpFoodCategory, YelpShoppingCategory, YelpRestaurantsCategory, YelpActiveLifeCategory, YelpNightlifeCategory, YelpArtsAndEntertainmentCategory 
 
+category_index_mapping = {
+    YelpShoppingCategory: 0,
+    YelpNightlifeCategory: 1,
+    YelpRestaurantsCategory: 2,
+    YelpArtsAndEntertainmentCategory: 3,
+    YelpActiveLifeCategory: 4
+}
+"""
+Mapping of Yelp category to index in NAR, WNAR result vector.
+"""
+
 def nar(businesses: list[YelpResult]) -> np.ndarray:
     """
     Takes in a list of businesses and calculates the NAR.
@@ -143,3 +154,5 @@ if __name__ == "__main__":
     axs[4].set_title("Active Life")
     fig.suptitle("WNAR Distributions")
     plt.show()
+
+    

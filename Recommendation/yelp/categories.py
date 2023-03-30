@@ -1676,6 +1676,14 @@ class YelpShoppingCategory(Enum):
 	WholesaleStores = 'wholesale_stores'
 	Wigs = 'wigs'
 
+YelpRecommendationCategories = Union[
+	YelpShoppingCategory,
+	YelpNightlifeCategory,
+	YelpRestaurantsCategory,
+	YelpActiveLifeCategory,
+	YelpArtsAndEntertainmentCategory
+]
+
 YelpCommonCategories = Union[
 	YelpShoppingCategory,
 	YelpNightlifeCategory,
