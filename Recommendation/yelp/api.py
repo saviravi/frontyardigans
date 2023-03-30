@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Union
 from dotenv import load_dotenv
 import os
@@ -37,6 +38,23 @@ class YelpResult():
 
     def jsonify(self) -> dict:
         return asdict(self)
+
+    @classmethod
+    def from_dict(self, d: dict) -> YelpResult:
+        return YelpResult(
+            d["id"],
+            d["name"],
+            d["image_url"],
+            d["is_closed"],
+            d["url"],
+            d["review_count"],
+            [parse_alias(c) for c in d["categories"]],
+            d["rating"],
+            d["price"],
+            d["latitude"],
+            d["longitude"],
+            d["city_name"]
+        )
 
 def _send_yelp_request(url, params):
     """
