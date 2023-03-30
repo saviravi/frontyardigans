@@ -63,20 +63,20 @@ class Activity:
 
 
 @dataclass
-class Day_Schedulue:
+class Day_Schedule:
     """
-    Class representing a day's schedulue
+    Class representing a day's schedule
     """
     # start_state and end_state should  be type Lodging or type Flight
     date: str
     activities: list[Activity]
     def __init__(self):
-        date = ""
-        activities = []
+        self.date = ""
+        self.activities = []
 
     def setDate(self, day):
         self.date = day
-    def setActivities(self, this, stuff):
+    def setActivities(self, stuff):
         for a in stuff:
             self.activities.append(a)
     def addActivity(self, a):
@@ -85,13 +85,13 @@ class Day_Schedulue:
 
 
 @dataclass
-class Schedulue:
+class Schedule:
     """
     Class representing the lodging for the trip
     """
-    day_schedulue_list: list[Day_Schedulue]
-    def setList(this, day_list):
-        this.day_schedule_list = day_list
+    day_schedule_list: list[Day_Schedule]
+    def setList(self, day_list):
+        self.day_schedule_list = day_list
 
 
 @dataclass
@@ -113,9 +113,15 @@ class Trip:
     """
     departure_flight: Flight
     return_flight: Flight
-    schedule: Schedulue
+    schedule: Schedule
 
 
+@dataclass
+class PrefCategory:
+    """
+    Class representing an airport retrieved from Duffel
+    """
+    value: str
 
 
 @dataclass
@@ -126,11 +132,18 @@ class Airport:
     airport_name: str
     location: Location
 
+def pprintSchedulue(sched):
+    for day in sched.day_schedule_list:
+        for act in day.activities:
+            print(act.business.name)
+            print()
+        print("-------------------")
+
 def handleInput(inputData):
     """
     Handles input and returns a list of possible trips :)
     """
-    print(setUpSchedulue("CMH", "ORD", datetime.date(2023, 12, 10),  5, ["hiking", "nightclubs"]))
+    pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="Nightclubs")]))
     return "Okay, let me find you some cities that are " + inputData[0] + "[TODO WEATHER API]"
 
 # This takes a couple of seconds and doesn't change between calls so could be cached
@@ -189,11 +202,10 @@ def getDayOfActivities(prefs, previous_activities, eventually=None, immediates=N
 def getLodging(airport):
     businesses = get_businesses_by_lat_long(
         airport.location.latitude, airport.location.longitude,
-        radius=5000,
+        radius=40000,
         price=1,
-        categories=filter
+        categories=[]
     )
-
     # Sort businesses by best rating
     businesses.sort(key=lambda b: b.rating, reverse=True)
 
@@ -222,15 +234,16 @@ class AirportBusiness:
     """
     latitude: float
     longitude: float
+    name: str
 def flightToActivity(flights_in):
-    return Activity(business=AirportBusiness(latitude = flights_in[0].slices[0].destination.latitude, longitude = flights_in[0].slices[0].destination.longitude), time="NONE", duration="NONE")
+    return Activity(business=AirportBusiness(name = flights_in[0].slices[0].destination.name, latitude = flights_in[0].slices[0].destination.latitude, longitude = flights_in[0].slices[0].destination.longitude), time="NONE", duration="NONE")
 
 
 
-#   returns a fully formed schedulue
-def setUpSchedulue(start_city, destination, start_date,  duration, preferances):
-    first_day = Day_Schedulue()
-    last_day = Day_Schedulue()
+#   returns a fully formed schedule
+def setUpSchedule(start_city, destination, start_date,  duration, preferances):
+    first_day = Day_Schedule()
+    last_day = Day_Schedule()
     flights_in = flight_utils.get_flights([flight_utils.FlightSlice(start_city, destination, start_date.day, start_date.month, start_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
     airportIn = getAirportLocation(flights_in)
     flightInActivity = flightToActivity(flights_in)
@@ -238,51 +251,54 @@ def setUpSchedulue(start_city, destination, start_date,  duration, preferances):
     date = start_date
     days = []
     #   Set up first day
-    day_sched = Day_Schedulue()
+    day_sched = Day_Schedule()
     activities_list = [flightInActivity, lodging]
     day_sched.setDate(date)
     first_day_activities = getDayOfActivities(preferances, activities_list, eventually = [lodging], immediates=[flightInActivity, lodging])
-    if isInMorning(flight_out.arrival_time):
-        number_of_activities = 0
-    elif isInAfterNoon(flight_out.arrival_time):
-        number_of_activities = 2
-    else:
-        number_of_activities = 4
+    #if isInMorning(flight_out.arrival_time):
+    #    number_of_activities = 0
+    #elif isInAfterNoon(flight_out.arrival_time):
+    #    number_of_activities = 2
+    #else:
+    #    number_of_activities = 4
+    number_of_activities = 2
     first_day_activities = first_day_activities[number_of_activities:]
     day_sched.setActivities(first_day_activities)
     date += datetime.timedelta(days = 1)
     days.append(day_sched)
-
     #   Set up middle days
-    for _ in duration - 2:
-        day_sched = Day_Schedulue()
+    for _ in range(duration - 2):
+        day_sched = Day_Schedule()
         day_sched.setDate(date)
         day_sched.setActivities(getDayOfActivities(preferances, activities_list, eventually = [lodging], immediates = [lodging]))
         date += datetime.timedelta(days = 1)
         days.append(day_sched)
 
     #   Set up final day
-    final_date = start_date + timedelta(duration)
-    flight_utils.get_flights([flight_utils.FlightSlice(destination, start_date, final_date.day, final_date.month, final_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
-    flight_out = flight_utils.get_flights([flight_utils.FlightSlice(start_city, destination, final_date.day, final_date.month, final_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
-    day_sched = Day_Schedulue()
+    final_date = start_date + datetime.timedelta(duration)
+    flight_out = flight_utils.get_flights([flight_utils.FlightSlice(destination, start_city, final_date.day, final_date.month, final_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
+    airportOut = getAirportLocation(flight_out)
+    flightOutActivity = flightToActivity(flight_out)
+    day_sched = Day_Schedule()
     day_sched.setDate(date)
-    activites = []
+    activities = []
     event = [lodging]
-    if isInMorning(flight_out.departure_time):
-        number_of_activities = 0
-        event = []
-    elif isInAfterNoon(flight_out.departure_time):
-        number_of_activities = 2
-    else:
-        number_of_activities = 4
-    activites = getDayOfActivities(preferances, activities_list, eventually = event, immediates = [lodging], number_of_activities=number_of_activities)
-    activites += flight_out
+    #if isInMorning(flight_out.departure_time):
+    #    number_of_activities = 0
+    #    event = []
+    #elif isInAfterNoon(flight_out.departure_time):
+    #    number_of_activities = 2
+    #else:
+    #    number_of_activities = 4
+    number_of_activities = 2
+    activities = getDayOfActivities(preferances, activities_list, eventually = event, immediates = [lodging], number_of_activities=number_of_activities)
+
+    activities.append(flightOutActivity)
     day_sched.setActivities(activities)
     days.append(day_sched)
 
     #   Return the list
-    theSchedulue = Schedulue()
+    theSchedule = Schedule(day_schedule_list = days)
     theSchedule.setList(days)
     return theSchedule
 
@@ -345,4 +361,4 @@ def get_local_businesses_from_yelp(city_name, number_to_fetch, api_key_filename)
     return data
 
 
-#handleInput(["cold"])
+handleInput(["cold"])
