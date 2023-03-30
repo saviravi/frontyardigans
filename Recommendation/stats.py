@@ -110,7 +110,7 @@ if __name__ == "__main__":
     nar_3 = [n[3] for n in nars]
     nar_4 = [n[4] for n in nars]
     fig, axs = plt.subplots(1, 5)
-    bins = np.linspace(0, 1, 100)
+    bins = np.linspace(0, 1, 30)
     axs[0].hist(nar_0, bins)
     axs[0].set_title("Shopping")
     axs[1].hist(nar_1, bins)
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     wnar_3 = [n[3] for n in wnars]
     wnar_4 = [n[4] for n in wnars]
     fig, axs = plt.subplots(1, 5)
-    bins = np.linspace(0, 4, 100)
+    bins = np.linspace(0, 4, 30)
     axs[0].hist(wnar_0, bins)
     axs[0].set_title("Shopping")
     axs[1].hist(wnar_1, bins)
