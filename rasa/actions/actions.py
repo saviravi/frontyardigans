@@ -129,6 +129,31 @@ class ValidateTravelForm(FormValidationAction):
         dispatcher.utter_message(text=f"OK! You enjoy {activity} the most.")
         return {"activity": slot_value}
 
+    def validate_startdate(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `startddate` value."""
+        startdate = tracker.get_slot("startdate")
+        dispatcher.utter_message(text=f"OK! You want your vacation to start on {startdate}")
+        return {"startdate": slot_value}
+
+    def validate_enddate(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `enddate` value."""
+        enddate = tracker.get_slot("enddate")
+        dispatcher.utter_message(text=f"OK! You want your vacation to end on {enddate}")
+        return {"enddate": slot_value}
+    
+
 class ActionClearSlots(Action):
 
  def name(self) -> Text:

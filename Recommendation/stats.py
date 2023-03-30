@@ -1,5 +1,17 @@
 import numpy as np
 from yelp import YelpResult, YelpFoodCategory, YelpShoppingCategory, YelpRestaurantsCategory, YelpActiveLifeCategory, YelpNightlifeCategory, YelpArtsAndEntertainmentCategory 
+import os
+
+category_index_mapping = {
+    YelpShoppingCategory: 0,
+    YelpNightlifeCategory: 1,
+    YelpRestaurantsCategory: 2,
+    YelpArtsAndEntertainmentCategory: 3,
+    YelpActiveLifeCategory: 4
+}
+"""
+Mapping of Yelp category to index in NAR, WNAR result vector.
+"""
 
 def nar(businesses: list[YelpResult]) -> np.ndarray:
     """
@@ -7,14 +19,18 @@ def nar(businesses: list[YelpResult]) -> np.ndarray:
     NAR = (number of businesses of category x) / (total number of businesses)
     Returns the NAR vector for the categories in the order: Shopping, Nightlife, Restaurants, Arts and Entertainment, Active Life.
     """
-    counts = dict()
+    counts = {
+        YelpShoppingCategory: 0,
+        YelpNightlifeCategory: 0,
+        YelpRestaurantsCategory: 0,
+        YelpArtsAndEntertainmentCategory: 0,
+        YelpActiveLifeCategory: 0,
+    }
+
     for business in businesses:
         for category in business.categories:
-            if category is None:
+            if type(category) not in list(counts):
                 continue
-
-            if type(category) not in counts:
-                counts[type(category)] = 0
             
             counts[type(category)] += 1
     
@@ -34,16 +50,25 @@ def wnar(businesses: list[YelpResult]) -> np.ndarray:
     Returns the WNAR vector for the categories in the order: Shopping, Nightlife, Restaurants, Arts and Entertainment, Active Life.
     The WNAR is representitive of the quality of businesses in a certain city per category.
     """
-    ratings = dict()
-    counts = dict()
+    ratings = {
+        YelpShoppingCategory: 0,
+        YelpNightlifeCategory: 0,
+        YelpRestaurantsCategory: 0,
+        YelpArtsAndEntertainmentCategory: 0,
+        YelpActiveLifeCategory: 0,
+    }
+    # Initialize to 1 to avoid division by zero
+    counts = {
+        YelpShoppingCategory: 1,
+        YelpNightlifeCategory: 1,
+        YelpRestaurantsCategory: 1,
+        YelpArtsAndEntertainmentCategory: 1,
+        YelpActiveLifeCategory: 1,
+    }
     for business in businesses:
         for category in business.categories:
-            if category is None:
+            if type(category) not in list(counts):
                 continue
-
-            if type(category) not in counts:
-                counts[type(category)] = 0
-                ratings[type(category)] = 0
             
             counts[type(category)] += 1
             ratings[type(category)] += business.rating
@@ -59,19 +84,22 @@ def wnar(businesses: list[YelpResult]) -> np.ndarray:
 
 if __name__ == "__main__":
     from glob import glob
-    from pickle import load
+    from json import load
     import matplotlib.pyplot as plt
+    from tqdm import tqdm
 
-    paths = glob("yelp/business_data/*.pickle")
+    paths = glob("yelp/business_data/*.json")
     nars = []
     wnars = []
     avg_nar = np.zeros((5,))
     avg_wnar = np.zeros((5,))
+    total_businesses = 0
 
-    for p in paths:
+    for p in tqdm(paths):
         with open(p, 'rb') as f:
             businesses = load(f)
-
+            businesses = list(map(YelpResult.from_dict, businesses))
+            total_businesses += len(businesses)
             city_nar = nar(businesses)
             city_wnar = wnar(businesses)
             nars.append(city_nar)
@@ -82,6 +110,9 @@ if __name__ == "__main__":
     avg_nar /= len(paths)
     avg_wnar /= len(paths)
 
+    print("Total businesses:", total_businesses)
+    print("Number of cities:", len(paths))
+    print("Average businesses per city:", total_businesses / len(paths))
     print("Avg NAR:", avg_nar)
     print("Avg WNAR:", avg_wnar)
 
@@ -91,7 +122,7 @@ if __name__ == "__main__":
     nar_3 = [n[3] for n in nars]
     nar_4 = [n[4] for n in nars]
     fig, axs = plt.subplots(1, 5)
-    bins = np.linspace(0, 1, 100)
+    bins = np.linspace(0, 1, 30)
     axs[0].hist(nar_0, bins)
     axs[0].set_title("Shopping")
     axs[1].hist(nar_1, bins)
@@ -102,6 +133,7 @@ if __name__ == "__main__":
     axs[3].set_title("Arts and Entertainment")
     axs[4].hist(nar_4, bins)
     axs[4].set_title("Active Life")
+    fig.suptitle("NAR Distributions")
     plt.show()
 
     wnar_0 = [n[0] for n in wnars]
@@ -110,7 +142,7 @@ if __name__ == "__main__":
     wnar_3 = [n[3] for n in wnars]
     wnar_4 = [n[4] for n in wnars]
     fig, axs = plt.subplots(1, 5)
-    bins = np.linspace(0, 4, 100)
+    bins = np.linspace(0, 5, 50)
     axs[0].hist(wnar_0, bins)
     axs[0].set_title("Shopping")
     axs[1].hist(wnar_1, bins)
@@ -121,4 +153,23 @@ if __name__ == "__main__":
     axs[3].set_title("Arts and Entertainment")
     axs[4].hist(wnar_4, bins)
     axs[4].set_title("Active Life")
+    fig.suptitle("WNAR Distributions")
+    plt.show()
+
+    fig, ax = plt.subplots(3, 9)
+    for i, p in tqdm(enumerate(paths)):
+        with open(p, 'rb') as f:
+            city_name = os.path.basename(p).split(".")[0].replace("_businesses", "")
+            businesses = load(f)
+            businesses = list(map(YelpResult.from_dict, businesses))
+            ratings = [b.rating for b in businesses]
+            ax[i // 9][i % 9].hist(ratings)
+            ax[i // 9][i % 9].set_yticks([])
+            ax[i // 9][i % 9].set_yticklabels([])
+            ax[i // 9][i % 9].set_xticks([0, 5])
+            ax[i // 9][i % 9].set_xticklabels(["0", "5"])
+            ax[i // 9][i % 9].set_title(city_name, fontdict={'size': 10})
+            ax[i // 9][i % 9].set_box_aspect(1)
+    fig.suptitle("Business Rating Distribution")
+    plt.tight_layout()
     plt.show()

@@ -4,7 +4,7 @@ from shapely.set_operations import intersection
 from shapely.geometry import box
 import numpy as np
 from vincenty import vincenty
-from yelp import get_businesses_by_lat_long, YelpCategory, any_of, parse_alias, get_remaining_calls
+from yelp import get_businesses_by_lat_long, any_of, parse_alias, get_remaining_calls, YelpFoodCategory, YelpActiveLifeCategory, YelpArtsAndEntertainmentCategory, YelpNightlifeCategory, YelpShoppingCategory
 import matplotlib.patches as pat
 import pickle
 import tqdm
@@ -324,10 +324,10 @@ tulum_mexico = [
 
 fig, ax = plt.subplots()
 
-london = Polygon(san_francisco_border)
+london = Polygon(vienna_border)
 
 minx, miny, maxx, maxy = london.bounds
-delta = 0.007
+delta = 0.01
 x = np.arange(minx, maxx + delta, delta)
 y = np.arange(miny, maxy + delta, delta)
 
@@ -345,7 +345,7 @@ for i in range(len(x) - 1):
         )
 
 x, y = london.exterior.xy
-plt.plot(x, y, label="London border", linewidth=3)
+plt.plot(x, y, label="City border", linewidth=3)
 
 # for b in grid:
 #     x, y  = b.exterior.xy
@@ -367,50 +367,32 @@ for b in grid:
 remaining_calls = get_remaining_calls()
 print("search will take %d calls, currently have %d API calls left" % (len(grid) * 5, remaining_calls))
 
-# with open('san_francisco_businesses.pickle', 'rb') as f:
-#     businesses = pickle.load(f)
-
-# nar = dict()
-# for b in businesses:
-#     # for c in b.categories:
-#     #     if type(c) == YelpCategory:
-#     #         t = type(parse_alias(c.value))
-#     #     else:
-#     #         t = type(parse_alias(c.alias))
-#     # if t not in nar:
-#     #     nar[t] = 0
-#     # nar[t] += 1
-#     if b.longitude is not None and b.latitude is not None:
-#         plt.plot(b.longitude, b.latitude, 'x', color='c')
-
-# print(nar)
-
-# plt.xlabel("Longitude")
+plt.xlabel("Longitude")
 plt.ylabel("Latitude")
-plt.title("London Gridded Search")
+plt.title("Vienna Gridded Search")
 plt.show()
 
-# all_businesses = []
-# found_ids = set()
-# for lat, long in tqdm.tqdm(search_points):
-#     duplicates = 0
+all_businesses = []
+found_ids = set()
+for lat, long in tqdm.tqdm(search_points):
+    duplicates = 0
 
-#     food_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllFood]))
-#     active_life_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllActiveLife]))
-#     arts_entertainment_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllArtsAndEntertainment]))
-#     nightlife_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllNightlife]))
-#     shopping_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllShopping]))
+    food_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpFoodCategory.Food]))
+    active_life_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpActiveLifeCategory.ActiveLife]))
+    arts_entertainment_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpArtsAndEntertainmentCategory.ArtsAndEntertainment]))
+    nightlife_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpNightlifeCategory.Nightlife]))
+    shopping_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpShoppingCategory.Shopping]))
     
-#     businesses = food_businesses + active_life_businesses + arts_entertainment_businesses + nightlife_businesses + shopping_businesses
-#     print("found %d, %d, %d, %d, %d businesses" % (len(food_businesses), len(active_life_businesses), len(arts_entertainment_businesses), len(nightlife_businesses), len(shopping_businesses)))
-#     for b in businesses:
-#         if b.id in found_ids:
-#             duplicates += 1
-#         else:
-#             found_ids.add(b.id)
-#             all_businesses.append(b)
+    businesses = food_businesses + active_life_businesses + arts_entertainment_businesses + nightlife_businesses + shopping_businesses
+    print("found %d, %d, %d, %d, %d businesses" % (len(food_businesses), len(active_life_businesses), len(arts_entertainment_businesses), len(nightlife_businesses), len(shopping_businesses)))
+    for b in businesses:
+        if b.id in found_ids:
+            duplicates += 1
+        else:
+            found_ids.add(b.id)
+            all_businesses.append(b)
 
-#     print("found %d duplicates" % duplicates)
-# print("found", len(all_businesses), "total")
-# with open('seville_businesses.pickle', 'wb') as f:
-#     pickle.dump(all_businesses, f)
+    print("found %d duplicates" % duplicates)
+print("found", len(all_businesses), "total")
+with open('vienna_businesses.pickle', 'wb') as f:
+    pickle.dump(all_businesses, f)

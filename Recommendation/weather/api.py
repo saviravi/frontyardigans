@@ -1,6 +1,8 @@
 import requests
 from urllib.parse import quote
 from dataclasses import dataclass
+import os
+import json
 
 @dataclass
 class WeatherDay:
@@ -63,3 +65,8 @@ def get_all_data() -> list[Station]:
         return list(map(station_from_json, response.json()))
     else:
         raise WeatherAPIException(str(response.content))
+
+with open(os.path.join(os.path.dirname(__file__), "weather.json"), 'rb') as f:
+    _weather = json.load(f)
+def get_monthly_weather(city: str) -> dict:
+    return _weather[city]

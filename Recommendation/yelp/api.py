@@ -1,11 +1,12 @@
+from __future__ import annotations
 from typing import Union
 from dotenv import load_dotenv
 import os
 from urllib.parse import urlencode
 import requests
 from dataclasses import dataclass, asdict
-from .categories import YelpCategory, UnknownYelpCategory
-from .parsed_categories import parse_alias
+from .categories import YelpAllCategories
+from .categories import parse_alias
 
 # Load environment variables
 load_dotenv()
@@ -28,7 +29,7 @@ class YelpResult():
     is_closed: bool
     url: str
     review_count: int
-    categories: list[Union[UnknownYelpCategory, YelpCategory]]
+    categories: list[YelpAllCategories]
     rating: float
     price: int
     latitude: float
@@ -37,6 +38,23 @@ class YelpResult():
 
     def jsonify(self) -> dict:
         return asdict(self)
+
+    @classmethod
+    def from_dict(self, d: dict) -> YelpResult:
+        return YelpResult(
+            d["id"],
+            d["name"],
+            d["image_url"],
+            d["is_closed"],
+            d["url"],
+            d["review_count"],
+            [parse_alias(c) for c in d["categories"]],
+            d["rating"],
+            d["price"],
+            d["latitude"],
+            d["longitude"],
+            d["city_name"]
+        )
 
 def _send_yelp_request(url, params):
     """
