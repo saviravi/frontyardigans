@@ -151,7 +151,8 @@ def handleInput(inputData):
     """
     Handles input and returns a list of possible trips :)
     """
-    print(pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")])))
+#    print(pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")])))
+    print(inputData)
     return pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")]))
 
 # This takes a couple of seconds and doesn't change between calls so could be cached
@@ -205,7 +206,6 @@ def getDayOfActivities(prefs, previous_activities, eventually=None, immediates=N
             next_activity = get_next_activity(prefs, 1, previous_activities[-1], term="food")
         else:
             term = random.choice(prefs).value
-            print(term)
             next_activity = get_next_activity(prefs, 1, previous_activities[-1], term = term)
         activities_to_return.append(next_activity)
         previous_activities.append(next_activity)
@@ -336,13 +336,13 @@ def get_next_activity(activity_preferences: List[YelpCommonCategories],
     previous_longitude = previous_activity.business.longitude
 
     # Create filter given user preferences without last activity categories
-    for previous_category in previous_activity.business.categories:
-        if previous_category in activity_preferences:
-            activity_preferences.remove(previous_category)
-    for category in exclude:
-        if category in activity_preferences:
-            activity_preferences.remove(category)
-    filter = any_of(activity_preferences)
+#    for previous_category in previous_activity.business.categories:
+#        if previous_category in activity_preferences:
+#            activity_preferences.remove(previous_category)
+#    for category in exclude:
+#        if category in activity_preferences:
+#            activity_preferences.remove(category)
+#    filter = any_of(activity_preferences)
 
     # Find a nearby activity within ~2 miles
     # TODO: filter by open time
@@ -386,4 +386,4 @@ def get_local_businesses_from_yelp(city_name, number_to_fetch, api_key_filename)
     return data
 
 
-handleInput(["cold"])
+#handleInput(["cold"])
