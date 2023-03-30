@@ -13,7 +13,7 @@ from urllib.parse import urlencode
 from yelp import get_businesses_by_location_name, YelpAPIException
 import datetime
 from yelp import get_businesses_by_lat_long, YelpAPIException, any_of, YelpResult, YelpCommonCategories, YelpAllCategories
-
+import random
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "flights")
 
@@ -133,18 +133,26 @@ class Airport:
     location: Location
 
 def pprintSchedulue(sched):
+    toReturn = ""
     for day in sched.day_schedule_list:
+        toReturn += "Date: " + str(day.date) + "\n"
         for act in day.activities:
-            print(act.business.name)
-            print()
-        print("-------------------")
+            toReturn += act.business.name + "\n"
+        toReturn += "\n"
+    return toReturn
+
+def pprintDaySchedulue(day):
+    for act in day.activities:
+        print(act.business.name)
+        print()
+    print("-------------------")
 
 def handleInput(inputData):
     """
     Handles input and returns a list of possible trips :)
     """
-    pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="Nightclubs")]))
-    return "Okay, let me find you some cities that are " + inputData[0] + "[TODO WEATHER API]"
+    print(pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")])))
+    return pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")]))
 
 # This takes a couple of seconds and doesn't change between calls so could be cached
 def get_duffel_airports() -> List[Airport]:
@@ -192,8 +200,13 @@ def isInAfternoon(start_time):
 
 def getDayOfActivities(prefs, previous_activities, eventually=None, immediates=None, number_of_activities=6):
     activities_to_return = immediates
-    for _ in range(number_of_activities):
-        next_activity = get_next_activity(prefs, 1, previous_activities[-1])
+    for x in range(number_of_activities):
+        if x % 2 == 0:
+            next_activity = get_next_activity(prefs, 1, previous_activities[-1], term="food")
+        else:
+            term = random.choice(prefs).value
+            print(term)
+            next_activity = get_next_activity(prefs, 1, previous_activities[-1], term = term)
         activities_to_return.append(next_activity)
         previous_activities.append(next_activity)
     activities_to_return += eventually
@@ -204,7 +217,7 @@ def getLodging(airport):
         airport.location.latitude, airport.location.longitude,
         radius=40000,
         price=1,
-        categories=[]
+        term="hotels"
     )
     # Sort businesses by best rating
     businesses.sort(key=lambda b: b.rating, reverse=True)
@@ -217,12 +230,20 @@ def getLodging(airport):
         duration=None
     )
 
-def getAirportLocation(flights_in):
+def getDestinationAirportLocation(flights_in):
     lat = flights_in[0].slices[0].destination.latitude
     long = flights_in[0].slices[0].destination.longitude
     name = flights_in[0].slices[0].destination.name
     city_name = flights_in[0].slices[0].destination.city_name
     time_zone = flights_in[0].slices[0].destination.time_zone
+    return Airport(airport_name=name, location=Location(city_name=city_name, latitude=lat, longitude=long, time_zone=time_zone))
+
+def getOriginAirportLocation(flights_in):
+    lat = flights_in[0].slices[0].origin.latitude
+    long = flights_in[0].slices[0].origin.longitude
+    name = flights_in[0].slices[0].origin.name
+    city_name = flights_in[0].slices[0].origin.city_name
+    time_zone = flights_in[0].slices[0].origin.time_zone
     return Airport(airport_name=name, location=Location(city_name=city_name, latitude=lat, longitude=long, time_zone=time_zone))
 
 
@@ -235,8 +256,10 @@ class AirportBusiness:
     latitude: float
     longitude: float
     name: str
-def flightToActivity(flights_in):
+def flightInToActivity(flights_in):
     return Activity(business=AirportBusiness(name = flights_in[0].slices[0].destination.name, latitude = flights_in[0].slices[0].destination.latitude, longitude = flights_in[0].slices[0].destination.longitude), time="NONE", duration="NONE")
+def flightOutToActivity(flights_out):
+    return Activity(business=AirportBusiness(name = flights_out[0].slices[0].origin.name, latitude = flights_out[0].slices[0].origin.latitude, longitude = flights_out[0].slices[0].origin.longitude), time="NONE", duration="NONE")
 
 
 
@@ -245,8 +268,8 @@ def setUpSchedule(start_city, destination, start_date,  duration, preferances):
     first_day = Day_Schedule()
     last_day = Day_Schedule()
     flights_in = flight_utils.get_flights([flight_utils.FlightSlice(start_city, destination, start_date.day, start_date.month, start_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
-    airportIn = getAirportLocation(flights_in)
-    flightInActivity = flightToActivity(flights_in)
+    airportIn = getDestinationAirportLocation(flights_in)
+    flightInActivity = flightInToActivity(flights_in)
     lodging = getLodging(airportIn)
     date = start_date
     days = []
@@ -262,7 +285,7 @@ def setUpSchedule(start_city, destination, start_date,  duration, preferances):
     #else:
     #    number_of_activities = 4
     number_of_activities = 2
-    first_day_activities = first_day_activities[number_of_activities:]
+    first_day_activities = first_day_activities[:number_of_activities]
     day_sched.setActivities(first_day_activities)
     date += datetime.timedelta(days = 1)
     days.append(day_sched)
@@ -277,8 +300,7 @@ def setUpSchedule(start_city, destination, start_date,  duration, preferances):
     #   Set up final day
     final_date = start_date + datetime.timedelta(duration)
     flight_out = flight_utils.get_flights([flight_utils.FlightSlice(destination, start_city, final_date.day, final_date.month, final_date.year).get_slice()], [Passenger.ADULT], Cabin.ECONOMY)
-    airportOut = getAirportLocation(flight_out)
-    flightOutActivity = flightToActivity(flight_out)
+    flightOutActivity = flightOutToActivity(flight_out)
     day_sched = Day_Schedule()
     day_sched.setDate(date)
     activities = []
@@ -306,7 +328,7 @@ def get_next_activity(activity_preferences: List[YelpCommonCategories],
                       price_preference: Union[int, str],
                       previous_activity: Activity,
                       radius_meters=3000,
-                      exclude: List[YelpCommonCategories] = []) -> Activity:
+                      exclude: List[YelpCommonCategories] = [], term="") -> Activity:
     """
     Finds a nearby activity that matches preferences but does not include the same type of activity as the previous activity done.
     """
@@ -328,14 +350,17 @@ def get_next_activity(activity_preferences: List[YelpCommonCategories],
         previous_latitude, previous_longitude,
         radius=radius_meters,
         price=price_preference,
-        categories=filter
+        categories=filter,
+        term = term
     )
 
     # Sort businesses by best rating
     businesses.sort(key=lambda b: b.rating, reverse=True)
 
     # Choose the next activity as the business with the best rating
-    business = businesses[0]
+    upperbound = min(len(businesses), 15)
+    idx = random.randrange(0, upperbound)
+    business = businesses[idx]
 
     # Convert business to activity
     activity = Activity(

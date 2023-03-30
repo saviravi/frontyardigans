@@ -97,7 +97,7 @@ def get_businesses_by_location_name(location: str, radius=8050, price: Union[int
     else:
         raise YelpAPIException(str(response.content))
 
-def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, price: Union[int, str]="1,2,3,4", limit=50, categories="") -> list[YelpResult]:
+def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, price: Union[int, str]="1,2,3,4", limit=50, categories="", term="") -> list[YelpResult]:
     """
     Searches Yelp Fusion API for businesses by latitude and longitude.
     Returns JSON of business details or raises YelpAPIException.
