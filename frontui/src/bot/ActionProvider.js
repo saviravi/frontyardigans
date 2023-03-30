@@ -11,8 +11,6 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
     // console.log(data)
 
-    var includeDatePicker = false;
-
     const botMessages = data.map(d => {
       if (d.text) {
         /* This is such a jank way to do this lol prob will break */
