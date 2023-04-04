@@ -64,13 +64,13 @@ def get_city_info(filename):
         if restaurant:
             cat_nums['restaurant'] += 1
             restaurant_rating += rating
-    cat_avg_rating = {"active_life": active_life_rating/cat_nums['active_life'], 
-                   "arts_n_ent": arts_n_ent_rating/cat_nums['arts_n_ent'], 
-                   "food": food_rating/cat_nums['food'], 
-                   "shopping": shopping_rating/cat_nums['shopping'], 
-                   "nightlife": nightlife_rating/cat_nums['nightlife'], 
-                   "travel": travel_rating/cat_nums['travel'], 
-                   "restaurant": restaurant_rating/cat_nums['restaurant']
+    cat_avg_rating = {"active_life": active_life_rating/cat_nums['active_life'] if cat_nums['active_life'] != 0 else 0, 
+                   "arts_n_ent": arts_n_ent_rating/cat_nums['arts_n_ent'] if cat_nums['arts_n_ent'] != 0 else 0, 
+                   "food": food_rating/cat_nums['food'] if cat_nums['food'] != 0 else 0, 
+                   "shopping": shopping_rating/cat_nums['shopping'] if cat_nums['shopping'] != 0 else 0, 
+                   "nightlife": nightlife_rating/cat_nums['nightlife'] if cat_nums['nightlife'] != 0 else 0, 
+                   "travel": travel_rating/cat_nums['travel'] if cat_nums['travel'] != 0 else 0, 
+                   "restaurant": restaurant_rating/cat_nums['restaurant'] if cat_nums['restaurant'] != 0 else 0
     }
     return cat_nums, len(city_info), cat_avg_rating
 
@@ -83,14 +83,14 @@ def calc_nars(city_info, total_businesses):
 def calc_rnar(city_nars):
     """ calculates the ranking of each category's nar value in a city"""
     sorted_nars = [(k, v) for k, v in sorted(city_nars.items(), key=lambda item: item[1])]
-    r_nars = {sorted_nars[6]: 1, sorted_nars[5]: 2, sorted_nars[4]: 3, sorted_nars[3]: 4, sorted_nars[2]: 5, sorted_nars[1]: 6, sorted_nars[0]: 7}
+    r_nars = {sorted_nars[6][0]: 1, sorted_nars[5][0]: 2, sorted_nars[4][0]: 3, sorted_nars[3][0]: 4, sorted_nars[2][0]: 5, sorted_nars[1][0]: 6, sorted_nars[0][0]: 7}
     return r_nars
 
 def calc_wrnar(city_nars, avg_ratings):
     """ weights the nar by the average star rating of that category then ranks """
     # get average star rating per category
     sorted_wnars = [(k, v) for k, v in sorted(city_nars.items(), key=lambda item: item[1]*avg_ratings[item[0]])] # increasing order
-    wr_nars = {sorted_wnars[6]: 1, sorted_wnars[5]: 2, sorted_wnars[4]: 3, sorted_wnars[3]: 4, sorted_wnars[2]: 5, sorted_wnars[1]: 6, sorted_wnars[0]: 7}
+    wr_nars = {sorted_wnars[6][0]: 1, sorted_wnars[5][0]: 2, sorted_wnars[4][0]: 3, sorted_wnars[3][0]: 4, sorted_wnars[2][0]: 5, sorted_wnars[1][0]: 6, sorted_wnars[0][0]: 7}
     return wr_nars
 
 def calc_well_rounded_score(nars):
@@ -109,13 +109,15 @@ def calc_city_metrics():
         for row in csv_reader:
             loc = row[0].split(", ")
             city_name = loc[0]
-            if city_name == "Istanbul":
-                break
+            # if city_name == "Istanbul":
+            #     break
             country_name = loc[1]
             lat = row[1]
             lon = row[2]
-            num_cat_info, num_businesses, avg_ratings = get_city_info("/Users/savitharavi/cse5914/frontyardigans/Recommendation/" + city_name + "_businesses-conv.pickle")
-
+            try:
+                num_cat_info, num_businesses, avg_ratings = get_city_info("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_businesses/" + city_name.replace(" ", "_") + "_businesses.pickle")
+            except FileNotFoundError:
+                continue
             nars = calc_nars(num_cat_info, num_businesses)
             # min_nar_cat = min(nars, key=nars.get)
 
@@ -127,30 +129,34 @@ def calc_city_metrics():
                 "rnars": calc_rnar(nars),
                 "wrnars": calc_wrnar(nars, avg_ratings), 
                 "wrs": calc_well_rounded_score(nars.values())
-                # "min_nar": (min_nar_cat, nars[min_nar_cat]),
             }
     return
 
 
+# calc_city_metrics()
 
-# filename = "/Users/savitharavi/cse5914/frontyardigans/Recommendation/paris_businesses-conv.pickle"
-# num_cat_info, num_businesses, avg_ratings = get_city_info(filename)
-# print("num per cat: ", num_cat_info.items())
-# print("total number of businesses: ", num_businesses)
-# print("avg ratings: ", avg_ratings)
-# nars = calc_nars(num_cat_info, num_businesses)
-# print("nars: ", nars)
-# r_nars = calc_rnar(nars)
-# wr_nars = calc_wrnar(nars, avg_ratings)
-# print("rnars: ", r_nars)
-# print("wrnars: ", wr_nars)
-# wrs = calc_well_rounded_score(nars.values())
-# print("wrs: ", wrs)
-
-# METRICS_DICT["Paris"] = {"country": "France", }
-
-calc_city_metrics()
-for city, entry in METRICS_DICT.items():
-    print(city)
-    print(entry)
 # print(METRICS_DICT)
+
+# with open('city_nar_info.pickle', 'wb') as f:
+#     pickle.dump(METRICS_DICT, f)
+
+
+
+# city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
+# print(city_info)
+
+def get_best_of_category(cat_name):
+    city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
+    cat_wrnars = {}
+    cat_rnars = {}
+    for city in city_info.keys():
+        cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
+        cat_rnars[city] = city_info[city]['rnars'][cat_name]
+    sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
+    sorted_rnars = [k for k, v in sorted(cat_rnars.items(), key=lambda item: item[1])]
+    # sorted_wrnars.index("")
+    return sorted_wrnars, sorted_rnars
+
+bestwr, bestr = get_best_of_category("active_life")
+print(bestwr)
+print(bestr)
