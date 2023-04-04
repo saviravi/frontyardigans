@@ -23,3 +23,4 @@ Open in localhost:3000 if browser doesn't pop up automatically
 # Note about API keys
 
 You will have to supply your own API keys
+Store them as environemnt variables ```DUFFEL_TOK, BONSAI_URL, YELP_FUSION_TOKEN```

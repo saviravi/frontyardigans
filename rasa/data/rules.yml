@@ -26,6 +26,7 @@ rules:
   - active_loop: null
   - slot_was_set:
     - requested_slot: null
+  - action: utter_please_wait
   - action: action_GetRecommendation
 
 - rule: Clear slots

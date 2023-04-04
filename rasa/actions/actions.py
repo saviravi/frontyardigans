@@ -69,7 +69,12 @@ class ActionGetRecommendation(Action):
          tracker: Tracker,
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
          temp = tracker.get_slot("temperature")
-         dispatcher.utter_message(text=Recommendation.handleInput([temp]))
+         city = tracker.get_slot("city")
+         activity = tracker.get_slot("activity")
+         startdate = tracker.get_slot("startdate")
+         enddate = tracker.get_slot("enddate")
+         # example input: ['cold', 'tulum', 'food', '04/04/2023', '04/04/2023']
+         dispatcher.utter_message(text=Recommendation.handleInput([temp, city, activity, startdate, enddate]))
          return []
 
 class ValidateTravelForm(FormValidationAction):
@@ -83,7 +88,6 @@ class ValidateTravelForm(FormValidationAction):
         domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate `temperature` value."""
-
         if slot_value.lower() not in ALLOWED_TEMP:
             dispatcher.utter_message(text=f"We only accept temps: hot/cold")
             return {"temperature": None}
