@@ -37,6 +37,10 @@
   }
 }
 
+html {
+  height: 100%;
+}
+
 body {
   background: url("images/wallpaper.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -44,6 +48,7 @@ body {
   -o-background-size: cover;
   background-size: cover;
   background-color: #301381;
+  height: 100%;
 }
 
 .react-chatbot-kit-chat-bot-message {

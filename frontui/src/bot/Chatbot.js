@@ -1,5 +1,6 @@
+import React, { useState } from 'react';
 import Chatbot from "react-chatbot-kit";
-import 'react-chatbot-kit/build/main.css'
+import 'react-chatbot-kit/build/main.css';
 import config from './config.js';
 import MessageParser from './MessageParser.js';
 import ActionProvider from './ActionProvider.js';
@@ -7,6 +8,7 @@ import { createChatBotMessage } from 'react-chatbot-kit';
 // import {useState} from 'react';
 
 const TravisBot = () => {
+  const [showBot, toggleBot] = useState(true);
 
   const clearHistory = () => {
     window.localStorage.removeItem('messageHistory'); 
@@ -22,12 +24,14 @@ const TravisBot = () => {
   return (
     <div>
         <button onClick={clearHistory}>Reset Chat</button>
+        {showBot && (
         <Chatbot
             config={config}
             messageParser={MessageParser}
             actionProvider={ActionProvider}
             messageHistory={loadMessages()}
-        />
+            />)}
+        <button onClick={() => toggleBot((prev) => !prev)}>Bot</button>
     </div>
   );
 };
