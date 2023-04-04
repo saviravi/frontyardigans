@@ -34,10 +34,15 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       }
     });
 
-    setState((prev) => ({
-      ...prev,
-      messages: [...prev.messages].concat(botMessages),
-    }));
+    setState((prev) => {
+      const newState = ({
+        ...prev,
+        messages: [...prev.messages].concat(botMessages),
+      });
+      /* Workaround for react-chatbot-kit saveMessages bug */
+      window.localStorage.setItem('messageHistory', JSON.stringify(newState.messages))
+      return newState;
+    });
   };
 
   return (
