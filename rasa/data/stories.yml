@@ -32,6 +32,7 @@ stories:
 - story: interactive story 1
   steps:
   - intent: ask_me_anything
+  - action: utter_form_intro
   - action: travel_form
   - active_loop: travel_form
   - slot_was_set:
@@ -57,4 +58,4 @@ stories:
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
-  - action: action_GetRecommendation
+  - action: utter_recommendation_ready

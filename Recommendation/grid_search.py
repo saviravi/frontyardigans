@@ -4,7 +4,7 @@ from shapely.set_operations import intersection
 from shapely.geometry import box
 import numpy as np
 from vincenty import vincenty
-from yelp import get_businesses_by_lat_long, YelpCategory, any_of, parse_alias, get_remaining_calls
+from yelp import get_businesses_by_lat_long, any_of, parse_alias, get_remaining_calls, YelpFoodCategory, YelpActiveLifeCategory, YelpArtsAndEntertainmentCategory, YelpNightlifeCategory, YelpShoppingCategory
 import matplotlib.patches as pat
 import pickle
 import tqdm
@@ -244,29 +244,6 @@ orlando_border = [
     (-81.318756, 28.567546)
 ]
 
-ibiza_border = [
-    (1.409629, 38.891218),
-    (1.404300, 38.895093),
-    (1.410401, 38.908735),
-    (1.418079, 38.908324),
-    (1.419269, 38.910764),
-    (1.413769, 38.913753),
-    (1.415596, 38.916487),
-    (1.424254, 38.913496),
-    (1.428141, 38.915559),
-    (1.433442, 38.914527),
-    (1.436313, 38.916349),
-    (1.433530, 38.920026),
-    (1.441349, 38.923394),
-    (1.454689, 38.911365),
-    (1.453010, 38.909647),
-    (1.439449, 38.915902),
-    (1.435297, 38.911193),
-    (1.440951, 38.909165),
-    (1.434723, 38.903150),
-    (1.423282, 38.905006)
-]
-
 vienna_border = [
     (16.419965, 48.300855),
     (16.484682, 48.255546),
@@ -287,12 +264,70 @@ seville_border = [
     (-5.972570, 37.354612)
 ]
 
+madrid_border = [
+    (-3.791359, 40.393204),
+    (-3.735485, 40.424607),
+    (-3.753444, 40.477755),
+    (-3.682936, 40.525804),
+    (-3.555222, 40.510129),
+    (-3.532606, 40.446883),
+    (-3.579834, 40.433214),
+    (-3.572517, 40.410933),
+    (-3.591142, 40.356212),
+    (-3.720186, 40.331877),
+    (-3.724842, 40.367869),
+    (-3.798011, 40.364322)
+]
+    
+cairns_border = [
+    (145.666883, -16.735478),
+    (145.774839, -16.879382),
+    (145.761862, -16.903667),
+    (145.780371, -16.919830),
+    (145.766873, -16.960611),
+    (145.753631, -16.958133),
+    (145.755646, -16.984014),
+    (145.749665, -17.031558),
+    (145.711847, -17.033000),
+    (145.733467, -16.973643),
+    (145.719286, -16.929835),
+    (145.685567, -16.892368),
+    (145.663016, -16.790978),
+    (145.649169, -16.763138)
+]
+    
+queenstown_border = [
+    (168.624266, -45.046330),
+    (168.654103, -45.021816),
+    (168.615433, -44.964269),
+    (168.652758, -44.963793),
+    (168.667553, -44.981397),
+    (168.690082, -44.977115),
+    (168.704205, -44.958321),
+    (168.756325, -44.942614),
+    (168.756815, -44.950792),
+    (168.741388, -44.954042),
+    (168.744501, -44.977373),
+    (168.784229, -45.006063),
+    (168.748257, -45.034423),
+    (168.720994, -45.016974),
+    (168.660652, -45.042872)
+]
+
+tulum_mexico = [
+    (-87.494175, 20.209174),
+    (-87.479698, 20.220271),
+    (-87.450171, 20.218718),
+    (-87.451753, 20.208688),
+    (-87.479260, 20.199640),
+]
+
 fig, ax = plt.subplots()
 
-london = Polygon(seville_border)
+london = Polygon(vienna_border)
 
 minx, miny, maxx, maxy = london.bounds
-delta = 0.007
+delta = 0.01
 x = np.arange(minx, maxx + delta, delta)
 y = np.arange(miny, maxy + delta, delta)
 
@@ -310,7 +345,7 @@ for i in range(len(x) - 1):
         )
 
 x, y = london.exterior.xy
-plt.plot(x, y, label="London border", linewidth=3)
+plt.plot(x, y, label="City border", linewidth=3)
 
 # for b in grid:
 #     x, y  = b.exterior.xy
@@ -332,27 +367,9 @@ for b in grid:
 remaining_calls = get_remaining_calls()
 print("search will take %d calls, currently have %d API calls left" % (len(grid) * 5, remaining_calls))
 
-# with open('london_businesses.pickle', 'rb') as f:
-#     businesses = pickle.load(f)
-
-# nar = dict()
-# for b in businesses:
-#     for c in b.categories:
-#         if type(c) == YelpCategory:
-#             t = type(parse_alias(c.value))
-#         else:
-#             t = type(parse_alias(c.alias))
-#     if t not in nar:
-#         nar[t] = 0
-#     nar[t] += 1
-#     if b.longitude is not None and b.latitude is not None:
-#         plt.plot(b.longitude, b.latitude, 'x', color='c')
-
-# print(nar)
-
-# plt.xlabel("Longitude")
+plt.xlabel("Longitude")
 plt.ylabel("Latitude")
-plt.title("London Gridded Search")
+plt.title("Vienna Gridded Search")
 plt.show()
 
 all_businesses = []
@@ -360,11 +377,11 @@ found_ids = set()
 for lat, long in tqdm.tqdm(search_points):
     duplicates = 0
 
-    food_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllFood]))
-    active_life_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllActiveLife]))
-    arts_entertainment_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllArtsAndEntertainment]))
-    nightlife_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllNightlife]))
-    shopping_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpCategory.AllShopping]))
+    food_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpFoodCategory.Food]))
+    active_life_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpActiveLifeCategory.ActiveLife]))
+    arts_entertainment_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpArtsAndEntertainmentCategory.ArtsAndEntertainment]))
+    nightlife_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpNightlifeCategory.Nightlife]))
+    shopping_businesses = get_businesses_by_lat_long(lat, long, search_size, categories=any_of([YelpShoppingCategory.Shopping]))
     
     businesses = food_businesses + active_life_businesses + arts_entertainment_businesses + nightlife_businesses + shopping_businesses
     print("found %d, %d, %d, %d, %d businesses" % (len(food_businesses), len(active_life_businesses), len(arts_entertainment_businesses), len(nightlife_businesses), len(shopping_businesses)))
@@ -377,5 +394,5 @@ for lat, long in tqdm.tqdm(search_points):
 
     print("found %d duplicates" % duplicates)
 print("found", len(all_businesses), "total")
-with open('seville_businesses.pickle', 'wb') as f:
+with open('vienna_businesses.pickle', 'wb') as f:
     pickle.dump(all_businesses, f)

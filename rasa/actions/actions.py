@@ -7,6 +7,7 @@
 
 # This is a simple example for a custom action which utters "Hello World!"
 
+import re
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
@@ -69,9 +70,18 @@ class ActionGetRecommendation(Action):
          tracker: Tracker,
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
          temp = tracker.get_slot("temperature")
-         dispatcher.utter_message(text=Recommendation.handleInput([temp]))
+         city = tracker.get_slot("city")
+         activity = tracker.get_slot("activity")
+         startdate = tracker.get_slot("startdate")
+         enddate = tracker.get_slot("enddate")
+         # example input: ['cold', 'tulum', 'food', '04/04/2023', '04/04/2023']
+         try:
+            dispatcher.utter_message(text=Recommendation.handleInput([temp, city, activity, startdate, enddate]))
+         except:
+            dispatcher.utter_message(text="Oops! The program crashed. Try again.")
          return []
 
+from datetime import datetime
 class ValidateTravelForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_travel_form"
@@ -83,7 +93,6 @@ class ValidateTravelForm(FormValidationAction):
         domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate `temperature` value."""
-
         if slot_value.lower() not in ALLOWED_TEMP:
             dispatcher.utter_message(text=f"We only accept temps: hot/cold")
             return {"temperature": None}
@@ -138,8 +147,16 @@ class ValidateTravelForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         """Validate `startddate` value."""
         startdate = tracker.get_slot("startdate")
+        startdate = re.sub(r'[^0-9\/]', '', startdate)
+        if not re.match(r"^(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$", startdate):
+            dispatcher.utter_message(text=f"Sorry! I didn't quite understand. Try using the date selector!") 
+            return {"startdate": None}
+        todaysDate = datetime.now()
+        if datetime.strptime(startdate, '%m/%d/%Y') <  todaysDate:
+           dispatcher.utter_message(text=f"Start date must be after today ({ todaysDate.strftime('%m/%d/%Y') })") 
+           return {"startdate": None}
         dispatcher.utter_message(text=f"OK! You want your vacation to start on {startdate}")
-        return {"startdate": slot_value}
+        return {"startdate": startdate}
 
     def validate_enddate(
         self,
@@ -150,8 +167,16 @@ class ValidateTravelForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         """Validate `enddate` value."""
         enddate = tracker.get_slot("enddate")
+        startdate = tracker.get_slot("startdate")
+        enddate = re.sub(r'[^0-9\/]', '', enddate)
+        if not re.match(r"^(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$", enddate):
+            dispatcher.utter_message(text=f"Sorry! I didn't quite understand. Try using the date selector!") 
+            return {"enddate": None}
+        if startdate is not None and datetime.strptime(enddate, '%m/%d/%Y') <= datetime.strptime(startdate, '%m/%d/%Y'):
+           dispatcher.utter_message(text=f"End date must be after start date ({startdate})") 
+           return {"enddate": None}
         dispatcher.utter_message(text=f"OK! You want your vacation to end on {enddate}")
-        return {"enddate": slot_value}
+        return {"enddate": enddate}
     
 
 class ActionClearSlots(Action):
@@ -162,7 +187,12 @@ class ActionClearSlots(Action):
  def run(self, dispatcher: CollectingDispatcher,
          tracker: Tracker,
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-         dispatcher.utter_message("Slots are cleared.")
+         
+         buttons = []
+         buttons.append({"title": "I'm good." , "payload": "/mood_great"})
+         buttons.append({"title": "I'm sad." , "payload": "/mood_unhappy"})
+         buttons.append({"title": "I would like to travel" , "payload": "/ask_me_anything"})
+         dispatcher.utter_message("OK! All slots have been reset!")
+         dispatcher.utter_message("What can I help you with?", buttons=buttons)
 
          return [AllSlotsReset()]

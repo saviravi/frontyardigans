@@ -153,10 +153,23 @@ def get_best_of_category(cat_name):
         cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
         cat_rnars[city] = city_info[city]['rnars'][cat_name]
     sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
-    sorted_rnars = [k for k, v in sorted(cat_rnars.items(), key=lambda item: item[1])]
+    # sorted_rnars = [k for k, v in sorted(cat_rnars.items(), key=lambda item: item[1])]
     # sorted_wrnars.index("")
-    return sorted_wrnars, sorted_rnars
+    return sorted_wrnars
 
-bestwr, bestr = get_best_of_category("active_life")
-print(bestwr)
-print(bestr)
+
+def get_best_of_categories(cat_name1, cat_name2, cat_name3):
+    city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
+    cat_wrnars = {}
+    cat_rnars = {}
+    for city in city_info.keys():
+        cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
+        cat_rnars[city] = city_info[city]['rnars'][cat_name]
+    sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
+    # sorted_rnars = [k for k, v in sorted(cat_rnars.items(), key=lambda item: item[1])]
+    # sorted_wrnars.index("")
+    return sorted_wrnars
+
+
+best = get_best_of_category("active_life")
+print(best)

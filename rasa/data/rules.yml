@@ -15,6 +15,7 @@ rules:
 - rule: Activate form
   steps:
   - intent: ask_me_anything
+  - action: utter_form_intro
   - action: travel_form
   - active_loop: travel_form
 
@@ -26,6 +27,11 @@ rules:
   - active_loop: null
   - slot_was_set:
     - requested_slot: null
+  - action: utter_recommendation_ready
+
+- rule: Generate recommendation
+  steps:
+  - intent: generate_recommendation
   - action: action_GetRecommendation
 
 - rule: Clear slots

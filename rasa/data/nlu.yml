@@ -96,18 +96,23 @@ nlu:
 - intent: give_city
   examples: |
     - [Chicago](city)
+- intent: generate_recommendation
+  examples: |
+    - Generate itinerary
+    - Give me my recommendation
+    - Create my schedule
 - intent: give_startdate
   examples : |
-    - Start on [01/01/2025]{"entity": "date", "role": "start"}
-    - Start [01/01/2025]{"entity": "date", "role": "start"}
-    - Starts [01/01/2025]{"entity": "date", "role": "start"}
-    - Starts on [01/01/2025]{"entity": "date", "role": "start"}
+    - Start on [01/01/2025](date)
+    - Start [01/01/2025](date)
+    - Starts [01/01/2025](date)
+    - Starts on [01/01/2025](date)
 - intent: give_enddate
   examples : |
-    - End on [01/01/2025]{"entity": "date", "role": "end"}
-    - Ends on [01/01/2025]{"entity": "date", "role": "end"}
-    - End [01/01/2025]{"entity": "date", "role": "end"}
-    - Ends [01/01/2025]{"entity": "date", "role": "end"}
+    - End on [01/01/2025](date)
+    - Ends on [01/01/2025](date)
+    - End [01/01/2025](date)
+    - Ends [01/01/2025](date)
 - intent: clear_slots
   examples: |
     - clear slots

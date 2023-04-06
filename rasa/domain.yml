@@ -15,6 +15,7 @@ intents:
   - give_startdate
   - give_enddate
   - clear_slots
+  - generate_recommendation
 
 entities:
   - temperature
@@ -27,45 +28,45 @@ slots:
     type: text
     influence_conversation: true
     mappings:
-    - type: from_entity
-      entity: temperature
-      conditions:
-      - active_loop: travel_form
+      - type: from_entity
+        entity: temperature
+        conditions:
+          - active_loop: travel_form
   city:
     type: text
     influence_conversation: true
     mappings:
-    - type: from_entity
-      entity: city
-      conditions:
-      - active_loop: travel_form
+      - type: from_entity
+        entity: city
+        conditions:
+          - active_loop: travel_form
   activity:
     type: text
     influence_conversation: true
     mappings:
-    - type: from_entity
-      entity: activity
-      conditions:
-      - active_loop: travel_form
+      - type: from_entity
+        entity: activity
+        conditions:
+          - active_loop: travel_form
   startdate:
     type: text
     influence_conversation: true
     mappings:
-    - type: from_entity
-      entity: date
-      role: start
-      conditions:
-      - active_loop: travel_form
+      - type: from_text
+        intent: give_startdate
+        conditions:
+          - active_loop: travel_form
+            requested_slot: startdate
   enddate:
     type: text
     influence_conversation: true
     mappings:
-    - type: from_entity
-      entity: date
-      role: start
-      conditions:
-      - active_loop: travel_form
-
+      - type: from_text
+        intent: give_enddate
+        conditions:
+          - active_loop: travel_form
+            requested_slot: enddate
+  
 forms:
   travel_form:
     required_slots:
@@ -77,128 +78,139 @@ forms:
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
-    buttons:
-    - title: "I'm doing well!"
-      payload: "/mood_great"
-    - title: "I'm depressed."
-      payload: "/mood_unhappy"
-    - title: "I feel like traveling!"
-      payload: "/ask_me_anything" 
-  - text: "Hello! How are you?"
-    buttons:
-      - title: "Doing super!"
-        payload: "/mood_great"
-      - title: "I hate it here!!"
-        payload: "/mood_unhappy"
-      - title: "Let's go somewhere fun!"
-        payload: "/ask_me_anything" 
-  - text: "Hi! How are you?"
-    buttons:
-    - title: "Pretty good!"
-      payload: "/mood_great"
-    - title: "I'm so sad."
-      payload: "/mood_unhappy"
-    - title: "I feel like traveling!"
-      payload: "/ask_me_anything" 
-  - text: "Hello! What can I help you with?"
-    buttons:
-    - title: "I'm doing well!"
-      payload: "/mood_great"
-    - title: "I'm depressed."
-      payload: "/mood_unhappy"
-    - title: "I feel like traveling!"
-      payload: "/ask_me_anything" 
-  - text: "Hey! What can I help you with?"
-    buttons:
-    - title: "Doing super!"
-      payload: "/mood_great"
-    - title: "I hate it here!!"
-      payload: "/mood_unhappy"
-    - title: "Let's go somewhere fun!"
-      payload: "/ask_me_anything" 
-  - text: "Hi! What can I help you with?"
-    buttons:
-    - title: "Pretty good!"
-      payload: "/mood_great"
-    - title: "I'm so sad."
-      payload: "/mood_unhappy"
-    - title: "I feel like traveling!"
-      payload: "/ask_me_anything" 
+    - text: "Hey! How are you?"
+      buttons:
+        - title: "I'm doing well!"
+          payload: "/mood_great"
+        - title: "I'm depressed."
+          payload: "/mood_unhappy"
+        - title: "I feel like traveling!"
+          payload: "/ask_me_anything"
+    - text: "Hello! How are you?"
+      buttons:
+        - title: "Doing super!"
+          payload: "/mood_great"
+        - title: "I hate it here!!"
+          payload: "/mood_unhappy"
+        - title: "Let's go somewhere fun!"
+          payload: "/ask_me_anything"
+    - text: "Hi! How are you?"
+      buttons:
+        - title: "Pretty good!"
+          payload: "/mood_great"
+        - title: "I'm so sad."
+          payload: "/mood_unhappy"
+        - title: "I feel like traveling!"
+          payload: "/ask_me_anything"
+    - text: "Hello! What can I help you with?"
+      buttons:
+        - title: "Nothing, I'm doing well!"
+          payload: "/mood_great"
+        - title: "I'm depressed."
+          payload: "/mood_unhappy"
+        - title: "I feel like traveling!"
+          payload: "/ask_me_anything"
+    - text: "Hey! What can I help you with?"
+      buttons:
+        - title: "Nothing, doing super!"
+          payload: "/mood_great"
+        - title: "I hate it here!!"
+          payload: "/mood_unhappy"
+        - title: "Let's go somewhere fun!"
+          payload: "/ask_me_anything"
+    - text: "Hi! What can I help you with?"
+      buttons:
+        - title: "Nothing, I'm doing pretty good!"
+          payload: "/mood_great"
+        - title: "I'm so sad."
+          payload: "/mood_unhappy"
+        - title: "I feel like traveling!"
+          payload: "/ask_me_anything"
 
   utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
+    - text: "Here is something to cheer you up:"
+      image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_recommendation_ready:
+    - text: "Please click the 'Generate' button below to create your itinerary."
+      buttons:
+        - title: "Generate"
+          payload: "/generate_recommendation"
+        - title: "I change my mind!"
+          payload: "/clear_slots"
+
+  utter_form_intro:
+    - text: "Ok, let me collect some more information to make you a recommendation."
 
   utter_did_that_help:
-  - text: "Did that help you?"
-    buttons:
-    - title: "Yeah it did"
-      payload: "/affirm"
-    - title: "Na"
-      payload: "/deny"
-  - text: "Is that helpful?"
-    buttons:
-    - title: "Yeah!"
-      payload: "/affirm"
-    - title: "No, it wasn't!"
-      payload: "/deny"
-  - text: "Are you happy with that answer?"
-    buttons:
-    - title: "Yes I am"
-      payload: "/affirm"
-    - title: "Hell no"
-      payload: "/deny" 
+    - text: "Did that help you?"
+      buttons:
+        - title: "Yeah it did"
+          payload: "/affirm"
+        - title: "Na"
+          payload: "/deny"
+    - text: "Is that helpful?"
+      buttons:
+        - title: "Yeah!"
+          payload: "/affirm"
+        - title: "No, it wasn't!"
+          payload: "/deny"
+    - text: "Are you happy with that answer?"
+      buttons:
+        - title: "Yes I am"
+          payload: "/affirm"
+        - title: "NO!"
+          payload: "/deny"
 
   utter_happy:
-  - text: "Great, carry on!"
-  - text: "Awesome!"
-  - text: "Nice!"
+    - text: "Great, carry on!"
+    - text: "Awesome!"
+    - text: "Nice!"
 
   utter_goodbye:
-  - text: "Bye"
-  - text: "Goodbye!"
-  - text: "Have a great day!!"
+    - text: "Bye"
+    - text: "Goodbye!"
+    - text: "Have a great day!!"
 
   utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
-  - text: "I am a Rasa chatbot."
-  
+    - text: "I am a bot, powered by Rasa."
+    - text: "I am a Rasa chatbot."
+
   utter_remember:
-  - text: "Thanks. I'll remember that."
+    - text: "Thanks. I'll remember that."
 
   utter_ask_travel_form_temperature:
-  - text: "What weather do you prefer?"
-    buttons:
-      - title: "hot"
-        payload: '/give_temp{{"temperature":"hot"}}'
-      - title: "cold"
-        payload: '/give_temp{{"temperature":"cold"}}'
-  
+    - text: "What weather do you prefer?"
+      buttons:
+        - title: "hot"
+          payload: '/give_temp{{"temperature":"hot"}}'
+        - title: "cold"
+          payload: '/give_temp{{"temperature":"cold"}}'
+
   utter_ask_travel_form_city:
-  - text: "What city did you recently visit/liked?"
+    - text: "What city did you recently visit/liked?"
 
   utter_ask_travel_form_activity:
-  - text: "Which activity do you enjoy the most?"
-    buttons:
-      - title: "Being Active"
-        payload: '/give_activity{{"activity":"being active"}}'
-      - title: "Arts & Entertainment"
-        payload: '/give_activity{{"activity":"arts & entertainment"}}'
-      - title: "Food"
-        payload: '/give_activity{{"activity":"food"}}'
-      - title: "Shopping"
-        payload: '/give_activity{{"activity":"shopping"}}'
-      - title: "Nightlife"
-        payload: '/give_activity{{"activity":"nightlife"}}'
-      - title: "Travel"
-        payload: '/give_activity{{"activity":"travel"}}'
-  
+    - text: "Which activity do you enjoy the most?"
+      buttons:
+        - title: "Being Active"
+          payload: '/give_activity{{"activity":"being active"}}'
+        - title: "Arts & Entertainment"
+          payload: '/give_activity{{"activity":"arts & entertainment"}}'
+        - title: "Food"
+          payload: '/give_activity{{"activity":"food"}}'
+        - title: "Shopping"
+          payload: '/give_activity{{"activity":"shopping"}}'
+        - title: "Nightlife"
+          payload: '/give_activity{{"activity":"nightlife"}}'
+        - title: "Travel"
+          payload: '/give_activity{{"activity":"travel"}}'
+
   utter_ask_travel_form_startdate:
-  - text: "When do you want your trip to start?"
+    - text: "When do you want your trip to start?"
 
   utter_ask_travel_form_enddate:
-  - text: "When do you want your trip to end?"
+    - text: "When do you want your trip to end?"
 
 actions:
   - validate_travel_form
