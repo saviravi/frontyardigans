@@ -211,6 +211,9 @@ responses:
 
   utter_ask_travel_form_enddate:
     - text: "When do you want your trip to end?"
+  
+  utter_please_rephrase:
+  - text: I'm sorry, I didn't quite understand that.
 
 actions:
   - validate_travel_form

@@ -7,6 +7,7 @@
 
 # This is a simple example for a custom action which utters "Hello World!"
 
+import random
 import re
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
@@ -114,7 +115,8 @@ class ValidateTravelForm(FormValidationAction):
             dispatcher.utter_message(text=f"No city was entered")
             return {"city": None}
         if slot_value.lower() not in ALLOWED_CITIES:
-            dispatcher.utter_message(text=f"We only allow the most popular 30 cities.")
+            buttons = list(map(lambda city: {"title": city.title(), "payload":city.title()},random.choices(ALLOWED_CITIES, k=3)))
+            dispatcher.utter_message(text=f"We only allow the most popular 30 cities. Here are some suggestions: ", buttons=buttons)
             return {"city": None}
         dispatcher.utter_message(text=f"OK! You liked visiting {city}.")
         return {"city": slot_value}
