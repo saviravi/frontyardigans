@@ -74,9 +74,13 @@ class ActionGetRecommendation(Action):
          startdate = tracker.get_slot("startdate")
          enddate = tracker.get_slot("enddate")
          # example input: ['cold', 'tulum', 'food', '04/04/2023', '04/04/2023']
-         dispatcher.utter_message(text=Recommendation.handleInput([temp, city, activity, startdate, enddate]))
+         try:
+            dispatcher.utter_message(text=Recommendation.handleInput([temp, city, activity, startdate, enddate]))
+         except:
+            dispatcher.utter_message(text="Oops! The program crashed. Try again.")
          return []
 
+from datetime import datetime
 class ValidateTravelForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_travel_form"
@@ -142,6 +146,10 @@ class ValidateTravelForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         """Validate `startddate` value."""
         startdate = tracker.get_slot("startdate")
+        todaysDate = datetime.now()
+        if datetime.strptime(startdate, '%m/%d/%Y') <  todaysDate:
+           dispatcher.utter_message(text=f"Start date must be after today ({ todaysDate.strftime('%m/%d/%Y') })") 
+           return {"startdate": None}
         dispatcher.utter_message(text=f"OK! You want your vacation to start on {startdate}")
         return {"startdate": slot_value}
 
@@ -154,6 +162,10 @@ class ValidateTravelForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         """Validate `enddate` value."""
         enddate = tracker.get_slot("enddate")
+        startdate = tracker.get_slot("startdate")
+        if startdate is not None and datetime.strptime(enddate, '%m/%d/%Y') <= datetime.strptime(startdate, '%m/%d/%Y'):
+           dispatcher.utter_message(text=f"End date must be after start date ({startdate})") 
+           return {"enddate": None}
         dispatcher.utter_message(text=f"OK! You want your vacation to end on {enddate}")
         return {"enddate": slot_value}
     
@@ -166,7 +178,12 @@ class ActionClearSlots(Action):
  def run(self, dispatcher: CollectingDispatcher,
          tracker: Tracker,
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-         dispatcher.utter_message("Slots are cleared.")
+         
+         buttons = []
+         buttons.append({"title": "I'm good." , "payload": "/mood_great"})
+         buttons.append({"title": "I'm sad." , "payload": "/mood_unhappy"})
+         buttons.append({"title": "I would like to travel" , "payload": "/ask_me_anything"})
+         dispatcher.utter_message("OK! All slots have been reset!")
+         dispatcher.utter_message("What can I help you with?", buttons=buttons)
 
          return [AllSlotsReset()]

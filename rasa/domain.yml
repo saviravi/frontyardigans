@@ -15,6 +15,7 @@ intents:
   - give_startdate
   - give_enddate
   - clear_slots
+  - generate_recommendation
 
 entities:
   - temperature
@@ -103,7 +104,7 @@ responses:
       payload: "/ask_me_anything" 
   - text: "Hello! What can I help you with?"
     buttons:
-    - title: "I'm doing well!"
+    - title: "Nothing, I'm doing well!"
       payload: "/mood_great"
     - title: "I'm depressed."
       payload: "/mood_unhappy"
@@ -111,7 +112,7 @@ responses:
       payload: "/ask_me_anything" 
   - text: "Hey! What can I help you with?"
     buttons:
-    - title: "Doing super!"
+    - title: "Nothing, doing super!"
       payload: "/mood_great"
     - title: "I hate it here!!"
       payload: "/mood_unhappy"
@@ -119,7 +120,7 @@ responses:
       payload: "/ask_me_anything" 
   - text: "Hi! What can I help you with?"
     buttons:
-    - title: "Pretty good!"
+    - title: "Nothing, I'm doing pretty good!"
       payload: "/mood_great"
     - title: "I'm so sad."
       payload: "/mood_unhappy"
@@ -130,8 +131,16 @@ responses:
   - text: "Here is something to cheer you up:"
     image: "https://i.imgur.com/nGF1K8f.jpg"
 
-  utter_please_wait:
-  - text: "Loading... please wait."
+  utter_recommendation_ready:
+  - text: "Please click the 'Generate' button below to create your itinerary."
+    buttons:
+    - title: "Generate"
+      payload: "/generate_recommendation"
+    - title: "I change my mind!"
+      payload: "/clear_slots"
+
+  utter_form_intro:
+  - text: "Ok, let me collect some more information to make you a recommendation."
 
   utter_did_that_help:
   - text: "Did that help you?"
@@ -150,7 +159,7 @@ responses:
     buttons:
     - title: "Yes I am"
       payload: "/affirm"
-    - title: "Hell no"
+    - title: "NO!"
       payload: "/deny" 
 
   utter_happy:

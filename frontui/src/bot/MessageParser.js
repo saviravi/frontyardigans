@@ -7,14 +7,18 @@ const MessageParser = ({ children, actions }) => {
     Sends post request to rasa with user input as payload.
   */
   const parse = (message) => {
-    axios.post('http://localhost:5005/webhooks/rest/webhook', {
-      sender: "User", 
-      message: message
-    }).then(response => {
+    if (actions.allowedNewMessage()) {
+      axios.post('http://localhost:5005/webhooks/rest/webhook', {
+        sender: "User", 
+        message: message
+      }).then(response => {
         actions.handleMessage(response.data);
-      }
-    );
-    
+      }).catch(error => {
+        console.log(error)
+      });
+    } else {
+      actions.addChatbotMessage("Just one sec! Busy doing something");
+    }
   };
 
   return (

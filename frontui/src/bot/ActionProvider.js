@@ -1,15 +1,32 @@
 // in ActionProvider.jsx
-import React from 'react';
+import React, {useState} from 'react';
 import { createCustomMessage } from 'react-chatbot-kit';
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+  
+  const [allowNewMessage, toggleAllowNewMessage] = useState(true);
+  
+  const allowedNewMessage = () => {
+    return allowNewMessage;
+  }
+
+  const addChatbotMessage = (message) => {
+    setState((prev) => {
+      const newState = ({
+        ...prev,
+        messages: [...prev.messages].concat(createChatBotMessage(message)),
+      });
+      /* Workaround for react-chatbot-kit saveMessages bug */
+      window.localStorage.setItem('messageHistory', JSON.stringify(newState.messages))
+      return newState;
+    });
+  }
+
   const handleMessage = (data) => {
     /*
       Takes the response from Rasa and outputs a message box.
       Called by Message Parser
     */
-
-    // console.log(data)
 
     const botMessages = data.map(d => {
       if (d.text) {
@@ -51,6 +68,9 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         return React.cloneElement(child, {
           actions: {
             handleMessage,
+            toggleAllowNewMessage,
+            allowedNewMessage,
+            addChatbotMessage
           },
         });
       })}
