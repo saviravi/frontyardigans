@@ -16,9 +16,23 @@ const TravisBot = () => {
   };
 
   const loadMessages = () => {
-    const messages = window.localStorage.getItem('messageHistory')
-    /* TODO maybe add a try-catch for json parse syntax error to be safe */
-    return messages ? JSON.parse(messages) : [createChatBotMessage(`Hello there, I'm Travis! Send me anything to get started.`)] ;
+    const messages = window.localStorage.getItem('messageHistory');
+    const initialButtons = [
+      {
+        title: "Hello!", 
+        payload: "/greet"
+      }, {
+        title: "Are you a bot?", 
+        payload: "/bot_challenge"
+      }, {
+        title: "I want to travel!",
+        payload: "/ask_me_anything"
+      }
+    ];
+    return messages ? JSON.parse(messages) : [createChatBotMessage(`Hello there, I'm Travis! Send me anything to get started.`, {
+      widget: 'buttonWidget',
+      payload: initialButtons
+  })] ;
   };
 
   return (

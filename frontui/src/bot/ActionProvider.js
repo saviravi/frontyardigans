@@ -33,7 +33,8 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         /* This is such a jank way to do this lol prob will break */
         if (d.text.includes("When do you want")) {
           return createChatBotMessage(d.text, {
-            widget: 'datePickerWidget'
+            widget: 'datePickerWidget',
+            payload: d.text
           });
         }
         if (d.buttons) {

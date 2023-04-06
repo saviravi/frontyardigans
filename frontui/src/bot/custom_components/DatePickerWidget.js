@@ -10,7 +10,8 @@ const DatePickerWidget = (props) => {
   const [date, setDate] = useState();
 
   const handler = () => {
-    const message = moment(date).format("MM/DD/YYYY");
+    const message = (props.payload.includes("start")? "Start on " : "End on ") 
+      + moment(date).format("MM/DD/YYYY");
     props.setState((prev) => ({
       ...prev,
       messages: [...prev.messages, createClientMessage(message)],
