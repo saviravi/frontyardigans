@@ -11,7 +11,7 @@ You need to install all required dependencies before you proceed to future instr
 
 1. Set up a virtual environment, then run ```make install-deps``` to install dependencies
 2. Run ```pip install -r requirements.txt``` to install the dependencies in your virtual environment  
-3. Run ```npm install``` in ```frontui``` directory for frontend dependencies
+3. Run ```npm install``` in ```frontui``` directory for frontend dependencies. The frontend is built with [React](https://react.dev/).
 
 ## Generate Rasa Model
 
@@ -27,7 +27,7 @@ You need to open 2 separate terminal windows.
 
 1. Open a terminal window, enter the ```rasa``` directory and run: ```python3 -m rasa run --enable-api --cors="*"```
 2. Open another terminal window, enter the ```rasa``` directory and run: ```python3 -m rasa run actions```
-3. Visit ```https://frontyardigans-travis.netlify.app/``` and start chatting with Travis!
+3. Visit [this page](https://frontyardigans-travis.netlify.app/) and start chatting with Travis!
 
 ## Start Using Travis Bot Locally
 
@@ -43,7 +43,7 @@ In your browser, visit ```localhost:3000``` if the webpage did not pop up automa
 
 ## Note about API Keys
 
-You will have to supply your own API keys for [Yelp Fusion](https://fusion.yelp.com/), [Bonsai](https://bonsai.io/), and [Duffel](https://duffel.com/).  
+You will have to supply your own API keys for [Duffel](https://duffel.com/), [Bonsai](https://bonsai.io/), and [Yelp Fusion](https://fusion.yelp.com/).  
 Store them as environment variables: ```DUFFEL_TOK, BONSAI_URL, YELP_FUSION_TOKEN```.  
 In the root directory of the project, create a file called ```.env``` and store your API keys in the following format:  
 ```DUFFEL_TOK=[your_duffel_token]```  
@@ -55,6 +55,6 @@ In the root directory of the project, create a file called ```.env``` and store 
 - [React](https://react.dev/)
 - [Netlify](https://www.netlify.com/)
 - [Rasa](https://rasa.com/)
-- [Yelp Fusion](https://fusion.yelp.com/)
-- [Bonsai](https://bonsai.io/)
 - [Duffel](https://duffel.com/)
+- [Bonsai](https://bonsai.io/)
+- [Yelp Fusion](https://fusion.yelp.com/)
