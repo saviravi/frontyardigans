@@ -9,15 +9,17 @@ import './App.css';
 
 function App() {
   return(
-    <Router>
-      <Navbar sticky="top" />
-      <Routes>
-        <Route path='/' element={<TravisBot />} />
-        <Route path='/home' element={<TravisBot />} />
-        <Route path='/highlights' element={<Highlights />} />
-        <Route path='/about' element={<About />} />
-      </Routes>
-    </Router>
+    <div>
+      <Router>
+        <Navbar sticky="top" />
+        <Routes>
+          <Route path='/' element={<TravisBot />} />
+          <Route path='/home' element={<TravisBot />} />
+          <Route path='/highlights' element={<Highlights />} />
+          <Route path='/about' element={<About />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

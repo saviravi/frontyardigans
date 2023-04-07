@@ -5,7 +5,6 @@ import config from './config.js';
 import MessageParser from './MessageParser.js';
 import ActionProvider from './ActionProvider.js';
 import { createChatBotMessage } from 'react-chatbot-kit';
-// import {useState} from 'react';
 
 const TravisBot = () => {
   const [showBot, toggleBot] = useState(true);
@@ -35,9 +34,40 @@ const TravisBot = () => {
   })] ;
   };
 
+  const [lat, setLat] = useState(null);
+  const [lon, setLon] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const geolocationAPI = navigator.geolocation;
+
+  const getUserCoordinates = () => {
+    if (!geolocationAPI) {
+      setErrorMsg("Geolocation is not supported by your browser.")
+      errorMsg && (
+        <p className="error"> {errorMsg} </p>
+      )
+    } else {
+      geolocationAPI.getCurrentPosition((position) => {
+        const { coords } = position;
+        setLat(coords.latitude);
+        setLon(coords.longitude);
+      }, (errorMsg) => {
+        setErrorMsg("Something went wrong getting your position!")
+        errorMsg && (
+          <p className="error"> {errorMsg} </p>
+        )
+      })
+    }
+  }
+
+  getUserCoordinates()
+
   return (
     <div>
-        <button onClick={clearHistory}>Reset Chat</button>
+        <div className='bot-page-button-container'>
+          <button id='bot-page-button-show-hide' onClick={() => toggleBot((prev) => !prev)}>Show / Hide Bot</button>
+          <button id='bot-page-button-start-over' onClick={clearHistory}>Start Over</button>
+        </div>
         {showBot && (
         <Chatbot
             config={config}
@@ -45,7 +75,9 @@ const TravisBot = () => {
             actionProvider={ActionProvider}
             messageHistory={loadMessages()}
             />)}
-        <button onClick={() => toggleBot((prev) => !prev)}>Bot</button>
+        <div className="location-container">
+          <p id="location">Your coordinates are: {[lat, lon]}</p>
+        </div>
     </div>
   );
 };

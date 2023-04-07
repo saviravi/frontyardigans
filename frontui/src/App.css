@@ -114,7 +114,7 @@ img.image-message {
 
 .option-button {
   margin: 5px;
-  border-radius: 25px;
+  border-radius: 10px;
   padding: 8px;
   border-color: #6f4394;
   background: transparent;
@@ -124,7 +124,7 @@ img.image-message {
 
 .option-button:hover {
   margin: 5px;
-  border-radius: 25px;
+  border-radius: 10px;
   padding: 8px;
   border-color: #6f4394;
   background: transparent;
@@ -136,3 +136,98 @@ img.image-message {
   display: inline-flex;
 }
 
+.bot-page-button-container {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  margin-right: -50%;
+  width: 60%;
+  transform: translate(-50%, -50%);
+}
+
+#bot-page-button-show-hide {
+  margin: 6px;
+  border-radius: 5px;
+  padding: 6px;
+  color: white;
+  border-color: transparent;
+  background: #5ba4fc;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+#bot-page-button-show-hide:hover {
+  margin: 6px;
+  border-radius: 5px;
+  padding: 6px;
+  text-align: center;
+  background-color: #5897ee;
+}
+
+#bot-page-button-show-hide:active {
+  margin: 6px;
+  border-radius: 5px;
+  padding: 6px;
+  text-align: center;
+  background-color: #1970ea;
+}
+
+#bot-page-button-start-over {
+  margin: 6px;
+  border-radius: 5px;
+  padding: 6px;
+  color: white;
+  border-color: transparent;
+  background: #fc3d39;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+#bot-page-button-start-over:hover {
+  margin: 6px;
+  border-radius: 5px;
+  padding: 6px;
+  text-align: center;
+  background-color: #e33437;
+}
+
+#bot-page-button-start-over:active {
+  margin: 6px;
+  border-radius: 5px;
+  padding: 6px;
+  text-align: center;
+  background-color: #be1013;
+}
+
+.location-container {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  margin-right: -50%;
+  width: 60%;
+  transform: translate(-50%, -50%);
+  background-color: #efefef;
+  border-radius: 5px;
+  transition: all 0.1s ease-in-out;
+}
+
+.location-container:hover {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  margin-right: -50%;
+  width: 60%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(175, 175, 175);
+  border-radius: 5px;
+}
+
+#location {
+  margin: 5px;
+  border-radius: 5px;
+  padding: 5px;
+  border-color: #6f4394;
+  background: transparent;
+  text-align: center;
+  transition: all 0.1s ease-in-out;
+}
