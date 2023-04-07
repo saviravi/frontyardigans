@@ -76,7 +76,10 @@ const TravisBot = () => {
             messageHistory={loadMessages()}
             />)}
         <div className="location-container">
-          <p id="location">Your coordinates are: {[lat, lon]}</p>
+          <p id="location">
+            <b>Latitude:</b> {lat}
+            <b> Longitude:</b> {lon}
+          </p>
         </div>
     </div>
   );
