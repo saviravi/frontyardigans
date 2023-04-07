@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 
 function TravisNavbar() {
   return (
-    <>
+    <div>
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="/home">Travis</Navbar.Brand>
@@ -15,7 +15,7 @@ function TravisNavbar() {
           </Nav>
         </Container>
       </Navbar>
-    </>
+    </div>
   );
 }
 
