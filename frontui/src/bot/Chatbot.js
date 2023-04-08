@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import Chatbot from "react-chatbot-kit";
 import 'react-chatbot-kit/build/main.css';
 import config from './config.js';
@@ -34,6 +36,7 @@ const TravisBot = () => {
   })] ;
   };
 
+  // Geolocation component
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
@@ -62,11 +65,32 @@ const TravisBot = () => {
 
   getUserCoordinates()
 
+  // Offcanvas component
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <div>
         <div className='bot-page-button-container'>
-          <button id='bot-page-button-show-hide' onClick={() => toggleBot((prev) => !prev)}>Show / Hide Bot</button>
-          <button id='bot-page-button-start-over' onClick={clearHistory}>Start Over</button>
+          <Button id="bot-page-button" variant="primary" onClick={() => toggleBot((prev) => !prev)}>Show / Hide Bot</Button>
+          <Button id="bot-page-button" variant="info" onClick={handleShow}>Information</Button>
+          <Button id="bot-page-button" variant="danger" onClick={clearHistory}>Start Over</Button>
+        </div>
+        <div className='bot-page-offcanvas'>
+          <Offcanvas show={show} onHide={handleClose}>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Information</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <div className="location-container">
+                <p id="location">
+                  <b>Latitude:</b> {lat}
+                  <b> Longitude:</b> {lon}
+                </p>
+              </div>
+            </Offcanvas.Body>
+          </Offcanvas>
         </div>
         {showBot && (
         <Chatbot
@@ -74,13 +98,7 @@ const TravisBot = () => {
             messageParser={MessageParser}
             actionProvider={ActionProvider}
             messageHistory={loadMessages()}
-            />)}
-        <div className="location-container">
-          <p id="location">
-            <b>Latitude:</b> {lat}
-            <b> Longitude:</b> {lon}
-          </p>
-        </div>
+        />)}
     </div>
   );
 };

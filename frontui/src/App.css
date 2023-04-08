@@ -145,10 +145,14 @@ img.image-message {
   transform: translate(-50%, -50%);
 }
 
+#bot-page-button {
+  margin-right: 10px;
+}
+
 #bot-page-button-show-hide {
   margin: 6px;
   border-radius: 5px;
-  padding: 6px;
+  padding: 5px;
   color: white;
   border-color: transparent;
   background: #5ba4fc;
@@ -159,7 +163,7 @@ img.image-message {
 #bot-page-button-show-hide:hover {
   margin: 6px;
   border-radius: 5px;
-  padding: 6px;
+  padding: 5px;
   text-align: center;
   background-color: #5897ee;
 }
@@ -167,7 +171,7 @@ img.image-message {
 #bot-page-button-show-hide:active {
   margin: 6px;
   border-radius: 5px;
-  padding: 6px;
+  padding: 5px;
   text-align: center;
   background-color: #1970ea;
 }
@@ -175,7 +179,7 @@ img.image-message {
 #bot-page-button-start-over {
   margin: 6px;
   border-radius: 5px;
-  padding: 6px;
+  padding: 5px;
   color: white;
   border-color: transparent;
   background: #fc3d39;
@@ -186,7 +190,7 @@ img.image-message {
 #bot-page-button-start-over:hover {
   margin: 6px;
   border-radius: 5px;
-  padding: 6px;
+  padding: 5px;
   text-align: center;
   background-color: #e33437;
 }
@@ -194,7 +198,7 @@ img.image-message {
 #bot-page-button-start-over:active {
   margin: 6px;
   border-radius: 5px;
-  padding: 6px;
+  padding: 5px;
   text-align: center;
   background-color: #be1013;
 }
