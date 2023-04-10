@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import Geocode from "react-geocode";
 import Chatbot from "react-chatbot-kit";
 import 'react-chatbot-kit/build/main.css';
 import config from './config.js';
@@ -70,6 +71,52 @@ const TravisBot = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // Geocode component
+  const [city, setCity] = useState(null);
+  const [state, setState] = useState(null);
+  const [country, setCountry] = useState(null);
+  const [address, setAddress] = useState(null);
+  Geocode.setApiKey("AIzaSyCLoKbJHEtxGv6vtRmAJRnJqIv9RCS-TiU")
+  Geocode.setLanguage("en")
+  //Geocode.setRegion("us")
+  Geocode.setLocationType("ROOFTOP")
+  Geocode.enableDebug()
+  // Get formatted address, city, state, country from latitude & longitude when
+  // Geocode.setLocationType("ROOFTOP") enabled
+  // the below parser will work for most of the countries
+  Geocode.fromLatLng(lat, lon).then(
+    (response) => {
+      const address = response.results[0].formatted_address;
+      let city, state, country;
+      for (let i = 0; i < response.results[0].address_components.length; i++) {
+        for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+          switch (response.results[0].address_components[i].types[j]) {
+            case "locality":
+              city = response.results[0].address_components[i].long_name;
+              break;
+            case "administrative_area_level_1":
+              state = response.results[0].address_components[i].long_name;
+              break;
+            case "country":
+              country = response.results[0].address_components[i].long_name;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+      console.log(city, state, country);
+      setCity(city);
+      setState(state);
+      setCountry(country);
+      console.log(address);
+      setAddress(address);
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
+
   return (
     <div>
         <div className='bot-page-button-container'>
@@ -85,8 +132,10 @@ const TravisBot = () => {
             <Offcanvas.Body>
               <div className="location-container">
                 <p id="location">
-                  <b>Latitude:</b> {lat}
-                  <b> Longitude:</b> {lon}
+                  <b>Address:</b><br/> {address}<br/>
+                  <b>City:</b> {city}, {state}, {country}<br/>
+                  <b>Latitude:</b> {lat}<br/>
+                  <b>Longitude:</b> {lon}
                 </p>
               </div>
             </Offcanvas.Body>

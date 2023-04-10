@@ -205,10 +205,10 @@ img.image-message {
 
 .location-container {
   position: absolute;
-  top: 90%;
+  top: 20%;
   left: 50%;
   margin-right: -50%;
-  width: 60%;
+  width: 80%;
   transform: translate(-50%, -50%);
   background-color: #efefef;
   border-radius: 5px;
@@ -217,10 +217,10 @@ img.image-message {
 
 .location-container:hover {
   position: absolute;
-  top: 90%;
+  top: 20%;
   left: 50%;
   margin-right: -50%;
-  width: 60%;
+  width: 80%;
   transform: translate(-50%, -50%);
   background-color: rgb(175, 175, 175);
   border-radius: 5px;
