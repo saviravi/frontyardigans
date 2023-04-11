@@ -8,13 +8,21 @@ import config from './config.js';
 import MessageParser from './MessageParser.js';
 import ActionProvider from './ActionProvider.js';
 import { createChatBotMessage } from 'react-chatbot-kit';
+import axios from 'axios';
 
 const TravisBot = () => {
   const [showBot, toggleBot] = useState(true);
 
   const clearHistory = () => {
-    window.localStorage.removeItem('messageHistory'); 
-    window.location.reload(false);
+    axios.post('http://localhost:5005/webhooks/rest/webhook', {
+        sender: "User",
+        message: "/clear_slots"
+        }).then(() => {
+          console.log("Slots cleared");
+        }).finally(() => {
+          window.localStorage.removeItem('messageHistory'); 
+          window.location.reload(false);
+        });
   };
 
   const loadMessages = () => {
