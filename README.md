@@ -46,9 +46,12 @@ In your browser, visit ```localhost:3000``` if the webpage did not pop up automa
 You will have to supply your own API keys for [Duffel](https://duffel.com/), [Bonsai](https://bonsai.io/), and [Yelp Fusion](https://fusion.yelp.com/).  
 Store them as environment variables: ```DUFFEL_TOK, BONSAI_URL, YELP_FUSION_TOKEN```.  
 In the root directory of the project, create a file called ```.env``` and store your API keys in the following format:  
-```DUFFEL_TOK=[your_duffel_token]```  
-```BONSAI_URL=[your_bonsai_url]```  
-```YELP_FUSION_TOKEN=[your_yelp_fusion_token]```
+
+``` .env
+DUFFEL_TOK=[your_duffel_token]  
+BONSAI_URL=[your_bonsai_url]  
+YELP_FUSION_TOKEN=[your_yelp_fusion_token]
+```
 
 ## Resources
 
