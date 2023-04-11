@@ -126,7 +126,7 @@ const TravisBot = () => {
   );
 
   return (
-    <div>
+    <div className="bot-page-container">
         <div className='bot-page-button-container'>
           <Button id="bot-page-button" variant="primary" onClick={() => toggleBot((prev) => !prev)}>Show / Hide Bot</Button>
           <Button id="bot-page-button" variant="info" onClick={handleShow}>Information</Button>
