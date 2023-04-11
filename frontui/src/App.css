@@ -65,7 +65,6 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   width: 100%;
-  min-width: 100%;
 }
 
 .react-chatbot-kit-chat-bot-message {
