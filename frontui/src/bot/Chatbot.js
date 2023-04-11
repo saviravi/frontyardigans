@@ -138,13 +138,15 @@ const TravisBot = () => {
               <Offcanvas.Title>Information</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <div className="location-container">
-                <p id="location">
-                  <b>Address:</b><br/> {address}<br/>
-                  <b>City:</b> {city}, {state}, {country}<br/>
-                  <b>Latitude:</b> {lat}<br/>
-                  <b>Longitude:</b> {lon}
-                </p>
+              <div className="information-container">
+                <div className="location-container">
+                  <p id="location">
+                    <b>Address:</b><br/> {address}<br/>
+                    <b>City:</b> {city}, {state}, {country}<br/>
+                    <b>Latitude:</b> {lat}<br/>
+                    <b>Longitude:</b> {lon}
+                  </p>
+                </div>
               </div>
             </Offcanvas.Body>
           </Offcanvas>

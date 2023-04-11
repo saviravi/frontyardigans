@@ -16,6 +16,7 @@
     grid-auto-flow: row;
     padding-left: 3rem;
     padding-right: 3rem;
+    padding-bottom: 3rem;
     border-radius: 5rem;
     justify-items: center;
     align-items: center;
