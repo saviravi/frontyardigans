@@ -1,3 +1,9 @@
+:root {
+  --g1: rgb(98, 0, 234);
+  --g2: rgb(236, 64, 122);
+  --g3: rgb(253, 216, 53);
+}
+
 .App {
   text-align: center;
 }
@@ -48,7 +54,18 @@ body {
   -o-background-size: cover;
   background-size: cover;
   background-color: #301381;
-  height: 100%;
+
+  background: linear-gradient(
+    130deg,
+    transparent 0% 33%,
+    var(--g1) 66%,
+    var(--g2) 83.5%,
+    var(--g3) 100%
+    );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100%;
+  min-width: 900px;
 }
 
 .react-chatbot-kit-chat-bot-message {
