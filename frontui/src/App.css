@@ -56,12 +56,9 @@ body {
 }
 
 .react-chatbot-kit-chat-container {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  margin-right: -50%;
-  width: 60%;
-  transform: translate(-50%, -50%);
+  order: 1;
+  width: 100%;
+  padding-top: 2em;
 }
 
 .react-chatbot-kit-chat-inner-container {
@@ -137,12 +134,7 @@ img.image-message {
 }
 
 .bot-page-button-container {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  margin-right: -50%;
-  width: 60%;
-  transform: translate(-50%, -50%);
+  order: 0;
 }
 
 #bot-page-button {
@@ -234,4 +226,13 @@ img.image-message {
   background: transparent;
   text-align: center;
   transition: all 0.1s ease-in-out;
+}
+
+.bot-page-container {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: stretch;
+  padding: 5em;
+  width: 100%;
 }
