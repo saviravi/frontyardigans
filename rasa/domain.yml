@@ -11,7 +11,9 @@ intents:
   - ask_me_anything
   - give_temp
   - give_city
-  - give_activity
+  - give_activity1
+  - give_activity2
+  - give_activity3
   - give_startdate
   - give_enddate
   - clear_slots
@@ -20,7 +22,9 @@ intents:
 entities:
   - temperature
   - city
-  - activity
+  - activity1
+  - activity2
+  - activity3
   - date
 
 slots:
@@ -40,12 +44,28 @@ slots:
         entity: city
         conditions:
           - active_loop: travel_form
-  activity:
+  activity1:
     type: text
     influence_conversation: true
     mappings:
       - type: from_entity
-        entity: activity
+        entity: activity1
+        conditions:
+          - active_loop: travel_form
+  activity2:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: activity2
+        conditions:
+          - active_loop: travel_form
+  activity3:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: activity3
         conditions:
           - active_loop: travel_form
   startdate:
@@ -72,7 +92,9 @@ forms:
     required_slots:
       - temperature
       - city
-      - activity
+      - activity1
+      - activity2
+      - activity3
       - startdate
       - enddate
 
@@ -190,21 +212,51 @@ responses:
   utter_ask_travel_form_city:
     - text: "What city did you recently visit/liked?"
 
-  utter_ask_travel_form_activity:
-    - text: "Which activity do you enjoy the most?"
+  utter_ask_travel_form_activity1:
+    - text: "You will be asked for your top three activities you enjoy. What is your favorite activity from the list?"
       buttons:
         - title: "Being Active"
-          payload: '/give_activity{{"activity":"being active"}}'
+          payload: '/give_activity1{{"activity1":"being active"}}'
         - title: "Arts & Entertainment"
-          payload: '/give_activity{{"activity":"arts & entertainment"}}'
+          payload: '/give_activity1{{"activity1":"arts & entertainment"}}'
         - title: "Food"
-          payload: '/give_activity{{"activity":"food"}}'
+          payload: '/give_activity1{{"activity1":"food"}}'
         - title: "Shopping"
-          payload: '/give_activity{{"activity":"shopping"}}'
+          payload: '/give_activity1{{"activity1":"shopping"}}'
         - title: "Nightlife"
-          payload: '/give_activity{{"activity":"nightlife"}}'
+          payload: '/give_activity1{{"activity1":"nightlife"}}'
         - title: "Travel"
-          payload: '/give_activity{{"activity":"travel"}}'
+          payload: '/give_activity1{{"activity1":"travel"}}'
+  utter_ask_travel_form_activity2:
+    - text: "What is your second favorite activity from the list?"
+      buttons:
+        - title: "Being Active"
+          payload: '/give_activity2{{"activity2":"being active"}}'
+        - title: "Arts & Entertainment"
+          payload: '/give_activity2{{"activity2":"arts & entertainment"}}'
+        - title: "Food"
+          payload: '/give_activity2{{"activity2":"food"}}'
+        - title: "Shopping"
+          payload: '/give_activity2{{"activity2":"shopping"}}'
+        - title: "Nightlife"
+          payload: '/give_activity2{{"activity2":"nightlife"}}'
+        - title: "Travel"
+          payload: '/give_activity2{{"activity2":"travel"}}'
+  utter_ask_travel_form_activity3:
+    - text: "What is your third favorite activity?"
+      buttons:
+        - title: "Being Active"
+          payload: '/give_activity3{{"activity3":"being active"}}'
+        - title: "Arts & Entertainment"
+          payload: '/give_activity3{{"activity3":"arts & entertainment"}}'
+        - title: "Food"
+          payload: '/give_activity3{{"activity3":"food"}}'
+        - title: "Shopping"
+          payload: '/give_activity3{{"activity3":"shopping"}}'
+        - title: "Nightlife"
+          payload: '/give_activity3{{"activity3":"nightlife"}}'
+        - title: "Travel"
+          payload: '/give_activity3{{"activity3":"travel"}}'
 
   utter_ask_travel_form_startdate:
     - text: "When do you want your trip to start?"

@@ -121,24 +121,60 @@ class ValidateTravelForm(FormValidationAction):
         dispatcher.utter_message(text=f"OK! You liked visiting {city}.")
         return {"city": slot_value}
 
-    def validate_activity(
+    def validate_activity1(
         self,
         slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict,
     ) -> Dict[Text, Any]:
-        """Validate `activity` value."""
+        """Validate `activity1` value."""
 
-        activity = tracker.get_slot("activity")
+        activity = tracker.get_slot("activity1")
         if not activity:
             dispatcher.utter_message(text=f"No activity was entered")
-            return {"activity": None}
+            return {"activity1": None}
         if slot_value.lower() not in ALLOWED_ACTIVITIES:
             dispatcher.utter_message(text=f"We only the 6 activities shown.")
-            return {"activity": None}
-        dispatcher.utter_message(text=f"OK! You enjoy {activity} the most.")
-        return {"activity": slot_value}
+            return {"activity1": None}
+        dispatcher.utter_message(text=f"OK! Your favorite activity is: {activity}.")
+        return {"activity1": slot_value}
+    def validate_activity2(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `activity2` value."""
+
+        activity = tracker.get_slot("activity2")
+        if not activity:
+            dispatcher.utter_message(text=f"No activity was entered")
+            return {"activity2": None}
+        if slot_value.lower() not in ALLOWED_ACTIVITIES:
+            dispatcher.utter_message(text=f"We only the 6 activities shown.")
+            return {"activity2": None}
+        dispatcher.utter_message(text=f"OK! Your second favorite activity is: {activity}.")
+        return {"activity2": slot_value}
+    def validate_activity3(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `activity3` value."""
+
+        activity = tracker.get_slot("activity3")
+        if not activity:
+            dispatcher.utter_message(text=f"No activity was entered")
+            return {"activity3": None}
+        if slot_value.lower() not in ALLOWED_ACTIVITIES:
+            dispatcher.utter_message(text=f"We only the 6 activities shown.")
+            return {"activity3": None}
+        dispatcher.utter_message(text=f"OK! Your third favorite activity is: {activity}.")
+        return {"activity3": slot_value}
 
     def validate_startdate(
         self,
