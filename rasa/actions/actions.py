@@ -148,15 +148,20 @@ class ValidateTravelForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         """Validate `activity2` value."""
 
-        activity = tracker.get_slot("activity2")
-        if not activity:
+        activity1 = tracker.get_slot("activity1")
+        activity2 = tracker.get_slot("activity2")
+        if not activity2:
             dispatcher.utter_message(text=f"No activity was entered")
             return {"activity2": None}
         if slot_value.lower() not in ALLOWED_ACTIVITIES:
             dispatcher.utter_message(text=f"We only the 6 activities shown.")
             return {"activity2": None}
-        dispatcher.utter_message(text=f"OK! Your second favorite activity is: {activity}.")
+        if activity1 == activity2:
+            dispatcher.utter_message(text=f"You already selected this activity")
+            return {"activity2": None}
+        dispatcher.utter_message(text=f"OK! Your second favorite activity is: {activity2}.")
         return {"activity2": slot_value}
+    
     def validate_activity3(
         self,
         slot_value: Any,
@@ -166,16 +171,21 @@ class ValidateTravelForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         """Validate `activity3` value."""
 
-        activity = tracker.get_slot("activity3")
-        if not activity:
+        activity1 = tracker.get_slot("activity1")
+        activity2 = tracker.get_slot("activity2")
+        activity3 = tracker.get_slot("activity3")
+        if not activity3:
             dispatcher.utter_message(text=f"No activity was entered")
             return {"activity3": None}
         if slot_value.lower() not in ALLOWED_ACTIVITIES:
             dispatcher.utter_message(text=f"We only the 6 activities shown.")
             return {"activity3": None}
-        dispatcher.utter_message(text=f"OK! Your third favorite activity is: {activity}.")
+        if activity3 == activity1 or activity3 == activity2:
+            dispatcher.utter_message(text=f"You already selected this activity")
+            return {"activity3": None}
+        dispatcher.utter_message(text=f"OK! Your third favorite activity is: {activity3}.")
         return {"activity3": slot_value}
-
+    
     def validate_startdate(
         self,
         slot_value: Any,
