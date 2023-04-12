@@ -39,7 +39,7 @@ def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, p
 
     # Filter by categories
     aliases = categories.split(",")
-    if len(aliases) > 0:
+    if len(aliases) > 0 and aliases[0] != '':
         nearby_businesses = [b for b in nearby_businesses if any(list(map(lambda cat: cat.value in aliases, b.categories)))]
 
     # Filter by name (term)
