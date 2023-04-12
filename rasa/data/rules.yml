@@ -7,6 +7,11 @@ rules:
   - intent: goodbye
   - action: action_GetRecommendation
 
+- rule: Greet anytime the user greets
+  steps:
+  - intent: greet
+  - action: utter_greet
+
 - rule: Say 'I am a bot' anytime the user challenges
   steps:
   - intent: bot_challenge

@@ -89,18 +89,19 @@ nlu:
     - would you like to ask me something
     - feel free to ask me about things
     - want to ask me something?
-- intent: give_temp
-  examples: |
-    - You prefer [hot](temperature) weather
-    - [cold](temperature) weather
-- intent: give_city
-  examples: |
-    - [Chicago](city)
-- intent: generate_recommendation
-  examples: |
+    - i want to travel
     - Generate itinerary
     - Give me my recommendation
     - Create my schedule
+    - let's go somewhere fun
+    - 
+- intent: give_temp
+  examples: |
+    - I prefer [hot](temperature) weather
+    - [cold](temperature) weather
+- intent: give_city
+  examples: |
+    - [Chicago](city)  
 - intent: give_startdate
   examples : |
     - Start on [01/01/2025](date)
@@ -121,6 +122,9 @@ nlu:
     - empty slots
     - delete slots
     - delete all the slots
+    - i change my mind
+    - i want to restart
+    - can i redo my answers
 - lookup: temperature
   examples: |
     - warm

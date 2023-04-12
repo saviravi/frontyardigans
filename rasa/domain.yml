@@ -181,13 +181,20 @@ responses:
       buttons:
         - title: "Yes I am"
           payload: "/affirm"
-        - title: "NO!"
+        - title: "No!"
           payload: "/deny"
 
   utter_happy:
     - text: "Great, carry on!"
     - text: "Awesome!"
     - text: "Nice!"
+  
+  utter_apologize:
+    - text: "Sorry :("
+    - text: "I apologize."
+    - text: "My bad. I will be better next time."
+    - text: "Very sorry to hear that."
+
 
   utter_goodbye:
     - text: "Bye"

@@ -42,7 +42,7 @@ const ButtonWidget = (props) => {
       } else {
         button.title !== "Generate" && props.setState((prev) => ({
           ...prev,
-          messages: [...prev.messages, createChatBotMessage("Still generating your itinerary. Please wait")],
+          messages: [...prev.messages, createChatBotMessage("Please wait...")],
         }));
       }
       
@@ -50,7 +50,7 @@ const ButtonWidget = (props) => {
   });
 
   const buttonsMarkup = options.map((option) => (
-    <button key={option.id} onClick={option.handler} className="option-button">
+    <button key={option.id} onClick={option.handler} className="option-button" style={option.text === "Generate" ? {"fontWeight": "bolder"}: {}}>
       {option.text}
     </button>
   ));

@@ -5,6 +5,7 @@ import UserAvatar from './UserAvatar';
 import ImageWidget from './custom_components/ImageWidget';
 import ButtonWidget from './custom_components/ButtonWidget';
 import ImageMessage from './custom_components/ImageMessage';
+import ItineraryMessage from './custom_components/ItineraryMessage';
 import DatePickerWidget from './custom_components/DatePickerWidget';
 
 const botName = "Travis, the travel agent";
@@ -32,6 +33,7 @@ const config = {
   ],
   customMessages: {
     imageMessage: (props) => <ImageMessage {...props} />,
+    itineraryMessage: (props) => <ItineraryMessage {...props} />
   },
 };
 

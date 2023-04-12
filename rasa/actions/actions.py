@@ -77,11 +77,19 @@ class ActionGetRecommendation(Action):
          activity3 = tracker.get_slot("activity3")
          startdate = tracker.get_slot("startdate")
          enddate = tracker.get_slot("enddate")
-         # example input: ['cold', 'tulum', ['food', etc.. ], '04/04/2023', '04/04/2023']
+         input_values = [temp, city, activity1, activity2, activity3, startdate, enddate]
+         # example input: ['cold', 'tulum', 'food', etc.. , '04/04/2023', '04/04/2023']
+         if None in input_values:
+            buttons = [{"title": "Ask me anything!" , "payload": "/ask_me_anything"}] if not tracker.active_loop else []
+            dispatcher.utter_message(text="We still need more information before making your itinerary.", buttons=buttons)
+            return []
+
          try:
-            dispatcher.utter_message(text=Recommendation.handleInput([temp, city, [activity1, activity2, activity3], startdate, enddate]))
+            dispatcher.utter_message(text="Your itinerary has been generated", attachment=Recommendation.handleInput(input_values))
+            # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
          except:
-            dispatcher.utter_message(text="Oops! The program crashed. Try again.")
+            buttons = [{"title": "Generate" , "payload": "/generate_recommendation"}]
+            dispatcher.utter_message(text="Oops! The program crashed. Try again.", buttons=buttons)
          return []
 
 from datetime import datetime
@@ -117,7 +125,7 @@ class ValidateTravelForm(FormValidationAction):
             dispatcher.utter_message(text=f"No city was entered")
             return {"city": None}
         if slot_value.lower() not in ALLOWED_CITIES:
-            buttons = list(map(lambda city: {"title": city.title(), "payload":city.title()},random.choices(ALLOWED_CITIES, k=3)))
+            buttons = list(map(lambda city: {"title": city.title(), "payload":city.title()},random.sample(ALLOWED_CITIES, len(ALLOWED_CITIES))[:3]))
             dispatcher.utter_message(text=f"We only allow the most popular 30 cities. Here are some suggestions: ", buttons=buttons)
             return {"city": None}
         dispatcher.utter_message(text=f"OK! You liked visiting {city}.")

@@ -46,6 +46,12 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
           return createChatBotMessage(d.text);
         }
       } else {
+        if (d.attachment) {
+          console.log(d.attachment)
+          return createCustomMessage("", "itineraryMessage", {
+            payload: d.attachment,
+          })
+        }
         return createCustomMessage("", "imageMessage", {
           payload: d.image,
         })
