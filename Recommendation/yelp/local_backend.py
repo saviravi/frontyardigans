@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 KM_PER_DEGREE = 111.1
 
 # Load all businesses and hotels and store in quadtree
-all_businesses = list(map(City.load_businesses, list(City)))
-all_hotels = list(map(City.load_hotels, list(City)))
+all_businesses = [c.businesses for c in list(City)]
+all_hotels = [c.hotels for c in list(City)]
 all_businesses = reduce(lambda a, b: a + b, all_businesses)
 all_businesses += reduce(lambda a, b: a + b, all_hotels)
 qt = QuadTree(Rect(0, 0, 360, 180), 50, 0)

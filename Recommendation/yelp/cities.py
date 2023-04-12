@@ -35,43 +35,57 @@ class City(Enum):
     #Tulum = "tulum"
     Vienna = "vienna"
 
-    @classmethod
-    def load_businesses(self, city: Union[City, str]) -> list[YelpResult]:
-        if type(city) == City:
-            city_name = city.value
-        else:
-            city_name = city
-        
+    def __init__(self, value: str):
+        super(Enum, self).__init__()
+        self.businesses = self.load_businesses()
+        self.hotels = self.load_hotels()
+        self.airport_code = "MIA"
+
+    def load_businesses(self) -> list[YelpResult]:
         path = os.path.join(
             os.path.dirname(__file__),
             "business_data",
-            "%s_businesses.json" % city_name
+            "%s_businesses.json" % self.value
         )
 
         with open(path, 'rb') as f:
             json_businesses = load(f)
             return list(map(YelpResult.from_dict, json_businesses))
     
-    @classmethod
-    def load_hotels(self, city: Union[City, str]) -> list[YelpResult]:
-        if type(city) == City:
-            city_name = city.value
-        else:
-            city_name = city
-        
+    def load_hotels(self) -> list[YelpResult]:
         path = os.path.join(
             os.path.dirname(__file__),
             "business_data",
-            "%s_hotels.json" % city_name
+            "%s_hotels.json" % self.value
         )
 
         with open(path, 'rb') as f:
             json_businesses = load(f)
             return list(map(YelpResult.from_dict, json_businesses))
 
+    def get_city_center(self) -> tuple[float, float]:
+        """
+        Takes in a list of businesses and returns the (latitude, longitude).
+        """
+        average_lat = 0
+        average_long = 0
+        count = 0
 
-def plot_businesses(businesses):
-    longitude = [b.longitude for b in businesses if b.longitude is not None and b.latitude is not None]
-    latitude = [b.latitude for b in businesses if b.longitude is not None and b.latitude is not None]
-    plt.plot(longitude, latitude, 'r.')
-    plt.show()
+        for b in self.businesses:
+            if b.latitude is not None and b.longitude is not None:
+                average_lat += b.latitude
+                average_long += b.longitude
+                count += 1
+        for b in self.hotels:
+            if b.latitude is not None and b.longitude is not None:
+                average_lat += b.latitude
+                average_long += b.longitude
+                count += 1
+
+        return (average_lat / count, average_long / count)
+
+    def plot_businesses(self, category=None):
+        longitude = [b.longitude for b in self.businesses if b.longitude is not None and b.latitude is not None and (category is None or category in b.categories)]
+        latitude = [b.latitude for b in self.businesses if b.longitude is not None and b.latitude is not None and (category is None or category in b.categories)]
+        plt.plot(longitude, latitude, 'r.')
+        plt.show()
