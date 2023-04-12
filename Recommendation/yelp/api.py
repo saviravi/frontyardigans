@@ -100,7 +100,7 @@ def get_businesses_by_location_name(location: str, radius=8050, price: Union[int
 def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, price: Union[int, str]="1,2,3,4", limit=50, categories="", term="") -> list[YelpResult]:
     """
     Searches Yelp Fusion API for businesses by latitude and longitude.
-    Returns JSON of business details or raises YelpAPIException.
+    Returns list of business details or raises YelpAPIException.
     """
     response = _send_yelp_request(YELP_BUSINESS_SEARCH_URL, locals())
     if response.status_code == 200:
