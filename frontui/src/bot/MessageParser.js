@@ -17,7 +17,17 @@ const MessageParser = ({ children, actions }) => {
         sender: "User", 
         message: message
       }).then(response => {
-        actions.handleMessage(response.data);
+        if (response.data && response.data.length > 0) {
+          actions.handleMessage(response.data);
+        } else {
+          axios.post('http://localhost:5005/webhooks/rest/webhook', {
+              sender: "User",
+              message: "/nlu_fallback"
+              }).then(response => {
+                actions.handleMessage(response.data);
+              }
+          );
+        }
       }).catch(error => {
         console.log(error)
       });

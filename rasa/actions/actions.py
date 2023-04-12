@@ -72,12 +72,14 @@ class ActionGetRecommendation(Action):
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
          temp = tracker.get_slot("temperature")
          city = tracker.get_slot("city")
-         activity = tracker.get_slot("activity")
+         activity1 = tracker.get_slot("activity1")
+         activity2 = tracker.get_slot("activity2")
+         activity3 = tracker.get_slot("activity3")
          startdate = tracker.get_slot("startdate")
          enddate = tracker.get_slot("enddate")
-         # example input: ['cold', 'tulum', 'food', '04/04/2023', '04/04/2023']
+         # example input: ['cold', 'tulum', ['food', etc.. ], '04/04/2023', '04/04/2023']
          try:
-            dispatcher.utter_message(text=Recommendation.handleInput([temp, city, activity, startdate, enddate]))
+            dispatcher.utter_message(text=Recommendation.handleInput([temp, city, [activity1, activity2, activity3], startdate, enddate]))
          except:
             dispatcher.utter_message(text="Oops! The program crashed. Try again.")
          return []
@@ -235,12 +237,13 @@ class ActionClearSlots(Action):
  def run(self, dispatcher: CollectingDispatcher,
          tracker: Tracker,
          domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-         
-         buttons = []
-         buttons.append({"title": "I'm good." , "payload": "/mood_great"})
-         buttons.append({"title": "I'm sad." , "payload": "/mood_unhappy"})
-         buttons.append({"title": "I would like to travel" , "payload": "/ask_me_anything"})
+
          dispatcher.utter_message("OK! All slots have been reset!")
-         dispatcher.utter_message("What can I help you with?", buttons=buttons)
+         if (not tracker.active_loop):
+            buttons = []
+            buttons.append({"title": "I'm good." , "payload": "/mood_great"})
+            buttons.append({"title": "I'm sad." , "payload": "/mood_unhappy"})
+            buttons.append({"title": "I would like to travel" , "payload": "/ask_me_anything"})
+            dispatcher.utter_message("What can I help you with?", buttons=buttons)
 
          return [AllSlotsReset()]

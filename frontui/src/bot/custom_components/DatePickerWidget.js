@@ -21,7 +21,17 @@ const DatePickerWidget = (props) => {
         sender: "User",
         message: message
         }).then(response => {
-          props.actions.handleMessage(response.data);
+          if (response.data && response.data.length > 0) {
+            props.actions.handleMessage(response.data);
+          } else {
+            axios.post('http://localhost:5005/webhooks/rest/webhook', {
+              sender: "User",
+              message: "/nlu_fallback"
+              }).then(response => {
+                props.actions.handleMessage(response.data);
+              }
+            );
+          }
         }
       );
     } else {

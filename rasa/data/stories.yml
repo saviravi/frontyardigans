@@ -44,9 +44,9 @@ stories:
   - slot_was_set:
     - city: Chicago
   - slot_was_set:
-    - requested_slot: activity
+    - requested_slot: activity1
   - slot_was_set:
-    - activity: Food
+    - activity1: Food
   - slot_was_set:
     - requested_slot: startdate
   - slot_was_set:
