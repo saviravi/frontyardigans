@@ -126,7 +126,7 @@ const TravisBot = () => {
   );
 
   return (
-    <div>
+    <div className="bot-page-container">
         <div className='bot-page-button-container'>
           <Button id="bot-page-button" variant="primary" onClick={() => toggleBot((prev) => !prev)}>Show / Hide Bot</Button>
           <Button id="bot-page-button" variant="info" onClick={handleShow}>Information</Button>
@@ -138,13 +138,15 @@ const TravisBot = () => {
               <Offcanvas.Title>Information</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <div className="location-container">
-                <p id="location">
-                  <b>Address:</b><br/> {address}<br/>
-                  <b>City:</b> {city}, {state}, {country}<br/>
-                  <b>Latitude:</b> {lat}<br/>
-                  <b>Longitude:</b> {lon}
-                </p>
+              <div className="information-container">
+                <div className="location-container">
+                  <p id="location">
+                    <b>Address:</b><br/> {address}<br/>
+                    <b>City:</b> {city}, {state}, {country}<br/>
+                    <b>Latitude:</b> {lat}<br/>
+                    <b>Longitude:</b> {lon}
+                  </p>
+                </div>
               </div>
             </Offcanvas.Body>
           </Offcanvas>
