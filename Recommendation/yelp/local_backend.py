@@ -8,15 +8,28 @@ import matplotlib.pyplot as plt
 
 KM_PER_DEGREE = 111.1
 
-# Load all businesses and store in quadtree
+# Load all businesses and hotels and store in quadtree
 all_businesses = list(map(City.load_businesses, list(City)))
+all_hotels = list(map(City.load_hotels, list(City)))
 all_businesses = reduce(lambda a, b: a + b, all_businesses)
+all_businesses += reduce(lambda a, b: a + b, all_hotels)
 qt = QuadTree(Rect(0, 0, 360, 180), 50, 0)
 
 for i, b in enumerate(all_businesses):
     if b.latitude is None or b.longitude is None:
         continue
     qt.insert(Point(b.longitude, b.latitude, data=i))
+
+def plot_all_hotels():
+    lat = []
+    lon = []
+    for b in all_businesses:
+        if 'hotels' in list(map(lambda c: c.value, b.categories)):
+            lat.append(b.latitude)
+            lon.append(b.longitude)
+    
+    plt.plot(lon, lat, 'cx')
+    plt.show()
 
 def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, price: Union[int, str]="1,2,3,4", limit=50, categories="", term="") -> list[YelpResult]:
     """
