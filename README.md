@@ -53,6 +53,9 @@ BONSAI_URL=[your_bonsai_url]
 YELP_FUSION_TOKEN=[your_yelp_fusion_token]
 ```
 
+## Get Quadtree code
+Run `git submodule init` and `git submodule update` after cloning the repository.
+
 ## Resources
 
 - [React](https://react.dev/)
