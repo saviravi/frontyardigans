@@ -1,7 +1,7 @@
 # import es_utils
 import csv
 import pickle
-from yelp import YelpCategory, YelpResult, YelpActiveLifeCategory, YelpArtsAndEntertainmentCategory, YelpFoodCategory, YelpHotelsAndTravelCategory, YelpNightlifeCategory, YelpRestaurantsCategory, YelpShoppingCategory 
+from yelp import YelpActiveLifeCategory, YelpArtsAndEntertainmentCategory, YelpFoodCategory, YelpHotelsAndTravelCategory, YelpNightlifeCategory, YelpRestaurantsCategory, YelpShoppingCategory 
 import statistics
 
 
@@ -128,48 +128,63 @@ def calc_city_metrics():
                 "nars": nars,
                 "rnars": calc_rnar(nars),
                 "wrnars": calc_wrnar(nars, avg_ratings), 
-                "wrs": calc_well_rounded_score(nars.values())
+                "wrs": calc_well_rounded_score(nars.values()),
+                "weather": None,
             }
     return
 
 
-# calc_city_metrics()
+calc_city_metrics()
+# METRICS_DICT = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
+
+
+# for city in METRICS_DICT:
+#     print(city)
+#     temp = input()
+#     if temp == "c":
+#         METRICS_DICT[city]["weather"] = "cold"
+#     else:
+#         METRICS_DICT[city]["weather"] = "hot"
+
+# for city in METRICS_DICT:
+#     print(city, METRICS_DICT[city]["weather"])
+
+
+
 
 # print(METRICS_DICT)
 
-# with open('city_nar_info.pickle', 'wb') as f:
-#     pickle.dump(METRICS_DICT, f)
+with open('city_nar_info.pickle', 'wb') as f:
+    pickle.dump(METRICS_DICT, f)
 
 
 
 # city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
 # print(city_info)
 
-def get_best_of_category(cat_name):
-    city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
-    cat_wrnars = {}
-    cat_rnars = {}
-    for city in city_info.keys():
-        cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
-        cat_rnars[city] = city_info[city]['rnars'][cat_name]
-    sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
-    # sorted_rnars = [k for k, v in sorted(cat_rnars.items(), key=lambda item: item[1])]
-    # sorted_wrnars.index("")
-    return sorted_wrnars
+# def get_best_of_category(cat_name):
+#     city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
+#     cat_wrnars = {}
+#     cat_rnars = {}
+#     for city in city_info.keys():
+#         cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
+#         cat_rnars[city] = city_info[city]['rnars'][cat_name]
+#     sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
+#     return sorted_wrnars
 
 
-def get_best_of_categories(cat_name1, cat_name2, cat_name3):
-    city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
-    cat_wrnars = {}
-    cat_rnars = {}
-    for city in city_info.keys():
-        cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
-        cat_rnars[city] = city_info[city]['rnars'][cat_name]
-    sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
-    # sorted_rnars = [k for k, v in sorted(cat_rnars.items(), key=lambda item: item[1])]
-    # sorted_wrnars.index("")
-    return sorted_wrnars
+# def get_best_of_categories(cat_name1, cat_name2, cat_name3):
+#     city_info = pickle.load(open("/Users/savitharavi/cse5914/frontyardigans/Recommendation/city_nar_info.pickle", "rb")) # list of nar info for cities
+#     cat_wrnars1 = {}
+#     cat_wrnars2 = {}
+#     cat_wrnars3 = {}
+#     for city in city_info.keys():
+#         cat_wrnars[city] = city_info[city]['wrnars'][cat_name1]
+#     sorted_wrnars1 = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
+#     # [elem for elem in set1 if elem in set2 and elem in set3]
+
+#     return sorted_wrnars
 
 
-best = get_best_of_category("active_life")
-print(best)
+# best = get_best_of_category("active_life")
+# print(best)

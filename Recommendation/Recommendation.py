@@ -14,8 +14,12 @@ from yelp import get_businesses_by_location_name, YelpAPIException
 import datetime
 from yelp import get_businesses_by_lat_long, YelpAPIException, any_of, YelpResult, YelpCommonCategories, YelpAllCategories
 import random
+import pickle
+from flights import es_utils
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "flights")
+# os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "city_nar_info.pickle"
+
 
 import flight_utils
 from flight_utils import Passenger
@@ -25,6 +29,23 @@ from flight_utils import Cabin
 # Load environment variables
 load_dotenv()
 DUFFEL_ACCESS_TOKEN = os.getenv('DUFFEL_ACCESS_TOKEN')
+
+city_info = pickle.load(open(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "city_nar_info_weather.pickle", "rb")) # list of nar info for cities
+# /Users/savitharavi/cse5914/frontyardigans/Recommendation/Recommendation.py
+
+# for city in city_info:
+#     print(city)
+#     temp = input()
+#     if temp == "c":
+#         city_info[city]["weather"] = "cold"
+#     else:
+#         city_info[city]["weather"] = "hot"
+
+
+# print(city_info["Paris"])
+
+# with open(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "city_nar_info_weather.pickle", 'wb') as f:
+#     pickle.dump(city_info, f) # list of nar info for cities
 
 
 
@@ -151,9 +172,54 @@ def handleInput(inputData):
     """
     Handles input and returns a list of possible trips :)
     """
-#    print(pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")])))
+    # pick city
+    # ['hot', 'cancun', 'arts & entertainment', '01/01/2024', '02/01/2024']
+    cat = inputData[2]
+    print(cat)
+    if inputData[2] == "arts & entertainment":
+        cat = "arts_n_ent"
+    elif inputData[2] == "being active":
+        cat = "active_life"
+    elif inputData[2] == "food":
+        cat = "restaurant"
+    best = get_best_of_category(city_info, cat)
+    print(best)
+    rec_city = ""
+    found = False
+    i = 0
+    while i < len(best) and not found:
+        print(city_info[best[i]])
+        print(city_info[best[i]]["weather"])
+        if city_info[best[i]]["weather"] == inputData[0]:
+            found = True
+            rec_city = best[i]
+    if not found:
+        rec_city = best[0]
+    
+    print(rec_city)
+    searcher = es_utils.ElasticSearcher()
+
+    results = searcher.airport_search(search_phrase=rec_city)
+    print(results["iata"])
+
+    if inputData[2] == "arts & entertainment":
+        cat = "arts"
+    elif inputData[2] == "being active":
+        cat = "active"
+    elif inputData[2] == "food" or inputData[2] == "restaurant":
+        cat = "restaurants"
+    elif inputData[2] == "shopping":
+        cat = "shopping"
+    elif inputData[2] == "nightlife":
+        cat = "nightlife"
+    elif inputData[2] == "travel":
+        cat = "hotelstravel"
+    
+    # print(pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")])))
     print(inputData)
-    return pprintSchedulue(setUpSchedule("CMH", "ORD", datetime.date(2023, 12, 10),  5, [PrefCategory(value ="bars")]))
+    print(pprintSchedulue(setUpSchedule("CMH", "LBG", datetime.date(2023, 12, 10),  5, [PrefCategory(value="bars")])))
+    return 
+    # return None
 
 # This takes a couple of seconds and doesn't change between calls so could be cached
 def get_duffel_airports() -> List[Airport]:
@@ -387,3 +453,14 @@ def get_local_businesses_from_yelp(city_name, number_to_fetch, api_key_filename)
 
 
 #handleInput(["cold"])
+
+def get_best_of_category(city_info, cat_name):
+    cat_wrnars = {}
+    for city in city_info.keys():
+        cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
+    sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
+    return sorted_wrnars
+
+# print(get_best_of_category(city_info,"active_life"))
+
+handleInput(['cold', 'london', 'arts & entertainment', '03/03/2024', '04/04/2024'])
