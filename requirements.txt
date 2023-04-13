@@ -7,3 +7,4 @@ nltk
 python-dotenv
 vincenty
 shapely
+quadtree-fast
