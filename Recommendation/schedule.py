@@ -373,10 +373,8 @@ def create_schedule(city: City, preference: Enum, price_preference: Union[int, s
     schedule = Schedule([], hotel, inbound_flight, outbound_flight)
 
     add_arrival_day(schedule, preference, price_preference, arrival_time=inbound_flight.arrival_time)
-    add_full_day(schedule, preference, price_preference)
-    add_full_day(schedule, preference, price_preference)
-    add_full_day(schedule, preference, price_preference)
-    add_full_day(schedule, preference, price_preference)
+    for _ in range((end_date - start_date).days - 1):
+        add_full_day(schedule, preference, price_preference)
     add_departure_day(schedule, preference, price_preference, departure_time=outbound_flight.departure_time)
 
     return schedule
