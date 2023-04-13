@@ -39,7 +39,7 @@ class City(Enum):
         super(Enum, self).__init__()
         self.businesses = self.load_businesses()
         self.hotels = self.load_hotels()
-        self.airport_code = "MIA"
+        self.airport_code = "LAX"
 
     def load_businesses(self) -> list[YelpResult]:
         path = os.path.join(
