@@ -48,13 +48,6 @@ html {
 }
 
 body {
-  background: url("images/wallpaper.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-color: #301381;
-
   background: linear-gradient(
     130deg,
     transparent 0% 33%,
