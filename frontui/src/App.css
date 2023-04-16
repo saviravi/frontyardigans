@@ -303,10 +303,12 @@ img.image-message {
 
 .welcome-page-banner-container .welcome-page-button {
   padding: 1rem;
+  padding-top: 3rem;
   padding-left: 5rem;
   padding-right: 5rem;
   font-family: 'Nunito', sans-serif;
   color: white;
+  text-align: center;
 }
 
 .welcome-page-banner-container .welcome-page-button button {
