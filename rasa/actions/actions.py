@@ -85,7 +85,7 @@ class ActionGetRecommendation(Action):
             return []
 
          try:
-            dispatcher.utter_message(text="Your itinerary has been generated", attachment=Recommendation.handleInput(input_values))
+            dispatcher.utter_message(text=f"Your {city.title()} itinerary has been generated", attachment=Recommendation.handleInput(input_values))
             # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
          except:
             buttons = [{"title": "Generate" , "payload": "/generate_recommendation"}]

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Geocode from "react-geocode";
@@ -9,9 +9,19 @@ import MessageParser from './MessageParser.js';
 import ActionProvider from './ActionProvider.js';
 import { createChatBotMessage } from 'react-chatbot-kit';
 import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
+import {Text} from 'react-native';
+import {EditText} from 'react-edit-text';
+import toast, { Toaster } from 'react-hot-toast';
 
 const TravisBot = () => {
   const [showBot, toggleBot] = useState(true);
+  const [itineraries, setItineraries] = useState([]);
+  const [showItinerary, toggleItinerary] = useState(false);
+  const [itineraryIndex, setItineraryIndex] = useState(0);
+  const [itineraryTitle, setItineraryTitle] = useState("");
+  const [itineraryText, setItinerary] = useState("");
+  const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false);
 
   const clearHistory = () => {
     axios.post('http://localhost:5005/webhooks/rest/webhook', {
@@ -125,6 +135,64 @@ const TravisBot = () => {
     }
   );
 
+  useEffect(() => {
+    if (show) {
+      const fetchedList = JSON.parse(window.localStorage.getItem('itinerary'));
+      setItineraries(fetchedList && Array.isArray(fetchedList) ? fetchedList : []);
+    } 
+  },[show]);
+
+  const viewItinerary = (key, title, text) => {
+    setItinerary(text)
+    setItineraryTitle(title);
+    setItineraryIndex(key);
+    toggleItinerary(true);
+  }
+
+  const saveItineraryChanges = () => {
+    let itin = itineraries;
+    itin[itineraryIndex] = {"title": itineraryTitle, "text": itineraryText};
+    setItineraries(itin);
+    window.localStorage.setItem('itinerary', JSON.stringify(itin));
+    toggleItinerary(false);
+  }
+
+  const saveItineraryDelete = () => {
+    let itin = itineraries;
+    itin.splice(itineraryIndex, 1);
+    setItineraries(itin);
+    window.localStorage.setItem('itinerary', JSON.stringify(itin));
+    toggleItinerary(false);
+    toast.success('Itinerary deleted.', {
+      style: {
+        border: '1px solid #6f4394',
+        padding: '16px',
+        color: '#6f4394',
+      },
+      iconTheme: {
+        primary: '#6f4394',
+        secondary: '#FFFAEE',
+      },
+    });
+  }
+
+  const deleteAllItineraries = () => {
+    setItineraries([]);
+    window.localStorage.removeItem('itinerary');
+    toast.success('All itineraries deleted.', {
+      style: {
+        border: '1px solid #6f4394',
+        padding: '16px',
+        color: '#6f4394',
+      },
+      iconTheme: {
+        primary: '#6f4394',
+        secondary: '#FFFAEE',
+      },
+    });
+    toggleDeleteConfirmation(false);
+  }
+
   return (
     <div className="bot-page-container">
         <div className='bot-page-button-container'>
@@ -148,6 +216,15 @@ const TravisBot = () => {
                   </p>
                 </div>
               </div>
+              <div className="itineraries-container">
+                {itineraries.map((name, index) => {
+                  return <Button id="bot-page-button" key={index + 1} variant="secondary" onClick={() => viewItinerary(index, name.title, name.text)}>
+                    {name.title}
+                    </Button>})}
+                      {itineraries.length > 0 && <Button id="bot-page-button" key={0} variant="danger" onClick={() => toggleDeleteConfirmation(true)}>
+                      Delete All
+                    </Button>}
+              </div>
             </Offcanvas.Body>
           </Offcanvas>
         </div>
@@ -158,6 +235,50 @@ const TravisBot = () => {
             actionProvider={ActionProvider}
             messageHistory={loadMessages()}
         />)}
+        <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+        />
+        <Modal
+        show={showItinerary}
+        onHide={saveItineraryChanges}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-custom-modal-styling-title">
+            <EditText
+              name="title-text-box"
+              value={itineraryTitle}
+              onChange={(e) => setItineraryTitle(e.target.value)}
+            />
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Text>
+            {itineraryText}
+          </Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={saveItineraryDelete}>Delete</Button>
+          <Button variant="secondary" onClick={saveItineraryChanges}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showDeleteConfirmation} onHide={() => toggleDeleteConfirmation(false)} dialogClassName="modal-90w" >
+        <Modal.Header closeButton>
+          <Modal.Title>Delete All</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p>Are you sure you want to delete all?</p>
+          <p>This action cannot be undone.</p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => toggleDeleteConfirmation(false)}>No</Button>
+          <Button variant="danger" onClick={deleteAllItineraries}>Yes</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

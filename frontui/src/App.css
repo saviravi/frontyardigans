@@ -150,6 +150,11 @@ img.image-message {
   margin-right: 10px;
 }
 
+.itineraries-container > #bot-page-button {
+  padding: 12px;
+  margin-bottom: 5px;
+}
+
 #bot-page-button-show-hide {
   margin: 6px;
   border-radius: 5px;
@@ -212,6 +217,17 @@ img.image-message {
   padding: 1rem;
   width: 100%;
 }
+
+.itineraries-container {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: stretch;
+  padding: 1rem;
+  width: 100%;
+}
+
+
 
 .location-container {
   order: 0;
