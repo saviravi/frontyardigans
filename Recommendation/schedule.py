@@ -8,9 +8,12 @@ import sys
 from functools import reduce
 import os
 import numpy as np
+import pickle
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("schedule.py")] + "flights")
 from flights.flight_utils import get_flights, FlightSlice, Passenger, Cabin
+
+city_info = pickle.load(open(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("schedule.py")] + "city_nar_info_weather.pickle", "rb")) # list of nar info for cities
 
 @dataclass
 class Flight:
@@ -30,6 +33,40 @@ class Day:
             result += "\t" + activity.name + "\n"
         
         return result
+
+def get_best_of_category(cat_name):
+    cat_wrnars = {}
+    for city in city_info.keys():
+        cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
+    sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
+    return sorted_wrnars
+
+
+def pick_city(inputData):
+    cat = inputData[2]
+    print(cat)
+    if inputData[2] == "arts & entertainment":
+        cat = "arts_n_ent"
+    elif inputData[2] == "being active":
+        cat = "active_life"
+    elif inputData[2] == "food":
+        cat = "restaurant"
+    best = get_best_of_category(city_info, cat)
+    print(best)
+    rec_city = ""
+    found = False
+    i = 0
+    while i < len(best) and not found:
+        print(city_info[best[i]])
+        print(city_info[best[i]]["weather"])
+        if city_info[best[i]]["weather"] == inputData[0]:
+            found = True
+            rec_city = best[i]
+    if not found:
+        rec_city = best[0]
+    
+    print(rec_city)
+    return rec_city
 
 @dataclass
 class Schedule:
@@ -381,5 +418,5 @@ def create_schedule(city: City, preference: Enum, price_preference: Union[int, s
 
     return schedule
 
-schedule = create_schedule(City.LosAngeles, YelpActiveLifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 25))
-print(schedule)
+# schedule = create_schedule(City.NewYorkCity, YelpArtsAndEntertainmentCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 25))
+# print(schedule)
