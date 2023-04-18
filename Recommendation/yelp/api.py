@@ -68,15 +68,15 @@ def _send_yelp_request(url, params):
     return requests.get(url + url_params, headers=headers)
 
 def _json_business_to_result(business: dict) -> YelpResult:
-    categories = []
-
     return YelpResult(
                 id=business["id"],
                 name=business["name"],
                 image_url=business["image_url"],
                 is_closed=business["is_closed"],
                 url=business["url"],
-                categories=list(map(parse_alias, [c["alias"] for c in business["categories"]])),
+                categories=list(
+                    map(parse_alias, [c["alias"] for c in business["categories"]])
+                ),
                 review_count=business["review_count"],
                 rating=business["rating"],
                 price=len(business["price"]),
@@ -85,7 +85,9 @@ def _json_business_to_result(business: dict) -> YelpResult:
                 city_name=business["location"]["city"]
             )
 
-def get_businesses_by_location_name(location: str, radius=8050, price: Union[int, str]="1,2,3,4", limit=50, categories="") -> list[YelpResult]:
+def get_businesses_by_location_name(location: str, radius=8050,
+                                    price: Union[int, str]="1,2,3,4", limit=50,
+                                    categories="") -> list[YelpResult]:
     """
     Searches Yelp Fusion API for businesses by location name, e.g. "NYC".
     Returns JSON of business details or raises YelpAPIException.
@@ -97,7 +99,9 @@ def get_businesses_by_location_name(location: str, radius=8050, price: Union[int
     else:
         raise YelpAPIException(str(response.content))
 
-def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, price: Union[int, str]="1,2,3,4", limit=50, categories="", term="") -> list[YelpResult]:
+def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050,
+                               price: Union[int, str]="1,2,3,4", limit=50,
+                               categories="", term="") -> list[YelpResult]:
     """
     Searches Yelp Fusion API for businesses by latitude and longitude.
     Returns list of business details or raises YelpAPIException.
@@ -113,6 +117,7 @@ def get_remaining_calls() -> int:
     """
     Gets the number of remaing Yelp Fusion API calls and returns it.
     """
-    response = _send_yelp_request(YELP_BUSINESS_SEARCH_URL, {"location": "NYC", "price": 1, "limit": 1})
+    request_data = {"location": "NYC", "price": 1, "limit": 1}
+    response = _send_yelp_request(YELP_BUSINESS_SEARCH_URL, request_data)
     num_remaining = response.headers["ratelimit-remaining"]
     return int(float(num_remaining))

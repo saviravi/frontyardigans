@@ -379,5 +379,5 @@ def create_schedule(city: City, preference: Enum, price_preference: Union[int, s
 
     return schedule
 
-schedule = create_schedule(City.LosAngeles, YelpActiveLifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 25))
+schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 22))
 print(schedule)
