@@ -152,6 +152,12 @@ responses:
   utter_cheer_up:
     - text: "Here is something to cheer you up:"
       image: "https://i.imgur.com/nGF1K8f.jpg"
+    - text: "Here is something to cheer you up:"
+      image: "https://www.gannett-cdn.com/presto/2020/03/17/USAT/c0eff9ec-e0e4-42db-b308-f748933229ee-XXX_ThinkstockPhotos-200460053-001.jpg?crop=1170%2C658%2Cx292%2Cy120&width=1200"
+    - text: "Here is something to cheer you up:"
+      image: "https://www.rd.com/wp-content/uploads/2021/04/GettyImages-138468381-scaled-e1619028416767.jpg"
+    - text: "Here's something to cheer you up:"
+      image: "https://wallpaperaccess.com/full/266770.jpg"
 
   utter_recommendation_ready:
     - text: "Please click the 'Generate' button below to create your itinerary."
