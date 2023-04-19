@@ -370,16 +370,16 @@ def create_schedule(city: City, preference_1: Enum,  preference_2: Enum,  prefer
 
     hotel = get_hotel(city, price_preference)
 
-    price_preferences = [preference_1, preference_2, preference_3]
+    activity_preferences = [preference_1, preference_2, preference_3]
 
     schedule = Schedule([], hotel, inbound_flight, outbound_flight)
 
-    add_arrival_day(schedule, preference, price_preference, arrival_time=inbound_flight.arrival_time)
+    add_arrival_day(schedule, preference_1, price_preference, arrival_time=inbound_flight.arrival_time)
     for i in range((end_date - start_date).days - 1):
-        add_full_day(schedule, preference, price_preferences[i % 3])
-    add_departure_day(schedule, preference, price_preference, departure_time=outbound_flight.departure_time)
+        add_full_day(schedule, activity_preferences[i%3], price_preference)
+    add_departure_day(schedule, preference_3, price_preference, departure_time=outbound_flight.departure_time)
 
     return schedule
 
-schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 22))
+schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory,YelpFoodCategory,YelpNightlifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 22))
 print(schedule)
