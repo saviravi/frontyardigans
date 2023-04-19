@@ -106,11 +106,26 @@ def top_random_choice(businesses: list[YelpResult], limit=30) -> YelpResult:
     """
     Randomly returns a business from the top n (default 30) choices sorted by number of ratings * average rating.
 
-    `businesses` cannot be empty.
+    `businesses` cannot be empty. it was though. oh well.
     """
     # Sort hotels by rating * number of ratings in descending order
     businesses = sorted(businesses, key=lambda b: b.rating * b.review_count, reverse=True)
 
+    if len(businesses) == 0:
+        return YelpResult(
+            id=0,
+            name="None Found",
+            image_url= "",
+            is_closed = True,
+            url = "",
+            review_count = 0,
+            categories = [],
+            rating = 0,
+            price = 0,
+            latitude = 0,
+            longitude = 0,
+            city_name = "",
+        )
     # Pick randomly from the top n places
     upper_bound = min(len(businesses), limit)
     random_business_idx = np.random.randint(0, upper_bound)
