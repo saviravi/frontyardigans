@@ -139,7 +139,7 @@ class ActionGetRecommendation(Action):
             # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
          except Exception as error:
             buttons = [{"title": "Generate" , "payload": "/generate_recommendation"}]
-            dispatcher.utter_message(text="Oops! The program crashed. Try again.", buttons=buttons)
+            dispatcher.utter_message(text=f"Oops! The program crashed. Try again. Error: {error}", buttons=buttons)
             print("Error: " + str(error))
          return []
 
