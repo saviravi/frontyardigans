@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Union
-from yelp import City, YelpRecommendationCategories, any_of, YelpResult, YelpArtsAndEntertainmentCategory, YelpRestaurantsCategory, YelpFoodCategory, YelpNightlifeCategory, YelpActiveLifeCategory, YelpShoppingCategory
+from yelp import City, YelpRecommendationCategories, any_of, YelpResult, YelpArtsAndEntertainmentCategory, YelpRestaurantsCategory, YelpFoodCategory, YelpNightlifeCategory, YelpActiveLifeCategory, YelpShoppingCategory, YelpHotelsAndTravelCategory
 from yelp.local_backend import get_businesses_by_lat_long
 from dataclasses import dataclass
 import datetime
@@ -381,5 +381,61 @@ def create_schedule(city: City, preference_1: Enum,  preference_2: Enum,  prefer
 
     return schedule
 
-schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory,YelpFoodCategory,YelpNightlifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 22))
-print(schedule)
+CITY_MAPPINGS = {
+    "paris": City.Paris,
+    "london": City.London,
+    "rome": City.Rome,
+    "barcelona": City.Barcelona,
+    "amsterdam": City.Amsterdam,
+    "istanbul" : City.Istanbul,
+    "tokyo" : City.Tokyo, 
+    "new york city": City.Tokyo,
+    "maui" : City.Maui,
+    "cancun": City.Cancun,
+    "sydney": City.Sydney,
+    # "venice": City.Venice,
+    "san francisco": City.SanFrancisco,
+    "miami": City.Miami,
+    "honolulu": City.Honolulu,
+    "rio de janeiro": City.Rio,
+    "prague": City.Prague,
+    "hong kong": City.HongKong,
+    "mexico city": City.MexicoCity,
+    "los angeles": City.LosAngeles,
+    "las vegas": City.LasVegas,
+    "orlando": City.Orlando,
+    # "ibiza": City.Ibiza,
+    "vienna": City.Vienna,
+    "seville": City.Seville,
+    "madrid": City.Madrid,
+    # "lake tahoe": City.LakeTahoe,
+    "cairns": City.Cairns,
+    # "queenstown": City.Queenstown,
+}
+
+ACTIVITY_MAPPINGS = { 
+    "arts & entertainment": YelpArtsAndEntertainmentCategory,
+    "food": YelpFoodCategory,
+    "being active": YelpActiveLifeCategory,
+    "shopping": YelpShoppingCategory,
+    "nightlife": YelpNightlifeCategory,
+    "travel": YelpHotelsAndTravelCategory
+}
+
+def handleSlotInputs(city: str, activity1:str, activity2:str, activity3:str, startdate:str, enddate:str) -> str:
+    # print([CITY_MAPPINGS[city.lower()], 
+    #                         ACTIVITY_MAPPINGS[activity1], 
+    #                         ACTIVITY_MAPPINGS[activity2], 
+    #                         ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
+    #                         datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+    #                         datetime.datetime.strptime(enddate, '%m/%d/%Y')])
+    return create_schedule(CITY_MAPPINGS[city.lower()], 
+                            ACTIVITY_MAPPINGS[activity1], 
+                            ACTIVITY_MAPPINGS[activity2], 
+                            ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
+                            datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+                            datetime.datetime.strptime(enddate, '%m/%d/%Y'))
+
+# schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory,YelpFoodCategory,YelpNightlifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2024, 3, 22))
+# schedule = handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024")
+# print(schedule)

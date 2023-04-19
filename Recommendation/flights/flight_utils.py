@@ -81,7 +81,7 @@ class FlightSlice(object):
 		self.depart_year = depart_year
 		return
 	def get_slice(self):
-		return {"origin": self.origin, "destination": self.dest, "departure_date": "{2}-{1}-{0}".format(self.depart_day, self.depart_month, self.depart_year) }
+		return {"origin": self.origin, "destination": self.dest, "departure_date": "{2}-{1}-{0}".format(str(self.depart_day).zfill(2), str(self.depart_month).zfill(2), self.depart_year) }
 
 class Passenger(Enum):
 	ADULT = "adult"
