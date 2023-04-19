@@ -1,6 +1,5 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Union
 from .api import YelpResult
 import os
 from json import load
@@ -85,7 +84,13 @@ class City(Enum):
         return (average_lat / count, average_long / count)
 
     def plot_businesses(self, category=None):
-        longitude = [b.longitude for b in self.businesses if b.longitude is not None and b.latitude is not None and (category is None or category in b.categories)]
-        latitude = [b.latitude for b in self.businesses if b.longitude is not None and b.latitude is not None and (category is None or category in b.categories)]
+        longitude = [b.longitude for b in self.businesses
+                    if b.longitude is not None
+                     and b.latitude is not None
+                     and (category is None or category in b.categories)]
+        latitude = [b.latitude for b in self.businesses
+                    if b.longitude is not None
+                    and b.latitude is not None
+                    and (category is None or category in b.categories)]
         plt.plot(longitude, latitude, 'r.')
         plt.show()
