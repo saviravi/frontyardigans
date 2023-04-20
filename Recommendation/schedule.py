@@ -16,6 +16,9 @@ from flights.flight_utils import get_flights, FlightSlice, Passenger, Cabin
 
 city_info = pickle.load(open(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("schedule.py")] + "city_nar_info_weather.pickle", "rb")) # list of nar info for cities
 
+# not in cities.py
+city_info.pop("Ibiza")
+
 @dataclass
 class Flight:
     departure_time: datetime
