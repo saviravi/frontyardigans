@@ -19,6 +19,7 @@ const About = () => {
                         <Card.Title>Stanley Vernier</Card.Title>
                         <Card.Text>
                             Instructor of the course<br/>
+                            Technical Support<br/>
                             <a href="mailto: vernier.13@osu.edu">vernier.13@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://www.linkedin.com/in/stanvernier" target="_blank" rel="noopener noreferrer">LinkedIn</Button>
@@ -29,7 +30,7 @@ const About = () => {
                     <Card.Body>
                         <Card.Title>Chris Cosma</Card.Title>
                         <Card.Text>
-                            Description of Chris Cosma<br/>
+                            Backend Developer: Rasa & Elasticsearch<br/>
                             <a href="mailto: cosma.5@osu.edu">cosma.5@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://github.com/chriscosma" target="_blank" rel="noopener noreferrer">GitHub</Button>
@@ -40,7 +41,7 @@ const About = () => {
                     <Card.Body>
                         <Card.Title>Shivani Jayasaal</Card.Title>
                         <Card.Text>
-                            Description of Shivani Jayasaal<br/>
+                            Backend Developer: Rasa<br/>
                             <a href="mailto: jayasaal.2@osu.edu">jayasaal.2@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://github.com/jayasaal2" target="_blank" rel="noopener noreferrer">GitHub</Button>
@@ -51,7 +52,8 @@ const About = () => {
                     <Card.Body>
                         <Card.Title>Kevin Le</Card.Title>
                         <Card.Text>
-                            Description of Kevin Le<br/>
+                            Frontend Developer: UX<br/>
+                            Backend Developer<br/>
                             <a href="mailto: le.542@osu.edu">le.542@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://github.com/le542" target="_blank" rel="noopener noreferrer">GitHub</Button>
@@ -62,7 +64,7 @@ const About = () => {
                     <Card.Body>
                         <Card.Title>Jason Moore</Card.Title>
                         <Card.Text>
-                            Description of Jason Moore<br/>
+                            Backend Developer: Rasa<br/>
                             <a href="mailto: moore.4000@osu.edu">moore.4000@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://github.com/Jason-DM" target="_blank" rel="noopener noreferrer">GitHub</Button>
@@ -73,7 +75,7 @@ const About = () => {
                     <Card.Body>
                         <Card.Title>Savitha Ravi</Card.Title>
                         <Card.Text>
-                            Description of Savitha Ravi<br/>
+                            Backend Developer: Rasa & Elasticsearch<br/>
                             <a href="mailto: ravi.98@osu.edu">ravi.98@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://github.com/saviravi" target="_blank" rel="noopener noreferrer">GitHub</Button>
@@ -84,7 +86,7 @@ const About = () => {
                     <Card.Body>
                         <Card.Title>Jacob Urick</Card.Title>
                         <Card.Text>
-                            Description of Jacob Urick<br/>
+                            Backend Developer: Rasa & Elasticsearch<br/>
                             <a href="mailto: urick.9@osu.edu">urick.9@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://github.com/jacurick19" target="_blank" rel="noopener noreferrer">GitHub</Button>
@@ -95,7 +97,7 @@ const About = () => {
                     <Card.Body>
                         <Card.Title>Keyang Zhang</Card.Title>
                         <Card.Text>
-                            Description of Keyang Zhang<br/>
+                            Frontend Developer: UI & UX<br/>
                             <a href="mailto: zhang.10448@osu.edu">zhang.10448@osu.edu</a>
                         </Card.Text>
                         <Button variant="primary" href="https://github.com/Mutsuki0110" target="_blank" rel="noopener noreferrer">GitHub</Button>
