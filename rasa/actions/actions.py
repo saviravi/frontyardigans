@@ -49,7 +49,7 @@ ALLOWED_CITIES = ["paris", "london", "rome", "barcelona", "amsterdam", "istanbul
     # "lake tahoe",
     "cairns",
     # "queenstown",
-    # "tulum" 
+    # "tulum"
     ]
 
 ALLOWED_ACTIVITIES = ["being active", "active life", "arts & entertainment", "arts and entertainment", "food", "shopping", "shops", "nightlife", "travel", "travelling" ]
@@ -61,7 +61,7 @@ PHOTO_URLS = {
     "barcelona": "https://media.architecturaldigest.com/photos/5956513b8afbdc247fb26215/4:3/w_4628,h_3471,c_limit/Barcelona_Travel_Guide_GettyImages-543868651.jpg",
     "amsterdam": "https://www.travelandleisure.com/thmb/_3nQ1ivxrnTKVphdp9ZYvukADKQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/amsterdam-nl-AMSTERDAMTG0521-6d2bfaac29704667a950bcf219680640.jpg",
     "istanbul" : "https://a.cdn-hotels.com/gdcs/production6/d781/3bae040b-2afb-4b11-9542-859eeb8ebaf1.jpg",
-    "tokyo" : "https://media.cntraveler.com/photos/63482b255e7943ad4006df0b/3:2/w_6000,h_4000,c_limit/tokyoGettyImages-1031467664.jpeg", 
+    "tokyo" : "https://media.cntraveler.com/photos/63482b255e7943ad4006df0b/3:2/w_6000,h_4000,c_limit/tokyoGettyImages-1031467664.jpeg",
     "new york city": "https://www.travelandleisure.com/thmb/91pb8LbDAUwUN_11wATYjx5oF8Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/new-york-city-evening-NYCTG0221-52492d6ccab44f328a1c89f41ac02aea.jpg",
     "maui" : "https://www.mauiinformationguide.com/wp-content/uploads/2022/04/mauihawaii.jpg",
     "cancun": "https://res.cloudinary.com/simpleview/image/upload/v1569364497/clients/quintanaroo/Cancun_oficial_22261778-3d43-4408-bc3b-c971b4d82a63.jpg",
@@ -101,8 +101,7 @@ print(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\a
 print("--------------")
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\actions\\actions.py")] + "Recommendation")
-import Recommendation
-
+import schedule
 
 class ActionGetRecommendation(Action):
 
@@ -128,13 +127,13 @@ class ActionGetRecommendation(Action):
          try:
             # DEPRECATED:
             # itinerary = f"Destination: {city.title()}\n\n" + Recommendation.handleInput(input_values)
-            
+
             # print(input_values)
             # itinerary = f"Destination: {city.title()}\n\n" + str(Recommendation.handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024"))
-            itinerary = f"Destination: {city.title()}\n\n" + str(Recommendation.handleSlotInputs(city, activity1, activity2, activity3, startdate, enddate))
-            
+            itinerary = f"Destination: {city.title()}\n\n" + str(schedulue.handleSlotInputs(city, activity1, activity2, activity3, startdate, enddate))
+
             if city.lower() in PHOTO_URLS:
-                dispatcher.utter_message(image=PHOTO_URLS[city.lower()]) 
+                dispatcher.utter_message(image=PHOTO_URLS[city.lower()])
             dispatcher.utter_message(text=f"Your {city.title()} itinerary has been generated", attachment=itinerary)
             # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
          except Exception as error:
@@ -222,7 +221,7 @@ class ValidateTravelForm(FormValidationAction):
             return {"activity2": None}
         dispatcher.utter_message(text=f"OK! Your second favorite activity is: {activity2}.")
         return {"activity2": slot_value}
-    
+
     def validate_activity3(
         self,
         slot_value: Any,
@@ -246,7 +245,7 @@ class ValidateTravelForm(FormValidationAction):
             return {"activity3": None}
         dispatcher.utter_message(text=f"OK! Your third favorite activity is: {activity3}.")
         return {"activity3": slot_value}
-    
+
     def validate_startdate(
         self,
         slot_value: Any,
@@ -258,11 +257,11 @@ class ValidateTravelForm(FormValidationAction):
         startdate = tracker.get_slot("startdate")
         startdate = re.sub(r'[^0-9\/]', '', startdate)
         if not re.match(r"^(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$", startdate):
-            dispatcher.utter_message(text=f"Sorry! I didn't quite understand. Try using the date selector!") 
+            dispatcher.utter_message(text=f"Sorry! I didn't quite understand. Try using the date selector!")
             return {"startdate": None}
         todaysDate = datetime.now()
         if datetime.strptime(startdate, '%m/%d/%Y') <  todaysDate:
-           dispatcher.utter_message(text=f"Start date must be after today ({ todaysDate.strftime('%m/%d/%Y') })") 
+           dispatcher.utter_message(text=f"Start date must be after today ({ todaysDate.strftime('%m/%d/%Y') })")
            return {"startdate": None}
         dispatcher.utter_message(text=f"OK! You want your vacation to start on {startdate}")
         return {"startdate": startdate}
@@ -279,14 +278,14 @@ class ValidateTravelForm(FormValidationAction):
         startdate = tracker.get_slot("startdate")
         enddate = re.sub(r'[^0-9\/]', '', enddate)
         if not re.match(r"^(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d$", enddate):
-            dispatcher.utter_message(text=f"Sorry! I didn't quite understand. Try using the date selector!") 
+            dispatcher.utter_message(text=f"Sorry! I didn't quite understand. Try using the date selector!")
             return {"enddate": None}
         if startdate is not None and datetime.strptime(enddate, '%m/%d/%Y') <= datetime.strptime(startdate, '%m/%d/%Y'):
-           dispatcher.utter_message(text=f"End date must be after start date ({startdate})") 
+           dispatcher.utter_message(text=f"End date must be after start date ({startdate})")
            return {"enddate": None}
         dispatcher.utter_message(text=f"OK! You want your vacation to end on {enddate}")
         return {"enddate": enddate}
-    
+
 
 class ActionClearSlots(Action):
 
