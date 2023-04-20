@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Union
 from yelp import City, YelpRecommendationCategories, any_of, YelpResult, YelpArtsAndEntertainmentCategory, YelpRestaurantsCategory, YelpFoodCategory, YelpNightlifeCategory, YelpActiveLifeCategory, YelpShoppingCategory, YelpHotelsAndTravelCategory
 from yelp.local_backend import get_businesses_by_lat_long
+from yelp import get_airport_code
 from dataclasses import dataclass
 import datetime
 import sys
@@ -51,6 +52,7 @@ class Schedule:
 
     def __repr__(self):
         result = ""
+        result += "Airfare costs a total of $%.2f.\n" % (self.inbound_flight.price + self.outbound_flight.price)
         for i, day in enumerate(self.days):
             result += "Day %d" % (i + 1) + "\n"
             if i == 0:
@@ -380,8 +382,9 @@ def add_departure_day(schedule: Schedule, preference: Enum, price_preference: Un
         schedule.days[-1].activities.append(schedule.hotel)
 
 def create_schedule(city: City, preference_1: Enum,  preference_2: Enum,  preference_3: Enum, price_preference: Union[int, str], start_date: datetime.date, end_date: datetime.date) -> Schedule:
-    inbound_flight = get_flight("CMH", city.airport_code, start_date)
-    outbound_flight = get_flight(city.airport_code, "CMH", end_date)
+    airport_code = get_airport_code(city)
+    inbound_flight = get_flight("CMH", airport_code, start_date)
+    outbound_flight = get_flight(airport_code, "CMH", end_date)
 
     hotel = get_hotel(city, price_preference)
 
@@ -404,7 +407,7 @@ CITY_MAPPINGS = {
     "amsterdam": City.Amsterdam,
     "istanbul" : City.Istanbul,
     "tokyo" : City.Tokyo, 
-    "new york city": City.Tokyo,
+    "new york city": City.NewYorkCity,
     "maui" : City.Maui,
     "cancun": City.Cancun,
     "sydney": City.Sydney,

@@ -38,7 +38,6 @@ class City(Enum):
         super(Enum, self).__init__()
         self.businesses = self.load_businesses()
         self.hotels = self.load_hotels()
-        self.airport_code = "LAX"
 
     def load_businesses(self) -> list[YelpResult]:
         path = os.path.join(
@@ -94,3 +93,38 @@ class City(Enum):
                     and (category is None or category in b.categories)]
         plt.plot(longitude, latitude, 'r.')
         plt.show()
+
+# Temporary thing for demo until elasticsearch airport code lookup is in
+airport_codes_temp = {
+    City.NewYorkCity: "JFK",
+    City.Amsterdam: "AMS",
+    City.Barcelona: "BCN",
+    City.Cairns: "CNS",
+    City.Cancun: "CUN",
+    City.HongKong: "HKG",
+    City.Honolulu: "HNL",
+    City.Istanbul: "IST",
+    City.LasVegas: "LAS",
+    City.LosAngeles: "LAX",
+    City.London: "YXU",
+    City.Madrid: "MAD",
+    City.Maui: "OGG",
+    City.MexicoCity: "MEX",
+    City.Miami: "MIA",
+    City.Orlando: "MCO",
+    City.Paris: "CDG",
+    City.Prague: "PRG",
+    City.Rio: "GIG",
+    City.Rome: "FCO",
+    City.SanFrancisco: "SFO",
+    City.Seville: "SVQ",
+    City.Sydney: "SYD",
+    City.Tokyo: "HND",
+    City.Vienna: "VIE"
+}
+
+def get_airport_code(city: City) -> str:
+    """
+    Returns the IATA city code for a certain city.
+    """
+    return airport_codes_temp[city]
