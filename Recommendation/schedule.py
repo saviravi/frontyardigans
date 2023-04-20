@@ -62,6 +62,8 @@ def pick_city(inputData):
             return "active_life"
         elif cat == "food":
             return "restaurant"
+        else:
+            return cat
     cat1 = adjust_cat_name(cat1)
     cat2 = adjust_cat_name(cat2)
     cat3 = adjust_cat_name(cat3)
