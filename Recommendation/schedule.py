@@ -17,7 +17,10 @@ from flights.flight_utils import get_flights, FlightSlice, Passenger, Cabin
 city_info = pickle.load(open(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("schedule.py")] + "city_nar_info_weather.pickle", "rb")) # list of nar info for cities
 
 # not in cities.py
+print("pre pop")
 city_info.pop("Ibiza")
+print("post pop")
+
 
 @dataclass
 class Flight:
@@ -63,9 +66,11 @@ def pick_city(inputData):
     cat2 = adjust_cat_name(cat2)
     cat3 = adjust_cat_name(cat3)
 
+
     best1 = get_best_of_category(cat1)
     best2 = get_best_of_category(cat2)
     best3 = get_best_of_category(cat3)
+
 
     def with_weather(best):
         i = 0
@@ -78,6 +83,7 @@ def pick_city(inputData):
     best1 = with_weather(best1)
     best2 = with_weather(best2)
     best3 = with_weather(best3)
+    print(len(best1))
 
     def findCommon(best1, best2, best3):
         i,j,k = 0,0,0
@@ -104,6 +110,7 @@ def pick_city(inputData):
             i += 1
         if rec_city == None:
             rec_city = best1[0]
+    print(rec_city)
     return rec_city
 
 @dataclass
@@ -480,7 +487,7 @@ CITY_MAPPINGS = {
     "barcelona": City.Barcelona,
     "amsterdam": City.Amsterdam,
     "istanbul" : City.Istanbul,
-    "tokyo" : City.Tokyo, 
+    "tokyo" : City.Tokyo,
     "new york city": City.NewYorkCity,
     "maui" : City.Maui,
     "cancun": City.Cancun,
@@ -505,7 +512,7 @@ CITY_MAPPINGS = {
     # "queenstown": City.Queenstown,
 }
 
-ACTIVITY_MAPPINGS = { 
+ACTIVITY_MAPPINGS = {
     "arts & entertainment": YelpArtsAndEntertainmentCategory,
     "food": YelpFoodCategory,
     "being active": YelpActiveLifeCategory,
@@ -515,18 +522,18 @@ ACTIVITY_MAPPINGS = {
 }
 
 def handleSlotInputs(city: str, activity1:str, activity2:str, activity3:str, startdate:str, enddate:str) -> str:
-    # print([CITY_MAPPINGS[city.lower()], 
-    #                         ACTIVITY_MAPPINGS[activity1], 
-    #                         ACTIVITY_MAPPINGS[activity2], 
-    #                         ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
-    #                         datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+    # print([CITY_MAPPINGS[city.lower()],
+    #                         ACTIVITY_MAPPINGS[activity1],
+    #                         ACTIVITY_MAPPINGS[activity2],
+    #                         ACTIVITY_MAPPINGS[activity3], "1,2,3,4",
+    #                         datetime.datetime.strptime(startdate, '%m/%d/%Y'),
     #                         datetime.datetime.strptime(enddate, '%m/%d/%Y')])
-    
-    return create_schedule(CITY_MAPPINGS[city.lower()], 
-                            ACTIVITY_MAPPINGS[activity1], 
-                            ACTIVITY_MAPPINGS[activity2], 
-                            ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
-                            datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+
+    return create_schedule(CITY_MAPPINGS[city.lower()],
+                            ACTIVITY_MAPPINGS[activity1],
+                            ACTIVITY_MAPPINGS[activity2],
+                            ACTIVITY_MAPPINGS[activity3], "1,2,3,4",
+                            datetime.datetime.strptime(startdate, '%m/%d/%Y'),
                             datetime.datetime.strptime(enddate, '%m/%d/%Y'))
 
 # schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory,YelpFoodCategory,YelpNightlifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2024, 3, 22))
