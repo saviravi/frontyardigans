@@ -514,14 +514,14 @@ ACTIVITY_MAPPINGS = {
     "travel": YelpHotelsAndTravelCategory
 }
 
-def handleSlotInputs(temp: str, activity1:str, activity2:str, activity3:str, startdate:str, enddate:str) -> str:
+def handleSlotInputs(city: str, activity1:str, activity2:str, activity3:str, startdate:str, enddate:str) -> str:
     # print([CITY_MAPPINGS[city.lower()], 
     #                         ACTIVITY_MAPPINGS[activity1], 
     #                         ACTIVITY_MAPPINGS[activity2], 
     #                         ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
     #                         datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
     #                         datetime.datetime.strptime(enddate, '%m/%d/%Y')])
-    city = pick_city([temp, activity1, activity2, activity3])
+    
     return create_schedule(CITY_MAPPINGS[city.lower()], 
                             ACTIVITY_MAPPINGS[activity1], 
                             ACTIVITY_MAPPINGS[activity2], 
