@@ -130,7 +130,7 @@ class ActionGetRecommendation(Action):
 
             # print(input_values)
             # itinerary = f"Destination: {city.title()}\n\n" + str(Recommendation.handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024"))
-            itinerary = f"Destination: {city.title()}\n\n" + str(schedulue.handleSlotInputs(city, activity1, activity2, activity3, startdate, enddate))
+            itinerary = f"Destination: {city.title()}\n\n" + str(schedule.handleSlotInputs(temp, activity1, activity2, activity3, startdate, enddate))
 
             if city.lower() in PHOTO_URLS:
                 dispatcher.utter_message(image=PHOTO_URLS[city.lower()])
