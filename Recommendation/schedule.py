@@ -9,9 +9,18 @@ import sys
 from functools import reduce
 import os
 import numpy as np
+import pickle
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("schedule.py")] + "flights")
 from flights.flight_utils import get_flights, FlightSlice, Passenger, Cabin
+
+city_info = pickle.load(open(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("schedule.py")] + "city_nar_info_weather.pickle", "rb")) # list of nar info for cities
+
+# not in cities.py
+print("pre pop")
+city_info.pop("Ibiza")
+print("post pop")
+
 
 @dataclass
 class Flight:
@@ -31,6 +40,78 @@ class Day:
             result += "\t" + activity.name + "\n"
 
         return result
+
+def get_best_of_category(cat_name):
+    cat_wrnars = {}
+    for city in city_info.keys():
+        cat_wrnars[city] = city_info[city]['wrnars'][cat_name]
+    sorted_wrnars = [k for k, v in sorted(cat_wrnars.items(), key=lambda item: item[1])]
+    return sorted_wrnars
+
+
+def pick_city(inputData):
+    cat1 = inputData[1]
+    cat2 = inputData[2]
+    cat3 = inputData[3]
+
+
+    def adjust_cat_name(cat):
+        if cat == "arts & entertainment":
+            return "arts_n_ent"
+        elif cat == "being active":
+            return "active_life"
+        elif cat == "food":
+            return "restaurant"
+    cat1 = adjust_cat_name(cat1)
+    cat2 = adjust_cat_name(cat2)
+    cat3 = adjust_cat_name(cat3)
+
+
+    best1 = get_best_of_category(cat1)
+    best2 = get_best_of_category(cat2)
+    best3 = get_best_of_category(cat3)
+
+
+    def with_weather(best):
+        i = 0
+        newbest = []
+        while i < len(best):
+            if city_info[best[i]]["weather"] == inputData[0]:
+                newbest.append(best[i])
+            i += 1
+        return newbest
+    best1 = with_weather(best1)
+    best2 = with_weather(best2)
+    best3 = with_weather(best3)
+    print(len(best1))
+
+    def findCommon(best1, best2, best3):
+        i,j,k = 0,0,0
+        rec_city = None
+        while (i < len(best1) and rec_city == None):
+            while(j < len(best2) and rec_city == None):
+                while(k < len(best3) and rec_city == None):
+                    if (best1[i] == best2[j] and best2[j] == best3[k]):
+                        rec_city = best1[i]
+                        return best1[i]
+                    k += 1
+                j += 1
+                k = 0
+            i += 1
+            j = 0
+    rec_city = findCommon(best1, best2, best3)
+    if rec_city == None:
+        i, j = 0, 0
+        while (i < len(best1) and rec_city == None):
+            while(j < len(best2) and rec_city == None):
+                if (best1[i] == best2[j]):
+                    rec_city = best1[i]
+                j += 1
+            i += 1
+        if rec_city == None:
+            rec_city = best1[0]
+    print(rec_city)
+    return rec_city
 
 @dataclass
 class Schedule:
@@ -406,7 +487,7 @@ CITY_MAPPINGS = {
     "barcelona": City.Barcelona,
     "amsterdam": City.Amsterdam,
     "istanbul" : City.Istanbul,
-    "tokyo" : City.Tokyo, 
+    "tokyo" : City.Tokyo,
     "new york city": City.NewYorkCity,
     "maui" : City.Maui,
     "cancun": City.Cancun,
@@ -431,7 +512,7 @@ CITY_MAPPINGS = {
     # "queenstown": City.Queenstown,
 }
 
-ACTIVITY_MAPPINGS = { 
+ACTIVITY_MAPPINGS = {
     "arts & entertainment": YelpArtsAndEntertainmentCategory,
     "food": YelpFoodCategory,
     "being active": YelpActiveLifeCategory,
@@ -441,19 +522,21 @@ ACTIVITY_MAPPINGS = {
 }
 
 def handleSlotInputs(city: str, activity1:str, activity2:str, activity3:str, startdate:str, enddate:str) -> str:
-    # print([CITY_MAPPINGS[city.lower()], 
-    #                         ACTIVITY_MAPPINGS[activity1], 
-    #                         ACTIVITY_MAPPINGS[activity2], 
-    #                         ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
-    #                         datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+    # print([CITY_MAPPINGS[city.lower()],
+    #                         ACTIVITY_MAPPINGS[activity1],
+    #                         ACTIVITY_MAPPINGS[activity2],
+    #                         ACTIVITY_MAPPINGS[activity3], "1,2,3,4",
+    #                         datetime.datetime.strptime(startdate, '%m/%d/%Y'),
     #                         datetime.datetime.strptime(enddate, '%m/%d/%Y')])
-    return create_schedule(CITY_MAPPINGS[city.lower()], 
-                            ACTIVITY_MAPPINGS[activity1], 
-                            ACTIVITY_MAPPINGS[activity2], 
-                            ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
-                            datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+
+    return create_schedule(CITY_MAPPINGS[city.lower()],
+                            ACTIVITY_MAPPINGS[activity1],
+                            ACTIVITY_MAPPINGS[activity2],
+                            ACTIVITY_MAPPINGS[activity3], "1,2,3,4",
+                            datetime.datetime.strptime(startdate, '%m/%d/%Y'),
                             datetime.datetime.strptime(enddate, '%m/%d/%Y'))
 
 # schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory,YelpFoodCategory,YelpNightlifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2024, 3, 22))
 # schedule = handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024")
 # print(schedule)
+# print(pick_city(["hot", "arts & entertainment", "being active", "food"]))

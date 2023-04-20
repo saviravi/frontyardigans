@@ -102,6 +102,7 @@ print("--------------")
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\actions\\actions.py")] + "Recommendation")
 import schedule
+import summary
 
 class ActionGetRecommendation(Action):
 
@@ -130,11 +131,19 @@ class ActionGetRecommendation(Action):
 
             # print(input_values)
             # itinerary = f"Destination: {city.title()}\n\n" + str(Recommendation.handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024"))
-            itinerary = f"Destination: {city.title()}\n\n" + str(schedulue.handleSlotInputs(city, activity1, activity2, activity3, startdate, enddate))
+            rec_city = schedule.pick_city([temp, activity1, activity2, activity3])
+            itinerary = f"Destination: {rec_city.title()}\n\n" + str(schedule.handleSlotInputs(rec_city, activity1, activity2, activity3, startdate, enddate))
 
             if city.lower() in PHOTO_URLS:
-                dispatcher.utter_message(image=PHOTO_URLS[city.lower()])
-            dispatcher.utter_message(text=f"Your {city.title()} itinerary has been generated", attachment=itinerary)
+                dispatcher.utter_message(image=PHOTO_URLS[rec_city.lower()])
+            city_summary = summary.get_city_info(rec_city.title())
+            print("city_sum")
+            dispatcher.utter_message(text=f"Let's go to {rec_city.title()}\n" + city_summary + f"Your {rec_city.title()} itinerary has been generated", attachment=itinerary)
+
+
+
+
+
             # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
          except Exception as error:
             buttons = [{"title": "Generate" , "payload": "/generate_recommendation"}]
