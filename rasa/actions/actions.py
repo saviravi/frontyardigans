@@ -126,25 +126,25 @@ class ActionGetRecommendation(Action):
             return []
 
          try:
-            # DEPRECATED:
-            # itinerary = f"Destination: {city.title()}\n\n" + Recommendation.handleInput(input_values)
-
-            # print(input_values)
-            # itinerary = f"Destination: {city.title()}\n\n" + str(Recommendation.handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024"))
-            rec_city = schedule.pick_city([temp, activity1, activity2, activity3])
+            try:
+                rec_city = schedule.pick_city([temp, activity1, activity2, activity3])
+            except Exception as err1:
+                rec_city = city
+                print("Error in city picker: " + str(err1))
+                print(f"Defaulted to user-chosen city: {city} instead.")
             itinerary = f"Destination: {rec_city.title()}\n\n" + str(schedule.handleSlotInputs(rec_city, activity1, activity2, activity3, startdate, enddate))
 
-            if city.lower() in PHOTO_URLS:
+            if rec_city.lower() in PHOTO_URLS:
                 dispatcher.utter_message(image=PHOTO_URLS[rec_city.lower()])
-            city_summary = summary.get_city_info(rec_city.title())
-            print("city_sum")
-            dispatcher.utter_message(text=f"Let's go to {rec_city.title()}\n" + city_summary + f"Your {rec_city.title()} itinerary has been generated", attachment=itinerary)
-
-
-
-
-
-            # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
+            dispatcher.utter_message(text=f"Let's go to {rec_city.title()}")
+            try:
+                city_summary = summary.get_city_info(rec_city.title())
+                print(city_summary)
+                dispatcher.utter_message(text=city_summary)
+            except Exception as err2:
+                print("Error in city summary: " + str(err2))
+            
+            dispatcher.utter_message(text=f"Your {rec_city.title()} itinerary has been generated", attachment=itinerary)
          except Exception as error:
             buttons = [{"title": "Generate" , "payload": "/generate_recommendation"}]
             dispatcher.utter_message(text=f"Oops! The program crashed. Try again. Error: {error}", buttons=buttons)
