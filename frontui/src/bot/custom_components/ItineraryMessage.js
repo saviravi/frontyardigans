@@ -10,7 +10,9 @@ import { createClientMessage, createChatBotMessage } from "react-chatbot-kit";
 
 const ItineraryMessage = (props) => {
   const [show, setShow] = useState(false);
-  const [itineraryTitle, setItineraryTitle] = useState("Untitled Itinerary");
+  const [itineraryTitle, setItineraryTitle] = useState((props.payload.match(/Destination: (.*)\n$/gm) ?
+  props.payload.match(/Destination: (.*)\n$/gm)[0].substring(13, props.payload.match(/Destination: (.*)\n$/gm)[0].length-1)
+  :"Untitled") + " Itinerary");
   const resetMessage = "I want to start over!";
 
   const postReset = () => {

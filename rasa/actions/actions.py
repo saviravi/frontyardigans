@@ -39,9 +39,18 @@ class ActionSayTemperature(Action):
 ALLOWED_TEMP = ["hot","cold"]
 
 ALLOWED_CITIES = ["paris", "london", "rome", "barcelona", "amsterdam", "istanbul", "tokyo", "new york city",
-    "maui","cancun","sydney","venice","san francisco","miami","honolulu","rio de janeiro",
-    "prague","hong kong","mexico city","los angeles","las vegas","orlando","ibiza","vienna",
-    "seville","madrid","lake tahoe","cairns","queenstown","tulum" ]
+    "maui","cancun","sydney",
+    # "venice",
+    "san francisco","miami","honolulu","rio de janeiro",
+    "prague","hong kong","mexico city","los angeles","las vegas","orlando",
+    # "ibiza",
+    "vienna",
+    "seville","madrid",
+    # "lake tahoe",
+    "cairns",
+    # "queenstown",
+    # "tulum" 
+    ]
 
 ALLOWED_ACTIVITIES = ["being active", "active life", "arts & entertainment", "arts and entertainment", "food", "shopping", "shops", "nightlife", "travel", "travelling" ]
 
@@ -117,13 +126,21 @@ class ActionGetRecommendation(Action):
             return []
 
          try:
+            # DEPRECATED:
+            # itinerary = f"Destination: {city.title()}\n\n" + Recommendation.handleInput(input_values)
+            
+            # print(input_values)
+            # itinerary = f"Destination: {city.title()}\n\n" + str(Recommendation.handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024"))
+            itinerary = f"Destination: {city.title()}\n\n" + str(Recommendation.handleSlotInputs(city, activity1, activity2, activity3, startdate, enddate))
+            
             if city.lower() in PHOTO_URLS:
                 dispatcher.utter_message(image=PHOTO_URLS[city.lower()]) 
-            dispatcher.utter_message(text=f"Your {city.title()} itinerary has been generated", attachment=f"Destination: {city.title()}\n\n" + Recommendation.handleInput(input_values))
+            dispatcher.utter_message(text=f"Your {city.title()} itinerary has been generated", attachment=itinerary)
             # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
-         except:
+         except Exception as error:
             buttons = [{"title": "Generate" , "payload": "/generate_recommendation"}]
-            dispatcher.utter_message(text="Oops! The program crashed. Try again.", buttons=buttons)
+            dispatcher.utter_message(text=f"Oops! The program crashed. Try again. Error: {error}", buttons=buttons)
+            print("Error: " + str(error))
          return []
 
 from datetime import datetime
