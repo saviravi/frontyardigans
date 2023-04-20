@@ -14,6 +14,7 @@ from yelp import get_businesses_by_location_name, YelpAPIException
 import datetime
 from yelp import get_businesses_by_lat_long, YelpAPIException, any_of, YelpResult, YelpCommonCategories, YelpAllCategories
 import random
+from schedule import handleSlotInputs
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("Recommendation.py")] + "flights")
 

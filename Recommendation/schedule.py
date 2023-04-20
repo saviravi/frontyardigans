@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import Union
-from yelp import City, YelpRecommendationCategories, any_of, YelpResult, YelpArtsAndEntertainmentCategory, YelpRestaurantsCategory, YelpFoodCategory, YelpNightlifeCategory, YelpActiveLifeCategory, YelpShoppingCategory
+from yelp import City, YelpRecommendationCategories, any_of, YelpResult, YelpArtsAndEntertainmentCategory, YelpRestaurantsCategory, YelpFoodCategory, YelpNightlifeCategory, YelpActiveLifeCategory, YelpShoppingCategory, YelpHotelsAndTravelCategory
 from yelp.local_backend import get_businesses_by_lat_long
+from yelp import get_airport_code
 from dataclasses import dataclass
 import datetime
 import sys
@@ -28,7 +29,7 @@ class Day:
         result = ""
         for activity in self.activities:
             result += "\t" + activity.name + "\n"
-        
+
         return result
 
 @dataclass
@@ -46,11 +47,12 @@ class Schedule:
                 return True
             elif act.name == activity.name:
                 return True
-        
+
         return False
 
     def __repr__(self):
         result = ""
+        result += "Airfare costs a total of $%.2f.\n" % (self.inbound_flight.price + self.outbound_flight.price)
         for i, day in enumerate(self.days):
             result += "Day %d" % (i + 1) + "\n"
             if i == 0:
@@ -58,7 +60,7 @@ class Schedule:
             result += str(day)
             if i == len(self.days) - 1:
                 result += "Outbound flight leaves from %s at %s\n" % (self.outbound_flight.departure_airport, self.outbound_flight.departure_time)
-        
+
         return result
 
 
@@ -93,7 +95,7 @@ def get_hotel(city: City, price_preference: Union[int, str], radius=3000) -> Yel
     # Get hotels within a 3km radius of the city center
     city_lat, city_long = city.get_city_center()
     hotels = get_businesses_by_lat_long(city_lat, city_long, radius=radius, price=price_preference, categories="hotels,hostels,resorts")
-    
+
     # If no hotels in radius, expand
     if len(hotels) > 0:
         hotel = top_random_choice(hotels)
@@ -105,12 +107,27 @@ def get_hotel(city: City, price_preference: Union[int, str], radius=3000) -> Yel
 def top_random_choice(businesses: list[YelpResult], limit=30) -> YelpResult:
     """
     Randomly returns a business from the top n (default 30) choices sorted by number of ratings * average rating.
-    
-    `businesses` cannot be empty.
+
+    `businesses` cannot be empty. it was though. oh well.
     """
     # Sort hotels by rating * number of ratings in descending order
     businesses = sorted(businesses, key=lambda b: b.rating * b.review_count, reverse=True)
 
+    if len(businesses) == 0:
+        return YelpResult(
+            id=0,
+            name="None Found",
+            image_url= "",
+            is_closed = True,
+            url = "",
+            review_count = 0,
+            categories = [],
+            rating = 0,
+            price = 0,
+            latitude = 0,
+            longitude = 0,
+            city_name = "",
+        )
     # Pick randomly from the top n places
     upper_bound = min(len(businesses), limit)
     random_business_idx = np.random.randint(0, upper_bound)
@@ -123,7 +140,7 @@ def get_breakfast_activity(schedule: Schedule, price_preference: Union[int, str]
     categories = any_of([YelpRestaurantsCategory.BreakfastAndBrunch,
                   YelpRestaurantsCategory.Cafes,
                   YelpFoodCategory.CoffeeAndTea])
-    
+
     places = get_businesses_by_lat_long(schedule.hotel.latitude, schedule.hotel.longitude, price=price_preference, categories=categories)
 
     # Pick a place that hasn't been scheduled yet
@@ -135,12 +152,12 @@ def get_breakfast_activity(schedule: Schedule, price_preference: Union[int, str]
         already_scheduled = schedule.already_scheduled(place) and counter < 30
 
     return place
-    
+
 def get_non_breakfast_activity(schedule: Schedule, price_preference: Union[int, str], last_location: YelpResult = None) -> YelpResult:
     categories = list(YelpRestaurantsCategory)
     categories.remove(YelpRestaurantsCategory.BreakfastAndBrunch)
     categories = any_of(categories)
-    
+
     if last_location is not None:
         places = get_businesses_by_lat_long(last_location.latitude, last_location.longitude, price=price_preference, categories=categories)
     else:
@@ -153,7 +170,7 @@ def get_non_breakfast_activity(schedule: Schedule, price_preference: Union[int, 
         place = top_random_choice(places)
         counter += 1
         already_scheduled = schedule.already_scheduled(place) and counter < 30
-    
+
     return place
 
 def get_preferred_activity(schedule: Schedule, preference: Enum, last_location: YelpResult, price_preference: Union[int, str]) -> YelpResult:
@@ -178,7 +195,7 @@ def get_preferred_activity(schedule: Schedule, preference: Enum, last_location: 
         place = top_random_choice(places)
         counter += 1
         already_scheduled = schedule.already_scheduled(place) and counter < 30
-    
+
     return place
 
 def is_in_morning(time: datetime.time) -> bool:
@@ -364,20 +381,79 @@ def add_departure_day(schedule: Schedule, preference: Enum, price_preference: Un
         # End at hotel
         schedule.days[-1].activities.append(schedule.hotel)
 
-def create_schedule(city: City, preference: Enum, price_preference: Union[int, str], start_date: datetime.date, end_date: datetime.date) -> Schedule:
-    inbound_flight = get_flight("CMH", city.airport_code, start_date)
-    outbound_flight = get_flight(city.airport_code, "CMH", end_date)
+def create_schedule(city: City, preference_1: Enum,  preference_2: Enum,  preference_3: Enum, price_preference: Union[int, str], start_date: datetime.date, end_date: datetime.date) -> Schedule:
+    airport_code = get_airport_code(city)
+    inbound_flight = get_flight("CMH", airport_code, start_date)
+    outbound_flight = get_flight(airport_code, "CMH", end_date)
 
     hotel = get_hotel(city, price_preference)
 
+    activity_preferences = [preference_1, preference_2, preference_3]
+
     schedule = Schedule([], hotel, inbound_flight, outbound_flight)
 
-    add_arrival_day(schedule, preference, price_preference, arrival_time=inbound_flight.arrival_time)
-    for _ in range((end_date - start_date).days - 1):
-        add_full_day(schedule, preference, price_preference)
-    add_departure_day(schedule, preference, price_preference, departure_time=outbound_flight.departure_time)
+    add_arrival_day(schedule, preference_1, price_preference, arrival_time=inbound_flight.arrival_time)
+    for i in range((end_date - start_date).days - 1):
+        add_full_day(schedule, activity_preferences[i%3], price_preference)
+    add_departure_day(schedule, preference_3, price_preference, departure_time=outbound_flight.departure_time)
 
     return schedule
 
-schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 22))
-print(schedule)
+CITY_MAPPINGS = {
+    "paris": City.Paris,
+    "london": City.London,
+    "rome": City.Rome,
+    "barcelona": City.Barcelona,
+    "amsterdam": City.Amsterdam,
+    "istanbul" : City.Istanbul,
+    "tokyo" : City.Tokyo, 
+    "new york city": City.NewYorkCity,
+    "maui" : City.Maui,
+    "cancun": City.Cancun,
+    "sydney": City.Sydney,
+    # "venice": City.Venice,
+    "san francisco": City.SanFrancisco,
+    "miami": City.Miami,
+    "honolulu": City.Honolulu,
+    "rio de janeiro": City.Rio,
+    "prague": City.Prague,
+    "hong kong": City.HongKong,
+    "mexico city": City.MexicoCity,
+    "los angeles": City.LosAngeles,
+    "las vegas": City.LasVegas,
+    "orlando": City.Orlando,
+    # "ibiza": City.Ibiza,
+    "vienna": City.Vienna,
+    "seville": City.Seville,
+    "madrid": City.Madrid,
+    # "lake tahoe": City.LakeTahoe,
+    "cairns": City.Cairns,
+    # "queenstown": City.Queenstown,
+}
+
+ACTIVITY_MAPPINGS = { 
+    "arts & entertainment": YelpArtsAndEntertainmentCategory,
+    "food": YelpFoodCategory,
+    "being active": YelpActiveLifeCategory,
+    "shopping": YelpShoppingCategory,
+    "nightlife": YelpNightlifeCategory,
+    "travel": YelpHotelsAndTravelCategory
+}
+
+def handleSlotInputs(city: str, activity1:str, activity2:str, activity3:str, startdate:str, enddate:str) -> str:
+    # print([CITY_MAPPINGS[city.lower()], 
+    #                         ACTIVITY_MAPPINGS[activity1], 
+    #                         ACTIVITY_MAPPINGS[activity2], 
+    #                         ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
+    #                         datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+    #                         datetime.datetime.strptime(enddate, '%m/%d/%Y')])
+    return create_schedule(CITY_MAPPINGS[city.lower()], 
+                            ACTIVITY_MAPPINGS[activity1], 
+                            ACTIVITY_MAPPINGS[activity2], 
+                            ACTIVITY_MAPPINGS[activity3], "1,2,3,4", 
+                            datetime.datetime.strptime(startdate, '%m/%d/%Y'), 
+                            datetime.datetime.strptime(enddate, '%m/%d/%Y'))
+
+# schedule = create_schedule(City.Paris, YelpArtsAndEntertainmentCategory,YelpFoodCategory,YelpNightlifeCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2024, 3, 22))
+# schedule = handleSlotInputs("rio de janeiro", "food", "travel", "nightlife", "12/22/2023", "01/02/2024")
+# print(schedule)
