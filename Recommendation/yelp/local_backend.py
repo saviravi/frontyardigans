@@ -31,12 +31,15 @@ def plot_all_hotels():
     plt.plot(lon, lat, 'cx')
     plt.show()
 
-def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, price: Union[int, str]="1,2,3,4", limit=50, categories="", term="") -> list[YelpResult]:
+def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050,
+                               price: Union[int, str]="1,2,3,4",
+                               limit=50, categories="", term="") -> list[YelpResult]:
     """
     Searches locally-stored Yelp data for businesses by latitude and longitude.
     """
     if latitude is None or longitude is None:
-        print("warning: get_businesses_by_lat_long received None for latitude and/or longitude")
+        print("warning: get_businesses_by_lat_long received None \
+              for latitude and/or longitude")
         return []
 
     radius_deg = (radius / 1000) / KM_PER_DEGREE
@@ -53,10 +56,17 @@ def get_businesses_by_lat_long(latitude: float, longitude: float, radius=8050, p
     # Filter by categories
     aliases = categories.split(",")
     if len(aliases) > 0 and aliases[0] != '':
-        nearby_businesses = [b for b in nearby_businesses if any(list(map(lambda cat: cat.value in aliases, b.categories)))]
+        nearby_businesses = [b for b in nearby_businesses
+                             if any(
+                                list(
+                                map(lambda cat: cat.value in aliases, b.categories)
+                                )
+                                )
+                            ]
 
     # Filter by name (term)
     if term != "":
-        nearby_businesses = [b for b in nearby_businesses if term.lower() in b.name.lower()]
+        nearby_businesses = [b for b in nearby_businesses
+                             if term.lower() in b.name.lower()]
 
     return nearby_businesses

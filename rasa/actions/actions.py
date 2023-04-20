@@ -60,7 +60,7 @@ print(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\a
 print("--------------")
 
 sys.path.append(os.path.realpath(__file__)[:len(os.path.realpath(__file__)) - len("rasa\\actions\\actions.py")] + "Recommendation")
-import Recommendation
+import schedule
 
 
 class ActionGetRecommendation(Action):
@@ -85,7 +85,7 @@ class ActionGetRecommendation(Action):
             return []
 
          try:
-            dispatcher.utter_message(text="Your itinerary has been generated", attachment=Recommendation.handleInput(input_values))
+            dispatcher.utter_message(text=f"Your {city.title()} itinerary has been generated", attachment=schedule.handleInput(input_values))
             # dispatcher.utter_message(text=Recommendation.handleInput(input_values))
          except:
             buttons = [{"title": "Generate" , "payload": "/generate_recommendation"}]

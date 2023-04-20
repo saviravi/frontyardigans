@@ -43,16 +43,30 @@ def get_best_of_category(cat_name):
 
 
 def pick_city(inputData):
+    # cat1 = inputData[2]
+    # cat2 = inputData[3]
+    # cat3 = inputData[4]
+
     cat = inputData[2]
-    print(cat)
-    if inputData[2] == "arts & entertainment":
-        cat = "arts_n_ent"
-    elif inputData[2] == "being active":
-        cat = "active_life"
-    elif inputData[2] == "food":
-        cat = "restaurant"
     best = get_best_of_category(city_info, cat)
-    print(best)
+
+
+    def adjust_cat_name(cat):
+        if cat == "arts & entertainment":
+            return "arts_n_ent"
+        elif cat == "being active":
+            return "active_life"
+        elif cat == "food":
+            return "restaurant"
+    # cat1 = adjust_cat_name(cat1)
+    # cat2 = adjust_cat_name(cat2)
+    # cat3 = adjust_cat_name(cat3)
+
+    # best1 = get_best_of_category(city_info, cat1)
+    # best2 = get_best_of_category(city_info, cat2)
+    # best3 = get_best_of_category(city_info, cat3)
+
+    # print(best)
     rec_city = ""
     found = False
     i = 0
@@ -105,6 +119,9 @@ def get_flight(departure_airport: str, arrival_airport: str, date: datetime.date
 
     `departure_airport` and `arrival_airport` are IATA city codes.
     """
+
+    # if date.day()
+
     offers = get_flights(
         [FlightSlice(departure_airport, arrival_airport, date.day, date.month, date.year).get_slice()],
         [Passenger.ADULT],
@@ -410,13 +427,36 @@ def create_schedule(city: City, preference: Enum, price_preference: Union[int, s
     schedule = Schedule([], hotel, inbound_flight, outbound_flight)
 
     add_arrival_day(schedule, preference, price_preference, arrival_time=inbound_flight.arrival_time)
-    add_full_day(schedule, preference, price_preference)
-    add_full_day(schedule, preference, price_preference)
-    add_full_day(schedule, preference, price_preference)
-    add_full_day(schedule, preference, price_preference)
+    for _ in range((end_date - start_date).days - 1):
+        add_full_day(schedule, preference, price_preference)
     add_departure_day(schedule, preference, price_preference, departure_time=outbound_flight.departure_time)
 
     return schedule
 
-# schedule = create_schedule(City.NewYorkCity, YelpArtsAndEntertainmentCategory, "1,2,3,4", datetime.date(2023, 12, 19), datetime.date(2023, 12, 25))
-# print(schedule)
+schedule = create_schedule(City.Paris, YelpNightlifeCategory, "1,2,3,4", datetime.date(2024, 1, 1), datetime.date(2024, 12, 25))
+print(schedule)
+
+def handleInput(input):
+    # [temp, prev city, activity 1, activity 2, activity 3, start date, end date]
+    city = pick_city(input)
+    city_rec_name = city.lower().replace(" ", "_")
+    if city == "Rio de Janeiro":
+        city_rec_name = "rio"
+    rec_city = City(city_rec_name)
+    # start_date = input[5]
+    start_date = datetime.strptime(input[5], '%d/%m/%Y').date()
+    # end_date = input[6]
+    end_date = datetime.strptime(input[6], '%d/%m/%Y').date()
+    cat = ""
+    if input[2] == "arts & entertainment":
+        cat =  YelpArtsAndEntertainmentCategory
+    elif input[2] == "being active":
+        cat = YelpActiveLifeCategory
+    elif input[2] == "food":
+        cat = YelpRestaurantsCategory
+    elif input[2] == "nightlife":
+        cat = YelpNightlifeCategory
+    elif input[2] == "shopping":
+        cat = YelpShoppingCategory
+    schedule = create_schedule(rec_city, cat, "1,2,3,4", start_date=start_date, end_date=end_date)
+    return

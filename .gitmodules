@@ -1,0 +1,3 @@
+[submodule "Recommendation/quadtree"]
+	path = Recommendation/quadtree
+	url = https://github.com/chriscosma/quadtree
